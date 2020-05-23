@@ -1,0 +1,13 @@
+{
+    "name": "oc-project5/blog",
+    "description": "Projet 5 de blog pour OC",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Pub\\": "public/"
+        }
+    },
+    "require": {
+        "twig/twig": "3.0.3"
+    }
+}
