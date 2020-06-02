@@ -6,6 +6,6 @@ class View {
     // Génère et affiche la vue
     public function generate()
     {
-        require ('layout.php');
+        require_once ('layout.php');
     }
 }
