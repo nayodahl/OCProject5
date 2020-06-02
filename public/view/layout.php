@@ -11,10 +11,10 @@
   <title>Mon blog de dev, basé sur bootstrap</title>
 
   <!-- Bootstrap core CSS -->
-  <link href="public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="public/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Custom fonts for this template -->
-  <link href="public/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="public/css/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
@@ -173,8 +173,8 @@
   </footer>
 
   <!-- Bootstrap core JavaScript -->
-  <script src="public/vendor/jquery/jquery.min.js"></script>
-  <script src="public/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="public/js/jquery.min.js"></script>
+  <script src="public/js/bootstrap.bundle.min.js"></script>
 
   <!-- Custom scripts for this template -->
   <script src="public/js/clean-blog.min.js"></script>
