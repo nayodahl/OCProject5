@@ -9,13 +9,7 @@ class Router
     {
         try
         {
-            if(isset($_GET['action']))
-            {
-            }
-            else
-            {
-                $this->home(); // no action : displaying home page
-            }
+            $this->home(); // no action : displaying home page
         }
         catch(Exception $e)
         {
