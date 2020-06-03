@@ -3,8 +3,7 @@
     "description": "Projet 5 de blog pour OC",
     "autoload": {
         "psr-4": {
-            "App\\": "app/",
-            "Pub\\": "public/"
+            "App\\": "src/"
         }
     },
     "require": {
