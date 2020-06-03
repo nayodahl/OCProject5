@@ -1,11 +1,12 @@
 <?php
 namespace Pub\View;
 
-class View {
+class View
+{
 
     // Génère et affiche la vue
     public function generate()
     {
-        require_once ('layout.php');
+        require_once 'layout.php';
     }
 }

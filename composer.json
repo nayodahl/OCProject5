@@ -9,5 +9,9 @@
     },
     "require": {
         "twig/twig": "3.0.3"
+    },
+    "require-dev": {
+        "filp/whoops": "^2.7",
+        "friendsofphp/php-cs-fixer": "^2.16"
     }
 }
