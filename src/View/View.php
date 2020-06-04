@@ -24,7 +24,7 @@ class View
     public function render(): void
     {
         try {
-            print_r ($this->twig->render('frontoffice/layout.twig'));
+            echo $this->twig->render('frontoffice/homepage.twig');
         } catch (LoaderError $e) {
         } catch (RuntimeError $e) {
         } catch (SyntaxError $e) {

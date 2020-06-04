@@ -12,7 +12,7 @@ class Router
         // dépendances
         $this->view = new View();
       
-        // En attendent de mettre en place la classe App\Service\Http\Request
+        // En attendent de mettre ne place la class App\Service\Http\Request
         $this->get = $_GET;
     }
     
