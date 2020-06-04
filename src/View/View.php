@@ -13,11 +13,21 @@ class View
     public function __construct()
     {
         $loader = new FilesystemLoader('../templates');
-        $this->twig = new Environment($loader);
+        $this->twig = new Environment(
+            $loader,
+            [
+            'cache' => false,
+            'debug' => true,]
+        );
     }
 
     public function render(): void
     {
-        echo $this->twig->render('frontoffice/layout.twig');
+        try {
+            print_r ($this->twig->render('frontoffice/layout.twig'));
+        } catch (LoaderError $e) {
+        } catch (RuntimeError $e) {
+        } catch (SyntaxError $e) {
+        }
     }
 }
