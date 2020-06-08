@@ -1,1 +1,5 @@
 *.code-workspace
+vendor/
+.vscode/
+var/
+.php_cs.cache
