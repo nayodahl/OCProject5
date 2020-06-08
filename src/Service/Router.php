@@ -19,11 +19,7 @@ class Router
     // Routing entry request
     public function routerRequest()
     {
-        try {
-            $this->home(); // no action : displaying home page
-        } catch (Exception $e) {
-            $this->error($e->getMessage());
-        }
+        $this->home(); // no action : displaying home page
     }
     
     // Affiche page d'accueil

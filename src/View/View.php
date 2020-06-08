@@ -23,11 +23,6 @@ class View
 
     public function render(): void
     {
-        try {
-            echo $this->twig->render('frontoffice/homepage.twig');
-        } catch (LoaderError $e) {
-        } catch (RuntimeError $e) {
-        } catch (SyntaxError $e) {
-        }
+        echo $this->twig->render('frontoffice/homepage.twig');
     }
 }
