@@ -10,7 +10,7 @@ class Router
     public function __construct()
     {
         // dépendances
-        $this->controller = new FrontController();
+        $this->controller = new \App\Controller\FrontController();
       
         // En attendent de mettre ne place la class App\Service\Http\Request
         $this->get = $_GET;
@@ -23,13 +23,11 @@ class Router
             if (($this->get['action']) == 'post') {
                 if (isset($this->get['id']) && ($this->get['id']) > 0) {
                     $this->controller->post($this->get['id']);
-                } else {
-                    throw new Exception('Aucun identifiant de post envoyé');
                 }
             }
         } 
-        else {
-            $this->controller->home(); // no action : displaying home page
+        elseif (!$this->get) {
+            $this->controller->home(); // no paramater, no action -> displaying homepage
         }
     }
 }

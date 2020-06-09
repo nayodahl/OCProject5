@@ -15,19 +15,15 @@ class PostManager
         $this->postRepo = $postRepository;
     }
     
-    public function showOnePost(int $id): ?Post
+    public function showSinglePost(int $postId): ?Post
     {
-        // *** exemple fictif d'accès à la base de données
-        if ($id > 600) {
-            return null;
-        }
-        
-        $data = $this->postRepo->getPost($id);
+        $data = $this->postRepo->getPost($postId);
 
         // réfléchir à l'hydratation des entités
-        $post = new Post();
+        /*
+        $post = new \App\Model\Entity\Post();
         $post
-            ->setId((int)($data['id'])) // pourquoi je dois convertir en int ?
+            ->setPostId((int)($data['id'])) // pourquoi je dois convertir en int ?
             ->setTitle($data['title'])
             ->setChapo($data['chapo'])
             ->setContent($data['content'])
@@ -36,6 +32,7 @@ class PostManager
             ->setAuthorId($data['user_id'])
             ->setAuthorLogin($data['login'])
         ;
-        return $post;
+        */
+        return $data;
     }
 }

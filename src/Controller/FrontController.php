@@ -14,9 +14,9 @@ class FrontController
 
     public function __construct()
     {
-        $this->renderer = new View();
-        $this->postRepo = new PostRepository();
-        $this->postManager = new PostManager($this->postRepo);
+        $this->renderer = new \App\View\View();
+        $this->postRepo = new \App\Model\Repository\PostRepository();
+        $this->postManager = new \App\Model\Manager\PostManager($this->postRepo);
     }
 
     public function home(): void
@@ -29,7 +29,7 @@ class FrontController
 
     public function post($postId): void
     {
-        $post = $this->postManager->showOnePost($postId);
+        $post = $this->postManager->showSinglePost($postId);
         $this->renderer->render('frontoffice/singlePost.twig', ['post' => $post]);
     }
 }

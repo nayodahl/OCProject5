@@ -14,13 +14,32 @@ class Post
     private $authorId;
     private $authorLogin;
 
+    public function __construct($data = [])
+    {
+        if (!empty($data)) {
+            $this->hydrate($data);
+        }
+    }
 
-    public function getId(): int
+    public function hydrate($data)
+    {
+        foreach ($data as $key => $value) {
+
+            $method = 'set'.str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
+
+
+            if (method_exists($this, $method)) {
+                $this->$method($value);
+            }
+        }
+    }
+
+    public function getPostId(): int
     {
         return $this->postId;
     }
 
-    public function setId(int $postId): self
+    public function setPostId($postId): self
     {
         $this->postId = $postId;
         return $this;

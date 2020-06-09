@@ -12,8 +12,8 @@ class View
 
     public function __construct()
     {
-        $loader = new FilesystemLoader('../templates');
-        $this->twig = new Environment(
+        $loader = new \Twig\Loader\FilesystemLoader('../templates');
+        $this->twig = new \Twig\Environment(
             $loader,
             [
             'cache' => false,
