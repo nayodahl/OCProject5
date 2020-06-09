@@ -21,8 +21,8 @@ class View
         );
     }
 
-    public function render(): void
+    public function render($view, $params = []): void
     {
-        echo $this->twig->render('frontoffice/homepage.twig');
+        echo $this->twig->render($view, $params);
     }
 }

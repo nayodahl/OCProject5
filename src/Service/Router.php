@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace  App\Service;
 
-use App\View\View;
+use App\Controller\Frontcontroller;
 
 class Router
 {
     public function __construct()
     {
         // dépendances
-        $this->view = new View();
+        $this->controller = new FrontController();
       
         // En attendent de mettre ne place la class App\Service\Http\Request
         $this->get = $_GET;
@@ -19,12 +19,20 @@ class Router
     // Routing entry request
     public function routerRequest()
     {
-        $this->home(); // no action : displaying home page
-    }
-    
-    // Affiche page d'accueil
-    public function home(): void
-    {
-        $this->view->render();
+        try {
+            if (isset($_GET['action'])) {
+                if ($_GET['action'] == 'post') {
+                    if (isset($_GET['id']) && $_GET['id'] > 0) {
+                        $this->controller->post($this->get['id']);
+                    } else {
+                        throw new Exception('Aucun identifiant de post envoyé');
+                    }
+                }
+            } else {
+                $this->controller->home(); // no action : displaying home page
+            }
+        } catch (Exception $e) {
+            echo 'Erreur : ' . $e->getMessage();
+        }
     }
 }
