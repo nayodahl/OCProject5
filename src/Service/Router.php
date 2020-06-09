@@ -19,20 +19,17 @@ class Router
     // Routing entry request
     public function routerRequest()
     {
-        try {
-            if (isset($_GET['action'])) {
-                if ($_GET['action'] == 'post') {
-                    if (isset($_GET['id']) && $_GET['id'] > 0) {
-                        $this->controller->post($this->get['id']);
-                    } else {
-                        throw new Exception('Aucun identifiant de post envoyé');
-                    }
+        if (isset($this->get['id'])) {
+            if (($this->get['action']) == 'post') {
+                if (isset($this->get['id']) && ($this->get['id']) > 0) {
+                    $this->controller->post($this->get['id']);
+                } else {
+                    throw new Exception('Aucun identifiant de post envoyé');
                 }
-            } else {
-                $this->controller->home(); // no action : displaying home page
             }
-        } catch (Exception $e) {
-            echo 'Erreur : ' . $e->getMessage();
+        } 
+        else {
+            $this->controller->home(); // no action : displaying home page
         }
     }
 }

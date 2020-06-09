@@ -27,7 +27,7 @@ class PostManager
         // réfléchir à l'hydratation des entités
         $post = new Post();
         $post
-            ->setId(intval($data['id'])) // pourquoi je dois convertir en int ?
+            ->setId((int)($data['id'])) // pourquoi je dois convertir en int ?
             ->setTitle($data['title'])
             ->setChapo($data['chapo'])
             ->setContent($data['content'])

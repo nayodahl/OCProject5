@@ -5,7 +5,7 @@ namespace App\Model\Entity;
 
 class Post
 {
-    private $id;
+    private $postId;
     private $title;
     private $chapo;
     private $content;
@@ -17,12 +17,12 @@ class Post
 
     public function getId(): int
     {
-        return $this->id;
+        return $this->postId;
     }
 
-    public function setId(int $id): self
+    public function setId(int $postId): self
     {
-        $this->id = $id;
+        $this->postId = $postId;
         return $this;
     }
 
