@@ -22,11 +22,10 @@ class Router
         if (isset($this->get['id'])) {
             if (($this->get['action']) == 'post') {
                 if (isset($this->get['id']) && ($this->get['id']) > 0) {
-                    $this->controller->post($this->get['id']);
+                    $this->controller->showSinglePost($this->get['id']);
                 }
             }
-        } 
-        elseif (!$this->get) {
+        } elseif (!$this->get) {
             $this->controller->home(); // no paramater, no action -> displaying homepage
         }
     }

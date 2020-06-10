@@ -15,7 +15,7 @@ class PostManager
         $this->postRepo = $postRepository;
     }
     
-    public function showSinglePost(int $postId): ?Post
+    public function getSinglePost(int $postId): ?Post
     {
         $data = $this->postRepo->getPost($postId);
 
@@ -33,6 +33,13 @@ class PostManager
             ->setAuthorLogin($data['login'])
         ;
         */
+        return $data;
+    }
+
+    public function getLastPosts(int $postNumberLimit)
+    {
+        $data = $this->postRepo->getMostXRecentPosts($postNumberLimit);
+
         return $data;
     }
 }

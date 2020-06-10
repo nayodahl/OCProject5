@@ -21,12 +21,11 @@ class Post
         }
     }
 
-    public function hydrate($data)
+    // for each attribute we get from DB, we try to call a method with the same name, starting with 'set"
+    public function hydrate(array $data): void
     {
         foreach ($data as $key => $value) {
-
-            $method = 'set'.str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-
+            $method = 'set'.ucwords($key);
 
             if (method_exists($this, $method)) {
                 $this->$method($value);
@@ -36,10 +35,10 @@ class Post
 
     public function getPostId(): int
     {
-        return $this->postId;
+        return intval($this->postId); // pourquoi je dois convertir le résultat en int ?
     }
 
-    public function setPostId($postId): self
+    public function setPostId($postId): self //pourquoi on ne peut pas forcer le typage du paramètre en int ?
     {
         $this->postId = $postId;
         return $this;
