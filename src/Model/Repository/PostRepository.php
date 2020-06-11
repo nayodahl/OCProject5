@@ -14,9 +14,9 @@ class PostRepository extends Database
     {
         $result = $this->dbConnect()->prepare(
             'SELECT post.id AS postId, post.title, post.chapo, post.content, DATE_FORMAT(post.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(post.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate, post.user_id AS authorId, user.login AS authorLogin 
-        FROM post 
-        INNER JOIN user ON post.user_id = user.id
-        WHERE post.id= :postId'
+            FROM post 
+            INNER JOIN user ON post.user_id = user.id
+            WHERE post.id= :postId'
         );
         $result->bindValue(':postId', $postId, \PDO::PARAM_INT);
         $result->execute();
@@ -30,9 +30,9 @@ class PostRepository extends Database
     {
         $result = $this->dbConnect()->prepare(
             'SELECT post.id AS postId, post.title, post.chapo, post.content, DATE_FORMAT(post.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(post.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate, post.user_id AS authorId, user.login AS authorLogin 
-        FROM post 
-        INNER JOIN user ON post.user_id = user.id
-        ORDER BY post.created DESC LIMIT :postsNumberLimit'
+            FROM post 
+            INNER JOIN user ON post.user_id = user.id
+            ORDER BY post.created DESC LIMIT :postsNumberLimit'
         );
         $result->bindValue(':postsNumberLimit', $postsNumberLimit, \PDO::PARAM_INT);
         $result->execute();

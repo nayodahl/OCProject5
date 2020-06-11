@@ -12,7 +12,7 @@ class Database
 
     protected function dbConnect()
     {
-        $database = new \PDO('mysql:host=localhost;dbname=blog;charset=utf8', 'root', 'W6shkqGTGsyM');
+        $database = new \PDO('mysql:host=localhost;dbname=blog;charset=utf8', '', '');
         return $database;
     }
 }

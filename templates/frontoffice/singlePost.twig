@@ -4,8 +4,7 @@
     <!-- Main Content -->
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-md-10 mx-auto">
-                
+            <div class="col-lg-8 col-md-10 mx-auto">                
                 <div class="post-preview">
                     <h2 class="post-title">
                         {{ post.title }}
@@ -23,6 +22,55 @@
                 <div class="clearfix">
                     <a class="btn btn-primary float-right" href="#">Anciens Articles &rarr;</a>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Section -->
+
+    {% if listcomments %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">                
+
+                {% for comment in listcomments %}
+                <div class="post-preview">
+                    <p class="post-meta">{{ comment.authorLogin }}, le {{ comment.lastUpdate }} :</p>
+                    <p>
+                        {{ comment.content }}
+                    </p>
+                </div>
+                {% endfor %}
+                <!-- Pager -->
+                <div class="clearfix">
+                    <a class="btn btn-primary float-right" href="#">&rarr;&rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    {% endif %}
+
+    <!-- Comment Form -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <h2 class="section-heading">Ajouter un commentaire</h2>
+                <form name="sentMessage" id="contactForm" novalidate>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls">
+                        <label>Tapez votre message</label>
+                        <textarea rows="5" class="form-control" placeholder="Votre message (vous devez être connecté pour ajouter un commentaire, et il sera soumis à validation" id="message" required data-validation-required-message="Entre votre message ici."></textarea>
+                        <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <br>
+                    <div id="success"></div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="sendMessageButton">Envoyer</button>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>
