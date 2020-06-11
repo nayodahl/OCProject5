@@ -25,20 +25,27 @@ class FrontController
         $this->commentManager = new \App\Model\Manager\CommentManager($this->commentRepo);
     }
 
-    // render homepage, by getting the last 4 most recent posts
+    // Render homepage, by getting the last 4 most recent posts
     public function home(): void
     {
-        $list_posts = $this->postManager->getLastPosts(4);
+        $list_posts = $this->postManager->getHomepagePosts();
         $this->renderer->render('frontoffice/homepage.twig', ['listposts' => $list_posts]);
     }
     
     // Render the single Post view
 
-    public function showSinglePost($postId): void
+    public function showSinglePost(int $postId): void
     {
         $post = $this->postManager->getSinglePost($postId);
-        $comments = $this->commentManager->getComments($postId);
+        $comments = $this->commentManager->getApprovedComments($postId);
 
         $this->renderer->render('frontoffice/singlePost.twig', ['post' => $post, 'listcomments' => $comments]);
+    }
+
+    // Render Posts Page
+    public function showPostPage(int $pageId): void
+    {
+        $list_posts = $this->postManager->getPostsPage($pageId);
+        $this->renderer->render('frontoffice/postsPage.twig', ['listposts' => $list_posts]);
     }
 }

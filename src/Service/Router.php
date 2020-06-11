@@ -13,7 +13,9 @@ class Router
         $this->controller = new \App\Controller\FrontController();
       
         // En attendent de mettre ne place la class App\Service\Http\Request
-        $this->get = $_GET;
+        if (isset($_GET)) {
+            $this->get = $_GET;
+        }
     }
     
     // Routing entry request
@@ -21,8 +23,13 @@ class Router
     {
         if (isset($this->get['id'])) {
             if (($this->get['action']) == 'post') {
-                if (isset($this->get['id']) && ($this->get['id']) > 0) {
-                    $this->controller->showSinglePost($this->get['id']);
+                if (($this->get['id']) > 0) {
+                    $this->controller->showSinglePost((int)($this->get['id']));
+                }
+            }
+            if (($this->get['action']) == 'page') {
+                if (($this->get['id']) > 0) {
+                    $this->controller->showPostPage((int)($this->get['id']));
                 }
             }
         } elseif (!$this->get) {

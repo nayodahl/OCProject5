@@ -36,9 +36,19 @@ class PostManager
         return $data;
     }
 
-    public function getLastPosts(int $postNumberLimit)
+    public function getHomepagePosts(): array
     {
-        $data = $this->postRepo->getMostXRecentPosts($postNumberLimit);
+        // get only last 4 posts to display on homepage.
+        $data = $this->postRepo->getMostXRecentPosts(4);
+
+        return $data;
+    }
+
+    public function getPostsPage(int $pageId): array
+    {
+        // for the moment, getting all 100 posts and displaying on one single plage
+        // waiting for pager system
+        $data = $this->postRepo->getMostXRecentPosts(100);
 
         return $data;
     }

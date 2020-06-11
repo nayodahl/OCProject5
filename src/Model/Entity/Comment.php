@@ -34,7 +34,7 @@ class Comment
 
     public function getCommentId(): int
     {
-        return intval($this->commentId); // pourquoi je dois convertir le résultat en int ?
+        return (int()($this->commentId)); // pourquoi je dois convertir le résultat en int ?
     }
 
     public function setCommentId($commentId): self //pourquoi on ne peut pas forcer le typage du paramètre en int ?
@@ -78,7 +78,7 @@ class Comment
 
     public function getPostId(): int
     {
-        return intval($this->postId); 
+        return (int()($this->postId));
     }
 
     public function setPostId($postId): self

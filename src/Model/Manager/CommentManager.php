@@ -14,17 +14,11 @@ class CommentManager
     {
         $this->commentRepo = $commentRepo;
     }
-    
-    public function getSingleComment(int $commentId): ?Comment
-    {
-        $data = $this->commentRepo->getComment($commentId);
 
-        return $data;
-    }
-
-    public function getComments(int $postId)
+    public function getApprovedComments(int $postId): array
     {
-        $data = $this->commentRepo->getAllComments($postId);
+        // second parameter is the status of the comment, 1 for approved
+        $data = $this->commentRepo->getAllComments($postId, 1);
 
         return $data;
     }
