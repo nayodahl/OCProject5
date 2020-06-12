@@ -27,9 +27,12 @@
                 {% endfor %}
 
                 <!-- Pager -->
-                <div class="clearfix">
-                    <a class="btn btn-primary float-right" href="#">Pagination en attente &rarr;</a>
+                <div class="clearfix">                                
                 </div>
+                {% include 'pagination.twig' with {
+                    currentPage: currentPage,
+                    lastPage: totalPages
+                } only %}
             </div>
         </div>
     </div>

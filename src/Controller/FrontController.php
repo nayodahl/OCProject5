@@ -43,9 +43,20 @@ class FrontController
     }
 
     // Render Posts Page
-    public function showPostPage(int $pageId): void
+    public function showPostPage(int $currentPage): void
     {
-        $list_posts = $this->postManager->getPostsPage($pageId);
-        $this->renderer->render('frontoffice/postsPage.twig', ['listposts' => $list_posts]);
+        $list_posts = $this->postManager->getPosts();
+        
+        $limit = 2; // number of Posts per page to display
+        $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
+        $totalItems = count($list_posts); // total number of Posts
+        $totalPages = ceil($totalItems / $limit); 
+        $itemsList = array_splice($list_posts, $offset, $limit);
+        
+        $this->renderer->render('frontoffice/postsPage.twig', [
+            'listposts' => $itemsList,
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages
+            ]);
     }
 }

@@ -43,4 +43,16 @@ class PostRepository extends Database
         }
         return $custom_array;
     }
+
+    // get total number of Posts
+    // return an int
+    public function CountPosts(): int
+    {
+        $result = $this->dbConnect()->prepare(
+            'SELECT * FROM post'
+        );
+        $result->execute();
+        $count = $result->rowCount();
+        return $count;
+    }
 }

@@ -44,7 +44,7 @@ class PostManager
         return $data;
     }
 
-    public function getPostsPage(int $pageId): array
+    public function getPosts(): array
     {
         // for the moment, getting all 100 posts and displaying on one single plage
         // waiting for pager system
