@@ -18,7 +18,7 @@
 
                     {% for i in range(1, extremePagesLimit) %} 
                         {% if ( i < currentPage - nearbyPagesLimit ) %} 
-                        <li><a href="{{ paginationPath }}{{ i }}">{{ i }}</a></li>
+                        <li><a class="btn btn-primary" href="{{ paginationPath }}{{ i }}">{{ i }}</a></li>
                         {% endif %}
                     {% endfor %}
 
@@ -28,19 +28,19 @@
 
                     {% for i in range(currentPage-nearbyPagesLimit, currentPage-1) %} 
                         {% if ( i > 0 ) %}
-                        <li><a href="{{ paginationPath }}{{ i }}">{{ i }}</a></li>
+                        <li><a class="btn btn-primary" href="{{ paginationPath }}{{ i }}">{{ i }}</a></li>
                         {% endif %}
                     {% endfor %}
                 {% elseif showAlwaysFirstAndLast %}
-                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Précédent</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="false">Précédent</a></li>
                 {% endif %}
 
-                <li class="active"><a href="#">{{ currentPage }}</a></li>
+                <li class="active"><a class="btn btn-primary" href="#">{{ currentPage }}</a></li>
 
                 {% if currentPage < lastPage %}
                     {% for i in range(currentPage+1, currentPage + nearbyPagesLimit) %} 
                         {% if ( i <= lastPage ) %}
-                        <li><a href="{{ paginationPath }}{{ i }}">{{ i }}</a></li>
+                        <li><a class="btn btn-primary" href="{{ paginationPath }}{{ i }}">{{ i }}</a></li>
                         {% endif %}
                     {% endfor %}
 
@@ -50,7 +50,7 @@
 
                     {% for i in range(lastPage - extremePagesLimit+1, lastPage) %}  
                         {% if ( i > currentPage + nearbyPagesLimit ) %}
-                        <li><a href="{{ paginationPath }}{{ i }}">{{ i }}</a></li>
+                        <li><a class="btn btn-primary" href="{{ paginationPath }}{{ i }}">{{ i }}</a></li>
                         {% endif %}
                     {% endfor %}
 
