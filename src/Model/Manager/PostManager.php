@@ -48,7 +48,7 @@ class PostManager
     {
         // for the moment, getting all 100 posts and displaying on one single plage
         // waiting for pager system
-        $data = $this->postRepo->getMostXRecentPosts(100);
+        $data = $this->postRepo->getAllPosts();
 
         return $data;
     }

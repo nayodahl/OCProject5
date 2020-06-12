@@ -7,6 +7,8 @@ use App\Model\Repository\PostRepository;
 use App\Model\Manager\PostManager;
 use App\Model\Repository\CommentRepository;
 use App\Model\Manager\CommentManager;
+use App\Model\Repository\UserRepository;
+use App\Model\Manager\UserManager;
 
 class FrontController
 {
@@ -15,6 +17,8 @@ class FrontController
     private $postManager;
     private $commentRepo;
     private $commentManager;
+    private $userRepo;
+    private $userManager;
 
     public function __construct()
     {
@@ -23,6 +27,8 @@ class FrontController
         $this->postManager = new \App\Model\Manager\PostManager($this->postRepo);
         $this->commentRepo = new \App\Model\Repository\CommentRepository();
         $this->commentManager = new \App\Model\Manager\CommentManager($this->commentRepo);
+        $this->userRepo = new \App\Model\Repository\UserRepository();
+        $this->userManager = new \App\Model\Manager\UserManager($this->userRepo);
     }
 
     // Render homepage, by getting the last 4 most recent posts
@@ -47,7 +53,7 @@ class FrontController
     {
         $list_posts = $this->postManager->getPosts();
         
-        $limit = 2; // number of Posts per page to display
+        $limit = 5; // number of Posts per page to display
         $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
         $totalItems = count($list_posts); // total number of Posts
         $totalPages = ceil($totalItems / $limit);
