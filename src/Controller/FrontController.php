@@ -50,7 +50,7 @@ class FrontController
         $limit = 2; // number of Posts per page to display
         $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
         $totalItems = count($list_posts); // total number of Posts
-        $totalPages = ceil($totalItems / $limit); 
+        $totalPages = ceil($totalItems / $limit);
         $itemsList = array_splice($list_posts, $offset, $limit);
         
         $this->renderer->render('frontoffice/postsPage.twig', [
