@@ -39,13 +39,31 @@ class FrontController
     }
     
     // Render the single Post view
-
-    public function showSinglePost(int $postId): void
+    public function showSinglePost(int $postId, int $commentPage): void
     {
+        // get Post content and its Comments
         $post = $this->postManager->getSinglePost($postId);
-        $comments = $this->commentManager->getApprovedComments($postId);
+        $listComments = $this->commentManager->getApprovedComments($postId);
 
-        $this->renderer->render('frontoffice/singlePost.twig', ['post' => $post, 'listcomments' => $comments]);
+        // getting number of Posts, needed for the pager on the Post section
+        $totalPosts = $this->postManager->getNumberOfPosts();
+
+        // Some calculation for the pager on Comments section
+        $limit = 4; // number of Comments per page to display
+        $offset = ($commentPage - 1) * $limit; // offset, to determine the number of the first Comment to display
+        $totalComments = count($listComments); // total number of Comments
+        $totalCommentPages = ceil($totalComments / $limit);
+        $itemsList = array_splice($listComments, $offset, $limit);
+
+        // twig rendering with some parameters
+        $this->renderer->render('frontoffice/singlePost.twig', [
+            'post' => $post,
+            'postId' => $postId,
+            'listcomments' => $itemsList,
+            'currentPage' => $commentPage,
+            'totalPages' => $totalCommentPages,
+            'totalPosts' => $totalPosts,
+            ]);
     }
 
     // Render Posts Page
@@ -53,7 +71,8 @@ class FrontController
     {
         $list_posts = $this->postManager->getPosts();
         
-        $limit = 5; // number of Posts per page to display
+        // Some calculation for the pager for Posts page
+        $limit = 4; // number of Posts per page to display
         $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
         $totalItems = count($list_posts); // total number of Posts
         $totalPages = ceil($totalItems / $limit);

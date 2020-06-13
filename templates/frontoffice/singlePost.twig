@@ -18,9 +18,13 @@
                     <p class="post-meta">Publié par {{ post.authorLogin }} le {{ post.lastUpdate }}</p>
                 </div>
                 
-                <!-- Pager -->
+                <!-- Pager for Posts-->
                 <div class="clearfix">
-                    <a class="btn btn-primary float-right" href="index.php?action=page&amp;id=1">Tous les articles &rarr;</a>
+                    {% include 'paginationSinglePost.twig' with {
+                        currentPage: postId,
+                        lastPage: totalPosts,
+                    } only %}
+                    
                 </div>
             </div>
         </div>
@@ -41,9 +45,13 @@
                     </p>
                 </div>
                 {% endfor %}
-                <!-- Pager -->
+                <!-- Pager for Comments-->
                 <div class="clearfix">
-                    <a class="btn btn-primary float-right" href="#">&rarr;&rarr;</a>
+                    {% include 'paginationComment.twig' with {
+                        currentPage: currentPage,
+                        lastPage: totalPages,
+                        postId: postId
+                    } only %}
                 </div>
             </div>
         </div>

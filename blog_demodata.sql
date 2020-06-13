@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : jeu. 11 juin 2020 à 18:00
+-- Généré le : sam. 13 juin 2020 à 16:21
 -- Version du serveur :  10.4.11-MariaDB
 -- Version de PHP : 7.4.5
 
@@ -55,7 +55,11 @@ INSERT INTO `comment` (`id`, `content`, `approved`, `created`, `last_update`, `p
 (12, 'Merci !', 1, '2020-06-08 18:09:02', '2020-06-08 18:09:02', 2, 2),
 (13, 'J\'aime pas les Regex non plus,\r\nDu coup, merci !', 1, '2020-06-08 18:09:40', '2020-06-08 18:09:40', 2, 1),
 (14, 'Merci pour cet article ;-)', 1, '2020-06-08 18:10:16', '2020-06-08 18:10:16', 1, 3),
-(15, 'ça va revenir à la mode, faites gaffe !', 1, '2020-06-08 18:11:15', '2020-06-08 18:11:15', 1, 5);
+(15, 'ça va revenir à la mode, faites gaffe !', 1, '2020-06-08 18:11:15', '2020-06-08 18:11:15', 1, 5),
+(16, 'Et ça existe pour le 32 bit ?', 1, '2020-06-13 16:12:15', '2020-06-13 16:12:15', 5, 3),
+(17, 'Merci pour les conseils Anthony !', 1, '2020-06-13 16:17:20', '2020-06-13 16:17:20', 5, 6),
+(18, 'L\'assembleur, c\'est la vie !', 1, '2020-06-13 16:18:34', '2020-06-13 16:18:34', 5, 3),
+(19, 'Avengers !  ASSEMBLE !', 1, '2020-06-13 16:19:08', '2020-06-13 16:19:08', 5, 7);
 
 -- --------------------------------------------------------
 
@@ -149,7 +153,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT pour la table `post`

@@ -18,7 +18,8 @@ class CommentRepository extends Database
             FROM comment 
             INNER JOIN user ON comment.user_id = user.id
             WHERE comment.post_id= :postId
-            AND comment.approved= :approved'
+            AND comment.approved= :approved
+            ORDER BY comment.created DESC'
         );
         $result->bindValue(':postId', $postId, \PDO::PARAM_INT);
         $result->bindValue(':approved', $approved, \PDO::PARAM_INT);

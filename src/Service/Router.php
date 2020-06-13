@@ -24,7 +24,12 @@ class Router
         if (isset($this->get['id'])) {
             if (($this->get['action']) == 'post') {
                 if (($this->get['id']) > 0) {
-                    $this->controller->showSinglePost((int)($this->get['id']));
+                    if (!isset($this->get['commentPage'])){
+                        $this->get['commentPage'] = 1;
+                    }
+                    if (($this->get['commentPage']) > 0) {
+                        $this->controller->showSinglePost((int)($this->get['id']),(int)($this->get['commentPage']));
+                    }
                 }
             }
             if (($this->get['action']) == 'page') {

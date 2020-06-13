@@ -52,4 +52,12 @@ class PostManager
 
         return $data;
     }
+
+    public function getNumberOfPosts(): int
+    {
+        // get the total number of posts, needed for pager calculation
+        $data = $this->postRepo->CountPosts();
+
+        return $data;
+    }
 }
