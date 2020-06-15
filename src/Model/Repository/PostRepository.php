@@ -20,9 +20,8 @@ class PostRepository extends Database
         );
         $result->bindValue(':postId', $postId, \PDO::PARAM_INT);
         $result->execute();
-        $data = $result->fetch(\PDO::FETCH_ASSOC);
-
-        return new \App\Model\Entity\Post($data);
+                
+        return new Post($result->fetch(\PDO::FETCH_ASSOC));
     }
     // get last X Posts, sorted by most recent
     // return an array of Posts
@@ -36,12 +35,12 @@ class PostRepository extends Database
         );
         $result->bindValue(':postsNumberLimit', $postsNumberLimit, \PDO::PARAM_INT);
         $result->execute();
-        $custom_array = [];
+        $customArray = [];
 
         while ($data = $result->fetch(\PDO::FETCH_ASSOC)) {
-            array_push($custom_array, new Post($data));
+            array_push($customArray, new Post($data));
         }
-        return $custom_array;
+        return $customArray;
     }
 
     // get all Posts, sorted by most recent
@@ -55,12 +54,12 @@ class PostRepository extends Database
             ORDER BY post.created DESC '
         );
         $result->execute();
-        $custom_array = [];
+        $customArray = [];
 
         while ($data = $result->fetch(\PDO::FETCH_ASSOC)) {
-            array_push($custom_array, new Post($data));
+            array_push($customArray, new Post($data));
         }
-        return $custom_array;
+        return $customArray;
     }
 
     // get total number of Posts
@@ -71,7 +70,7 @@ class PostRepository extends Database
             'SELECT * FROM post'
         );
         $result->execute();
-        $count = $result->rowCount();
-        return $count;
+
+        return $result->rowCount();
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Entity;
 
-class Userfi
+class User
 {
     private $userId;
     private $login;
@@ -35,10 +35,10 @@ class Userfi
 
     public function getUserId(): int
     {
-        return ((int)($this->userId)); // pourquoi je dois convertir le résultat en int ?
+        return (int)$this->userId;
     }
 
-    public function setPostId($userId): self //pourquoi on ne peut pas forcer le typage du paramètre en int ?
+    public function setPostId(int $userId): self
     {
         $this->userId = $userId;
         return $this;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -17,18 +18,14 @@ class FrontController
     private $postManager;
     private $commentRepo;
     private $commentManager;
-    private $userRepo;
-    private $userManager;
 
     public function __construct()
     {
-        $this->renderer = new \App\View\View();
-        $this->postRepo = new \App\Model\Repository\PostRepository();
-        $this->postManager = new \App\Model\Manager\PostManager($this->postRepo);
-        $this->commentRepo = new \App\Model\Repository\CommentRepository();
-        $this->commentManager = new \App\Model\Manager\CommentManager($this->commentRepo);
-        $this->userRepo = new \App\Model\Repository\UserRepository();
-        $this->userManager = new \App\Model\Manager\UserManager($this->userRepo);
+        $this->renderer = new View();
+        $this->postRepo = new PostRepository();
+        $this->postManager = new PostManager($this->postRepo);
+        $this->commentRepo = new CommentRepository();
+        $this->commentManager = new CommentManager($this->commentRepo);
     }
 
     // Render homepage, by getting the last 4 most recent posts

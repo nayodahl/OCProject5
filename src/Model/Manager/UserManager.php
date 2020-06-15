@@ -15,10 +15,10 @@ class UserManager
         $this->userRepo = $userRepository;
     }
     
+    /*
     public function getSingleUser(int $userId): ?User
     {
-        $data = $this->userRepo->getUser($userId);
-
-        return $data;
+        return $this->userRepo->getUser($userId);
     }
+    */
 }

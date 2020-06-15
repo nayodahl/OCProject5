@@ -9,5 +9,5 @@ $whoops = new \Whoops\Run;
 $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 $whoops->register();
 
-$router = new App\Service\Router();
+$router = new Router();
 $router->routerRequest();

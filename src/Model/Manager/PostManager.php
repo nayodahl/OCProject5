@@ -17,47 +17,24 @@ class PostManager
     
     public function getSinglePost(int $postId): ?Post
     {
-        $data = $this->postRepo->getPost($postId);
-
-        // réfléchir à l'hydratation des entités
-        /*
-        $post = new \App\Model\Entity\Post();
-        $post
-            ->setPostId((int)($data['id'])) // pourquoi je dois convertir en int ?
-            ->setTitle($data['title'])
-            ->setChapo($data['chapo'])
-            ->setContent($data['content'])
-            ->setCreated($data['creation_date_fr'])
-            ->setLastUpdate($data['update_date_fr'])
-            ->setAuthorId($data['user_id'])
-            ->setAuthorLogin($data['login'])
-        ;
-        */
-        return $data;
+        return $this->postRepo->getPost($postId);
     }
 
     public function getHomepagePosts(): array
     {
         // get only last 4 posts to display on homepage.
-        $data = $this->postRepo->getMostXRecentPosts(4);
-
-        return $data;
+        return $this->postRepo->getMostXRecentPosts(4);
     }
 
     public function getPosts(): array
     {
-        // for the moment, getting all 100 posts and displaying on one single plage
-        // waiting for pager system
-        $data = $this->postRepo->getAllPosts();
-
-        return $data;
+        //  getting all posts and displaying on one single plage
+        return $this->postRepo->getAllPosts();
     }
 
     public function getNumberOfPosts(): int
     {
         // get the total number of posts, needed for pager calculation
-        $data = $this->postRepo->CountPosts();
-
-        return $data;
+        return $this->postRepo->CountPosts();
     }
 }

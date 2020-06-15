@@ -35,10 +35,10 @@ class Post
 
     public function getPostId(): int
     {
-        return ((int)($this->postId)); // pourquoi je dois convertir le résultat en int ?
+        return (int)$this->postId;
     }
 
-    public function setPostId($postId): self //pourquoi on ne peut pas forcer le typage du paramètre en int ?
+    public function setPostId($postId): self
     {
         $this->postId = $postId;
         return $this;

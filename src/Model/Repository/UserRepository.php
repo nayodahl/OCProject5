@@ -8,11 +8,12 @@ use App\Service\Database;
 
 class UserRepository extends Database
 {
+    /*
     public function getSingleUser(int $userId): array
     {
         $result = $this->dbConnect()->prepare(
-            'SELECT comment.id AS commentId, comment.content, DATE_FORMAT(comment.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(comment.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate, comment.post_id AS postId, comment.user_id AS authorId, user.login AS authorLogin 
-            FROM comment 
+            'SELECT comment.id AS commentId, comment.content, DATE_FORMAT(comment.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(comment.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate, comment.post_id AS postId, comment.user_id AS authorId, user.login AS authorLogin
+            FROM comment
             INNER JOIN user ON comment.user_id = user.id
             WHERE user.user_id= :userId
             AND comment.approved= :approved'
@@ -27,4 +28,5 @@ class UserRepository extends Database
 
         return $custom_array;
     }
+    */
 }

@@ -24,12 +24,12 @@ class CommentRepository extends Database
         $result->bindValue(':postId', $postId, \PDO::PARAM_INT);
         $result->bindValue(':approved', $approved, \PDO::PARAM_INT);
         $result->execute();
-        $custom_array = [];
+        $customArray = [];
 
         while ($data = $result->fetch(\PDO::FETCH_ASSOC)) {
-            array_push($custom_array, new Comment($data));
+            array_push($customArray, new Comment($data));
         }
 
-        return $custom_array;
+        return $customArray;
     }
 }

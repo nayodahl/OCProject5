@@ -15,11 +15,11 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 {% if currentPage > 1 %}
-                    <li class="page-item"><a class="page-link" href="{{ paginationPathPart1 }}{{ postId }}{{ paginationPathPart2 }}{{ currentPage-1  }}">Précédent</a></li>
+                    <li class="page-item"><a class="page-link" href="{{ paginationPathPart1 }}{{ postId }}{{ paginationPathPart2 }}{{ currentPage-1  }}#comments">Précédent</a></li>
 
                     {% for i in range(1, extremePagesLimit) %} 
                         {% if ( i < currentPage - nearbyPagesLimit ) %} 
-                        <li><a class="btn btn-primary" href="{{ paginationPathPart1 }}{{ postId }}{{ paginationPathPart2 }}{{ i }}">{{ i }}</a></li>
+                        <li><a class="btn btn-primary" href="{{ paginationPathPart1 }}{{ postId }}{{ paginationPathPart2 }}{{ i }}#comments">{{ i }}</a></li>
                         {% endif %}
                     {% endfor %}
 
@@ -29,19 +29,19 @@
 
                     {% for i in range(currentPage-nearbyPagesLimit, currentPage-1) %} 
                         {% if ( i > 0 ) %}
-                        <li><a class="btn btn-primary" href="{{ paginationPathPart1 }}{{ postId }}{{ paginationPathPart2 }}{{ i }}">{{ i }}</a></li>
+                        <li><a class="btn btn-primary" href="{{ paginationPathPart1 }}{{ postId }}{{ paginationPathPart2 }}{{ i }}#comments">{{ i }}</a></li>
                         {% endif %}
                     {% endfor %}
                 {% elseif showAlwaysFirstAndLast %}
                     <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="false">Précédent</a></li>
                 {% endif %}
 
-                <li class="active"><a class="btn btn-primary" href="#">{{ currentPage }}</a></li>
+                <li class="active"><a class="btn btn-primary" href="#comments">{{ currentPage }}</a></li>
 
                 {% if currentPage < lastPage %}
                     {% for i in range(currentPage+1, currentPage + nearbyPagesLimit) %} 
                         {% if ( i <= lastPage ) %}
-                        <li><a class="btn btn-primary" href="{{ paginationPathPart1 }}{{ postId }}{{ paginationPathPart2 }}{{ i }}">{{ i }}</a></li>
+                        <li><a class="btn btn-primary" href="{{ paginationPathPart1 }}{{ postId }}{{ paginationPathPart2 }}{{ i }}#comments">{{ i }}</a></li>
                         {% endif %}
                     {% endfor %}
 
@@ -51,11 +51,11 @@
 
                     {% for i in range(lastPage - extremePagesLimit+1, lastPage) %}  
                         {% if ( i > currentPage + nearbyPagesLimit ) %}
-                        <li><a class="btn btn-primary" href="{{ paginationPathPart1 }}{{ postId }}{{ paginationPathPart2 }}{{ i }}">{{ i }}</a></li>
+                        <li><a class="btn btn-primary" href="{{ paginationPathPart1 }}{{ postId }}{{ paginationPathPart2 }}{{ i }}#comments">{{ i }}</a></li>
                         {% endif %}
                     {% endfor %}
 
-                    <li class="page-item"><a class="page-link" href="{{ paginationPathPart1 }}{{ postId }}{{ paginationPathPart2 }}{{ currentPage+1 }}">Suivant</a></li>
+                    <li class="page-item"><a class="page-link" href="{{ paginationPathPart1 }}{{ postId }}{{ paginationPathPart2 }}{{ currentPage+1 }}#comments">Suivant</a></li>
                 {% elseif showAlwaysFirstAndLast %}
                     <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Suivant</a></li>
                 {% endif %}
