@@ -24,11 +24,11 @@ class Router
         if (isset($this->get['id'])) {
             if (($this->get['action']) == 'post') {
                 if (($this->get['id']) > 0) {
-                    if (!isset($this->get['commentPage'])){
+                    if (!isset($this->get['commentPage'])) {
                         $this->get['commentPage'] = 1;
                     }
                     if (($this->get['commentPage']) > 0) {
-                        $this->controller->showSinglePost((int)($this->get['id']),(int)($this->get['commentPage']));
+                        $this->controller->showSinglePost((int)($this->get['id']), (int)($this->get['commentPage']));
                     }
                 }
             }
@@ -36,6 +36,13 @@ class Router
                 if (($this->get['id']) > 0) {
                     $this->controller->showPostPage((int)($this->get['id']));
                 }
+            }
+        } elseif (isset($this->get['action'])) {
+            if (($this->get['action']) == 'login') {
+                $this->controller->showLoginPage();
+            }
+            if (($this->get['action']) == 'signin') {
+                $this->controller->showSigninPage();
             }
         } elseif (!$this->get) {
             $this->controller->home(); // no paramater, no action -> displaying homepage

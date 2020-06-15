@@ -56,7 +56,7 @@ class FrontController
         $itemsList = array_splice($listComments, $offset, $limit);
 
         // twig rendering with some parameters
-        $this->renderer->render('frontoffice/singlePost.twig', [
+        $this->renderer->render('frontoffice/singlePostPage.twig', [
             'post' => $post,
             'postId' => $postId,
             'listcomments' => $itemsList,
@@ -83,5 +83,17 @@ class FrontController
             'currentPage' => $currentPage,
             'totalPages' => $totalPages
             ]);
+    }
+
+    // Render Login Page
+    public function showLoginPage(): void
+    {
+        $this->renderer->render('frontoffice/loginPage.twig');
+    }
+
+    // Render Signin Page
+    public function showSigninPage(): void
+    {
+        $this->renderer->render('frontoffice/signinPage.twig');
     }
 }
