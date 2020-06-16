@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Model\Manager;
 
-use App\Model\Entity\Comment;
-use App\Model\Repository\CommentRepository;
+use \App\Model\Entity\Comment;
+use \App\Model\Repository\CommentRepository;
 
 class CommentManager
 {

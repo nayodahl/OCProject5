@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\View;
 
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
+use \Twig\Environment;
+use \Twig\Loader\FilesystemLoader;
 
 class View
 {

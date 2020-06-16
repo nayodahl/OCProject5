@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Model\Repository;
 
-use App\Model\Entity\Comment;
-use App\Service\Database;
+use \App\Model\Entity\Comment;
+use \App\Service\Database;
 
 class CommentRepository extends Database
 {

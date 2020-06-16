@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Model\Repository;
 
-use App\Model\Entity\User;
-use App\Service\Database;
+use \App\Model\Entity\User;
+use \App\Service\Database;
 
 class UserRepository extends Database
 {

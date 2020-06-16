@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\View\View;
-use App\Model\Repository\PostRepository;
-use App\Model\Manager\PostManager;
-use App\Model\Repository\CommentRepository;
-use App\Model\Manager\CommentManager;
-use App\Model\Repository\UserRepository;
-use App\Model\Manager\UserManager;
+use \App\View\View;
+use \App\Model\Repository\PostRepository;
+use \App\Model\Manager\PostManager;
+use \App\Model\Repository\CommentRepository;
+use \App\Model\Manager\CommentManager;
+use \App\Model\Repository\UserRepository;
+use \App\Model\Manager\UserManager;
 
 class FrontController
 {
