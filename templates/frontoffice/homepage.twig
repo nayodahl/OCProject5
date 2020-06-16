@@ -43,33 +43,33 @@
                 <h2 class="section-heading" id="contact">Contactez-moi</h2>
                 <p>Envoyez-moi un message et je vous répondrai dans les plus brefs délais !</p>
 
-                <form name="sentMessage" id="contactForm" novalidate>
+                <form method="post" action="index.php#contactForm" name="sentMessage" id="contactForm">
                     <div class="control-group">
                         <div class="form-row">
                             <div class="form-group col-lg-6 floating-label-form-group controls">
-                            <label>Nom</label>
-                            <input type="text" class="form-control" placeholder="Nom" id="name" required data-validation-required-message="Entrez votre nom.">
-                            <p class="help-block text-danger"></p>
+                                <label>Nom</label>
+                                <input name="name" type="text" class="form-control" placeholder="Nom" id="name" required data-validation-required-message="Entrez votre nom.">
+                                <p class="help-block text-danger"></p>
                             </div>
                             <div class="form-group col-lg-6 floating-label-form-group controls">
-                            <label>Prénom</label>
-                            <input type="text" class="form-control" placeholder="Prénom" id="surname" required data-validation-required-message="Entrez votre prénom.">
-                            <p class="help-block text-danger"></p>
+                                <label>Prénom</label>
+                                <input name="forename" type="text" class="form-control" placeholder="Prénom" id="forename" required data-validation-required-message="Entrez votre prénom.">
+                                <p class="help-block text-danger"></p>
                             </div>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls">
-                        <label>Email</label>
-                        <input type="email" class="form-control" placeholder="Email" id="email" required data-validation-required-message="Entrez votre adresse email.">
-                        <p class="help-block text-danger"></p>
+                            <label>Email</label>
+                            <input name="email" type="email" class="form-control" placeholder="Email" id="email" required data-validation-required-message="Entrez votre adresse email.">
+                            <p class="help-block text-danger"></p>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls">
-                        <label>Message</label>
-                        <textarea rows="5" class="form-control" placeholder="Message" id="message" required data-validation-required-message="Entre votre message ici."></textarea>
-                        <p class="help-block text-danger"></p>
+                            <label>Message</label>
+                            <textarea name="message" rows="5" class="form-control" placeholder="Message" id="message" maxlength="500" required data-validation-required-message="Entre votre message ici."></textarea>
+                            <p class="help-block text-danger"></p>
                         </div>
                     </div>
                     <br>

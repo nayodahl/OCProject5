@@ -9,6 +9,7 @@ class Router
 {
     private $controller;
     private $get;
+    private $post;
     
     public function __construct()
     {
@@ -18,6 +19,10 @@ class Router
         // En attendent de mettre en place la class App\Service\Http\Request
         if (isset($_GET)) {
             $this->get = $_GET;
+        }
+
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $this->post = $_POST;
         }
     }
     
@@ -47,7 +52,11 @@ class Router
             if ($this->get['action'] === 'signin') {
                 $this->controller->showSigninPage();
             }
-        } elseif (!$this->get) {
+        } 
+        elseif ($this->post) {         
+            $this->controller->contactForm($this->post); 
+        }
+        elseif (!$this->get) {         
             $this->controller->home(); // no paramater, no action -> displaying homepage
         }
     }

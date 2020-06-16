@@ -10,6 +10,7 @@ use \App\Model\Repository\CommentRepository;
 use \App\Model\Manager\CommentManager;
 use \App\Model\Repository\UserRepository;
 use \App\Model\Manager\UserManager;
+use \App\Service\FormValidator;
 
 class FrontController
 {
@@ -30,7 +31,7 @@ class FrontController
 
     // Render homepage, by getting the last 4 most recent posts
     public function home(): void
-    {
+    {      
         $list_posts = $this->postManager->getHomepagePosts();
         $this->renderer->render('frontoffice/homepage.twig', ['listposts' => $list_posts]);
     }
@@ -92,5 +93,25 @@ class FrontController
     public function showSigninPage(): void
     {
         $this->renderer->render('frontoffice/signinPage.twig');
+    }
+
+    // Contact Form
+    public function contactForm(array $post): void
+    {      
+        $name = FormValidator::sanitize($post['name']);
+        $forename = FormValidator::sanitize($post['forename']);
+        $email = FormValidator::sanitize($post['email']);
+        $message = FormValidator::sanitize($post['message']);
+
+        if (!isset($name) || !isset($forename) || !isset($email) || !isset($message) || !FormValidator::is_email($email)) {
+            echo "Tous les champs ne sont pas remplis ou corrects";
+        } else {
+
+            /*
+                 Traitement du message, envoi du mail
+            */
+            echo "Votre formulaire a bien été envoyé.";
+        }
+        $this->home();
     }
 }
