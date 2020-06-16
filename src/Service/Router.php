@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Controller\FrontController; // FAUX ?
+use \App\Controller\FrontController;
 
 class Router
 {
