@@ -111,13 +111,41 @@ class FrontController
         //validate input
         if (!isset($lastname) || !isset($firstname) || !isset($email) || !isset($message) || !$this->formValidator->isEmail($email)) {
             echo "Tous les champs ne sont pas remplis ou corrects"; // temporaire
+        } else {
+            /*
+            Traitement du message, envoi du mail
+            Temporaire
+            */
+            echo "Votre message a bien été envoyé. <br>";
         }
-        /*
-                Traitement du message, envoi du mail
-                Temporaire
-        */
-        echo "Votre formulaire a bien été envoyé. <br>";
-        
         $this->home();
+    }
+
+    // Signin Form
+    public function signinForm(array $post): void
+    {
+        //sanitize input
+        $login = $this->formValidator->sanitizeString($post['login']);
+        $email =  $this->formValidator->sanitizeEmail($post['email']);
+
+        //validate input
+        /*
+            needs a password valid function /
+            - check if password has a certain length
+            - check if password is complex enought
+        */
+        $password = $post['password']; // temporaire, need a hash + salt function
+
+        if (!isset($login) || !isset($password) || !isset($email) || !$this->formValidator->isEmail($email)) {
+            echo "Tous les champs ne sont pas remplis ou corrects"; // temporaire
+            $this->showSigninPage();
+        } else {
+            /*
+                    Traitement du message, envoi du mail
+                    Temporaire
+            */
+            echo "Votre inscription a bien été enregistrée. <br>";
+            $this->showLoginPage();
+        }
     }
 }

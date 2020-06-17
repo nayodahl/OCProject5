@@ -50,6 +50,9 @@ class Router
                 $this->controller->showLoginPage();
             }
             if ($this->get['action'] === 'signin') {
+                if ($this->post) {
+                    $this->controller->signinForm($this->post);
+                }
                 $this->controller->showSigninPage();
             }
         } elseif ($this->post) {
