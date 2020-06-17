@@ -48,8 +48,12 @@ class FrontController
         // getting number of Posts, needed for the pager on the Post section
         $totalPosts = $this->postManager->getNumberOfPosts();
 
+        // getting previous and next postId based on creation date, needed for the pager
+        $nextId = $this->postManager->getNextPostId($postId);
+        $prevId = $this->postManager->getPreviousPostId($postId);
+
         // Some calculation for the pager on Comments section
-        $limit = 4; // number of Comments per page to display
+        $limit = 50; // number of Comments per page to display
         $offset = ($commentPage - 1) * $limit; // offset, to determine the number of the first Comment to display
         $totalComments = count($listComments); // total number of Comments
         $totalCommentPages = ceil($totalComments / $limit);
@@ -62,12 +66,13 @@ class FrontController
             'listcomments' => $itemsList,
             'currentPage' => $commentPage,
             'totalPages' => $totalCommentPages,
-            'totalPosts' => $totalPosts,
+            'prevId' => $prevId,
+            'nextId' => $nextId
             ]);
     }
 
     // Render Posts Page
-    public function showPostPage(int $currentPage): void
+    public function showPostsPage(int $currentPage): void
     {
         $list_posts = $this->postManager->getPosts();
         
@@ -109,15 +114,13 @@ class FrontController
         //validate input
         if (!isset($lastname) || !isset($firstname) || !isset($email) || !isset($message) || !$this->formValidator->isEmail($email)) {
             echo "Tous les champs ne sont pas remplis ou corrects"; // temporaire
-        } else {
-
-            /*
-                 Traitement du message, envoi du mail
-                 Temporaire
-            */
-            echo "Votre formulaire a bien été envoyé. <br>";
-            var_dump($lastname, $firstname, $email, $message);
         }
+        /*
+                Traitement du message, envoi du mail
+                Temporaire
+        */
+        echo "Votre formulaire a bien été envoyé. <br>";
+        
         $this->home();
     }
 }

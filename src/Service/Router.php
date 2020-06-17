@@ -42,7 +42,7 @@ class Router
             }
             if ($this->get['action'] === 'page') {
                 if ($this->get['id'] > 0) {
-                    $this->controller->showPostPage((int)($this->get['id']));
+                    $this->controller->showPostsPage((int)($this->get['id']));
                 }
             }
         } elseif (isset($this->get['action'])) {

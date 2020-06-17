@@ -21,8 +21,8 @@
                 <!-- Pager for Posts-->
                 <div class="clearfix">
                     {% include 'paginationSinglePost.twig' with {
-                        currentPage: postId,
-                        lastPage: totalPosts,
+                        prevId: prevId,
+                        nextId: nextId,
                     } only %}
                     
                 </div>
