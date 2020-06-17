@@ -19,6 +19,7 @@ class FrontController
     private $postManager;
     private $commentRepo;
     private $commentManager;
+    private $formValidator;
 
     public function __construct()
     {
@@ -27,11 +28,12 @@ class FrontController
         $this->postManager = new PostManager($this->postRepo);
         $this->commentRepo = new CommentRepository();
         $this->commentManager = new CommentManager($this->commentRepo);
+        $this->formValidator = new FormValidator();
     }
 
     // Render homepage, by getting the last 4 most recent posts
     public function home(): void
-    {      
+    {
         $list_posts = $this->postManager->getHomepagePosts();
         $this->renderer->render('frontoffice/homepage.twig', ['listposts' => $list_posts]);
     }
@@ -97,20 +99,24 @@ class FrontController
 
     // Contact Form
     public function contactForm(array $post): void
-    {      
-        $name = FormValidator::sanitize($post['name']);
-        $forename = FormValidator::sanitize($post['forename']);
-        $email = FormValidator::sanitize($post['email']);
-        $message = FormValidator::sanitize($post['message']);
+    {
+        //sanitize input
+        $lastname = $this->formValidator->sanitizeString($post['lastname']);
+        $firstname =  $this->formValidator->sanitizeString($post['firstname']);
+        $email =  $this->formValidator->sanitizeEmail($post['email']);
+        $message =  $this->formValidator->sanitizeString($post['message']);
 
-        if (!isset($name) || !isset($forename) || !isset($email) || !isset($message) || !FormValidator::is_email($email)) {
-            echo "Tous les champs ne sont pas remplis ou corrects";
+        //validate input
+        if (!isset($lastname) || !isset($firstname) || !isset($email) || !isset($message) || !$this->formValidator->isEmail($email)) {
+            echo "Tous les champs ne sont pas remplis ou corrects"; // temporaire
         } else {
 
             /*
                  Traitement du message, envoi du mail
+                 Temporaire
             */
-            echo "Votre formulaire a bien été envoyé.";
+            echo "Votre formulaire a bien été envoyé. <br>";
+            var_dump($lastname, $firstname, $email, $message);
         }
         $this->home();
     }

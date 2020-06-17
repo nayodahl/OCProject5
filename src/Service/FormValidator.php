@@ -5,24 +5,32 @@ namespace App\Service;
 
 class FormValidator
 {
-    public static function sanitize(string $data): ?string
+    public function sanitizeString(string $data): ?string
     {
-        if ((isset($data) && ($data != '')) && strlen($data) < 500 ) {
+        if ((isset($data) && ($data != '')) && strlen($data) < 500) {
             $data = trim($data);
-            $data = stripslashes($data);
+            $data = filter_var($data, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
             $data = htmlspecialchars($data);
 
             return $data;
         }
-        else return null;
+        return null;
     }
 
-    public static function is_email(string $value): bool
+    public function sanitizeEmail(string $data): ?string
+    {
+        if ((isset($data) && ($data != '')) && strlen($data) < 500) {
+            $data = filter_var($data, FILTER_SANITIZE_EMAIL);
+            return $data;
+        }
+        return null;
+    }
+
+    public function isEmail(string $value): bool
     {
         if (filter_var($value, FILTER_VALIDATE_EMAIL) && !empty($value)) {
             return true;
         }
-        else return false;
+        return false;
     }
-
 }

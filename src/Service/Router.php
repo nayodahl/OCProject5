@@ -52,11 +52,9 @@ class Router
             if ($this->get['action'] === 'signin') {
                 $this->controller->showSigninPage();
             }
-        } 
-        elseif ($this->post) {         
-            $this->controller->contactForm($this->post); 
-        }
-        elseif (!$this->get) {         
+        } elseif ($this->post) {
+            $this->controller->contactForm($this->post);
+        } elseif (!$this->get) {
             $this->controller->home(); // no paramater, no action -> displaying homepage
         }
     }
