@@ -45,9 +45,6 @@ class FrontController
         $post = $this->postManager->getSinglePost($postId);
         $listComments = $this->commentManager->getApprovedComments($postId);
 
-        // getting number of Posts, needed for the pager on the Post section
-        $totalPosts = $this->postManager->getNumberOfPosts();
-
         // getting previous and next postId based on creation date, needed for the pager
         $nextId = $this->postManager->getNextPostId($postId);
         $prevId = $this->postManager->getPreviousPostId($postId);
