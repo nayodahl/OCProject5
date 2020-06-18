@@ -133,6 +133,7 @@ class FrontController
             needs a password valid function /
             - check if password has a certain length
             - check if password is complex enought
+            needs a login valid, to check is the login is already taken in DB
         */
         $password = $post['password']; // temporaire, need a hash + salt function
 
@@ -141,10 +142,13 @@ class FrontController
             $this->showSigninPage();
         } else {
             /*
-                    Traitement du message, envoi du mail
-                    Temporaire
+                    Temporaire !!
+                    Traitement de l'inscription:
+                    - create user with status =  not activated
+                    - send mail with token
+
             */
-            echo "Votre inscription a bien été enregistrée. <br>";
+            echo "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription. <br>";
             $this->showLoginPage();
         }
     }
