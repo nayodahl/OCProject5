@@ -1,16 +1,16 @@
-{% extends 'LayoutFront.twig' %}
+{% extends 'LayoutBack.twig' %}
 
 {% block content %}
     <!-- Main Content -->
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
-                <h2 class="section-heading">Tous les articles</h2>
+                <a class="btn btn-primary left" href="#">Ecrire un Article</a
                 <hr>
 
                 {% for post in listposts %}
                     <div class="post-preview">
-                        <a href="index.php?action=post&amp;id={{ post.postId }}&amp;commentPage=1">
+                        <a href="#">
                         <h2 class="post-title">
                             {{ post.title }}
                         </h2>
@@ -21,15 +21,14 @@
                         <p class="post-meta">Publié par {{ post.authorLogin }} le {{ post.lastUpdate }}</p>
                     </div>
                     <div class="clearfix">
-                    <a class="btn btn-primary float-right" href="index.php?action=post&amp;id={{ post.postId }}&amp;commentPage=1">Lire la suite &rarr;</a>
+                    <a class="btn btn-primary float-right" href="#">Modifier &rarr;</a>
                 </div>
                     <hr>
                 {% endfor %}
 
                 <!-- Pager -->
-                <div class="clearfix">                                
-                </div>
-                {% include 'frontoffice/paginationPostsPage.twig' with {
+                <div class="clearfix"></div>
+                {% include 'backoffice/paginationPostsPage.twig' with {
                     currentPage: currentPage,
                     lastPage: totalPages
                 } only %}

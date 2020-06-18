@@ -1,4 +1,4 @@
-{% extends 'layoutfront.twig' %}
+{% extends 'LayoutFront.twig' %}
 
 {% block content %}
     <!-- Main Content -->
@@ -20,7 +20,7 @@
                 
                 <!-- Pager for Posts-->
                 <div class="clearfix">
-                    {% include 'paginationSinglePost.twig' with {
+                    {% include 'frontoffice/paginationSinglePost.twig' with {
                         prevId: prevId,
                         nextId: nextId,
                     } only %}
@@ -47,7 +47,7 @@
                 {% endfor %}
                 <!-- Pager for Comments-->
                 <div class="clearfix">
-                    {% include 'paginationComment.twig' with {
+                    {% include 'frontoffice/paginationComment.twig' with {
                         currentPage: currentPage,
                         lastPage: totalPages,
                         postId: postId

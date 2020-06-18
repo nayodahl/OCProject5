@@ -10,6 +10,6 @@ class Database
 {
     protected function dbConnect()
     {
-        return new \PDO('mysql:host=localhost;dbname=blog;charset=utf8', 'root', 'W6shkqGTGsyM');
+        return new \PDO('mysql:host=localhost;dbname=blog;charset=utf8', 'blog', 'blog');
     }
 }
