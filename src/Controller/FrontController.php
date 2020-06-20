@@ -35,15 +35,19 @@ class FrontController
     public function home(): void
     {
         $list_posts = $this->postManager->getHomepagePosts();
-        $this->renderer->render('frontoffice/homepage.twig', ['listposts' => $list_posts]);
+        $this->renderer->render('frontoffice/HomePage.twig', ['listposts' => $list_posts]);
     }
     
     // Render the single Post view
     public function showSinglePost(array $get): void
     {
-        $postId = ((int)$get[1]);
-        $commentPage=1;
-        // validating $get
+        // validating $get inputs
+        $postId = 1;
+        if (isset($get[1]) &&  ($get[1] > 0)){
+            $postId=((int)$get[1]);
+        };        
+        
+        $commentPage=1;        
         if (isset($get[2]) &&  ($get[2] > 0)){
             $commentPage=((int)$get[2]);
         };        
@@ -67,7 +71,7 @@ class FrontController
         $itemsList = array_splice($listComments, (int)$offset, $limit);
 
         // twig rendering with some parameters
-        $this->renderer->render('frontoffice/singlePostPage.twig', [
+        $this->renderer->render('frontoffice/SinglePostPage.twig', [
             'post' => $post,
             'postId' => $postId,
             'listcomments' => $itemsList,
@@ -99,7 +103,7 @@ class FrontController
         $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
         $itemsList = array_splice($list_posts, (int)$offset, $limit);
         
-        $this->renderer->render('frontoffice/postsPage.twig', [
+        $this->renderer->render('frontoffice/PostsPage.twig', [
             'listposts' => $itemsList,
             'currentPage' => $currentPage,
             'totalPages' => $totalPages
@@ -109,13 +113,13 @@ class FrontController
     // Render Login Page
     public function showLoginPage(): void
     {
-        $this->renderer->render('frontoffice/loginPage.twig');
+        $this->renderer->render('frontoffice/LoginPage.twig');
     }
 
     // Render Signin Page
     public function showSigninPage(): void
     {
-        $this->renderer->render('frontoffice/signinPage.twig');
+        $this->renderer->render('frontoffice/SigninPage.twig');
     }
 
     // Contact Form

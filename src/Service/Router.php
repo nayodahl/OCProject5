@@ -10,7 +10,6 @@ class Router
 {
     private $frontController;
     private $backController;
-    private $router;
     private $get;
     private $post;
     private $routes;
@@ -35,6 +34,7 @@ class Router
 
     }
 
+    // register all routes
     public function register(string $method, string $action, string $controller, string $actionController): void {
         $route = [
             'method' => $method,
@@ -51,7 +51,6 @@ class Router
         if ($this->get){ $method='GET'; };
         $controller = $this->get['url'][0] ?? null;
         $action = $this->get['url'][1] ?? null;
-        $param = $this->get['url'][2] ?? 1;
         
         // if controller is not defined, we set it to frontcontroller (default)
         if  (!(isset($controller))) {
@@ -59,20 +58,26 @@ class Router
         };
 
         // if we dont want admin section but we have parameters in url, then we switches parameters and set controller to frontcontroller
-        if (( $controller != "admin") || ( $controller != "frontController" )){
-            $param = $action;
+        if (($controller <> "admin") && ($controller <> "frontController")){
             $action = $controller;
             $controller = "frontController";
         };
+        // just an alias for admin = backController
+        if ($controller === "admin"){$controller = "backController";};
        
-        // checking all registred routes, if one matches
+        // checking all registred routes, if one matches we call the controller with its method and pass it $get and/or $post as parameters
         foreach($this->routes as $route) {
             if ($route['action'] === $action && $route['controller'] === $controller) {
+                
+                if ($route['controller'] === "backController"){
+                    $isAdmin = true; // temporary, it will be a method that check if user has admin rights
+                    if (!$isAdmin){break;};
+                }
                 $this->{$route['controller']}->{$route['ac']}($this->get['url']);
                 break;
             }
             // if no action, showing homepage
-            if ( $action === $controller) {
+            if ( !isset($action)) {
                 $this->{$route['controller']}->{$route['ac']}();
                 break;
             }

@@ -1,5 +1,5 @@
 
-{% set paginationPath = "index.php?action=post&id=" %}
+{% set paginationPath = "post/" %}
 
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
@@ -11,10 +11,10 @@
 
         {% if nextId %}
             <li class="page-item"><a class="page-link" href="{{ paginationPath }}{{ nextId }}">Suivant</a>
-            <li class="page-item"><a class="page-link" href="index.php?action=page&amp;id=1">Tous les articles</a></li>
+            <li class="page-item"><a class="page-link" href="posts">Tous les articles</a></li>
         {% else %}
             <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Suivant</a></li>
-            <li class="page-item"><a class="page-link" href="index.php?action=page&amp;id=1">Tous les articles</a></li>
+            <li class="page-item"><a class="page-link" href="posts">Tous les articles</a></li>
         {% endif %}
     </ul>
 </nav>

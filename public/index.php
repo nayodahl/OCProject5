@@ -20,5 +20,8 @@ $router->register('GET', 'post', 'frontController', 'showSinglePost');
 $router->register('GET', 'login', 'frontController', 'showLoginPage');
 $router->register('GET', 'signin', 'frontController', 'showSigninPage');
 
+// Back
+$router->register('GET', 'posts', 'backController', 'showPostsManager');
+
 
 $router->routerRequest();

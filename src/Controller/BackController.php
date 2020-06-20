@@ -29,16 +29,25 @@ class BackController
     }
 
     // Render Posts Manager page (default)
-    public function showPostsManager(int $currentPage): void
+    public function showPostsManager(array $get): void
     {
+        $currentPage=1;
+        // validating $get
+        if (isset($get[2]) && ($get[2] > 0)){
+            $currentPage=((int)$get[2]);
+        };
+
         $list_posts = $this->postManager->getPosts();
 
         // Some calculation for the pager for Posts page
         $limit = 4; // number of Posts per page to display
-        $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
         $totalItems = count($list_posts); // total number of Posts
         $totalPages = ceil($totalItems / $limit);
-        $itemsList = array_splice($list_posts, $offset, $limit);
+        if ($currentPage > $totalPages){
+            $currentPage=$totalPages;
+        };
+        $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
+        $itemsList = array_splice($list_posts, (int)$offset, $limit);
 
         $this->renderer->render('backoffice/PostsManager.twig', [
             'listposts' => $itemsList,

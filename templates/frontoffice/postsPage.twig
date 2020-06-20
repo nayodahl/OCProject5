@@ -10,7 +10,7 @@
 
                 {% for post in listposts %}
                     <div class="post-preview">
-                        <a href="index.php?action=post&amp;id={{ post.postId }}&amp;commentPage=1">
+                        <a href="post&#47;{{ post.postId }}">
                         <h2 class="post-title">
                             {{ post.title }}
                         </h2>
@@ -21,7 +21,7 @@
                         <p class="post-meta">Publié par {{ post.authorLogin }} le {{ post.lastUpdate }}</p>
                     </div>
                     <div class="clearfix">
-                    <a class="btn btn-primary float-right" href="index.php?action=post&amp;id={{ post.postId }}&amp;commentPage=1">Lire la suite &rarr;</a>
+                    <a class="btn btn-primary float-right" href="post&#47;{{ post.postId }}">Lire la suite &rarr;</a>
                 </div>
                     <hr>
                 {% endfor %}
@@ -29,7 +29,7 @@
                 <!-- Pager -->
                 <div class="clearfix">                                
                 </div>
-                {% include 'frontoffice/paginationPostsPage.twig' with {
+                {% include 'frontoffice/PaginationPostsPage.twig' with {
                     currentPage: currentPage,
                     lastPage: totalPages
                 } only %}

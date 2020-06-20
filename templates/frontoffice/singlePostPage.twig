@@ -20,7 +20,7 @@
                 
                 <!-- Pager for Posts-->
                 <div class="clearfix">
-                    {% include 'frontoffice/paginationSinglePost.twig' with {
+                    {% include 'frontoffice/PaginationSinglePost.twig' with {
                         prevId: prevId,
                         nextId: nextId,
                     } only %}
@@ -47,7 +47,7 @@
                 {% endfor %}
                 <!-- Pager for Comments-->
                 <div class="clearfix">
-                    {% include 'frontoffice/paginationComment.twig' with {
+                    {% include 'frontoffice/PaginationComment.twig' with {
                         currentPage: currentPage,
                         lastPage: totalPages,
                         postId: postId
