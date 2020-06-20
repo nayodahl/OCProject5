@@ -14,11 +14,12 @@ $router = new Router();
 
 // Routes
 //  Front
-$router->register('GET', '', 'frontController', 'home');
+$router->register('GET', null, 'frontController', 'home');
 $router->register('GET', 'posts', 'frontController', 'showPostsPage');
 $router->register('GET', 'post', 'frontController', 'showSinglePost');
 $router->register('GET', 'login', 'frontController', 'showLoginPage');
 $router->register('GET', 'signin', 'frontController', 'showSigninPage');
+$router->register('POST', null, 'frontController', 'contactForm');
 
 // Back
 $router->register('GET', 'posts', 'backController', 'showPostsManager');

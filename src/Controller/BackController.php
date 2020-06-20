@@ -33,7 +33,7 @@ class BackController
     {
         $currentPage=1;
         // validating $get
-        if (isset($get[2]) && ($get[2] > 0)){
+        if (isset($get[2]) && ($get[2] > 0)) {
             $currentPage=((int)$get[2]);
         };
 
@@ -43,7 +43,7 @@ class BackController
         $limit = 4; // number of Posts per page to display
         $totalItems = count($list_posts); // total number of Posts
         $totalPages = ceil($totalItems / $limit);
-        if ($currentPage > $totalPages){
+        if ($currentPage > $totalPages) {
             $currentPage=$totalPages;
         };
         $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display

@@ -43,14 +43,14 @@ class FrontController
     {
         // validating $get inputs
         $postId = 1;
-        if (isset($get[1]) &&  ($get[1] > 0)){
+        if (isset($get[1]) &&  ($get[1] > 0)) {
             $postId=((int)$get[1]);
-        };        
+        };
         
-        $commentPage=1;        
-        if (isset($get[2]) &&  ($get[2] > 0)){
+        $commentPage=1;
+        if (isset($get[2]) &&  ($get[2] > 0)) {
             $commentPage=((int)$get[2]);
-        };        
+        };
         
         // get Post content and its Comments
         $post = $this->postManager->getSinglePost($postId);
@@ -61,10 +61,10 @@ class FrontController
         $prevId = $this->postManager->getPreviousPostId($postId);
 
         // Some calculation for the pager on Comments section
-        $limit = 50; // number of Comments per page to display        
+        $limit = 50; // number of Comments per page to display
         $totalComments = count($listComments); // total number of Comments
         $totalCommentPages = ceil($totalComments / $limit);
-        if ($commentPage > $totalCommentPages){
+        if ($commentPage > $totalCommentPages) {
             $commentPage=$totalCommentPages;
         };
         $offset = ($commentPage - 1) * $limit; // offset, to determine the number of the first Comment to display
@@ -87,17 +87,17 @@ class FrontController
     {
         $currentPage=1;
         // validating $get
-        if (isset($get[1]) && ($get[1] > 0)){
+        if (isset($get[1]) && ($get[1] > 0)) {
             $currentPage=((int)$get[1]);
         };
 
         $list_posts = $this->postManager->getPosts();
         
         // Some calculation for the pager for Posts page
-        $limit = 4; // number of Posts per page to display        
+        $limit = 4; // number of Posts per page to display
         $totalItems = count($list_posts); // total number of Posts
-        $totalPages = ceil($totalItems / $limit);        
-        if ($currentPage > $totalPages){
+        $totalPages = ceil($totalItems / $limit);
+        if ($currentPage > $totalPages) {
             $currentPage=$totalPages;
         };
         $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
@@ -123,7 +123,7 @@ class FrontController
     }
 
     // Contact Form
-    public function contactForm(array $post): void
+    public function contactForm(?array $get, ?array $post): void
     {
         //sanitize input
         $lastname = $this->formValidator->sanitizeString($post['lastname']);
@@ -133,14 +133,14 @@ class FrontController
 
         //validate input
         if (!isset($lastname) || !isset($firstname) || !isset($email) || !isset($message) || !$this->formValidator->isEmail($email)) {
-            echo "Tous les champs ne sont pas remplis ou corrects"; // temporaire
-        } else {
-            /*
-            Traitement du message, envoi du mail
-            Temporaire
-            */
-            echo "Votre message a bien été envoyé. <br>";
+            echo "Tous les champs ne sont pas remplis ou corrects";
+            return; // temporaire
         }
+        /*
+        Traitement du message, envoi du mail
+        Temporaire
+        */
+        echo "Votre message a bien été envoyé. <br>";
         $this->home();
     }
 

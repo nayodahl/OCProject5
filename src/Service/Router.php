@@ -26,59 +26,60 @@ class Router
         if (isset($_GET['url'])) {
             $this->get = $_GET;
             $this->get['url'] = explode('/', $this->get['url']);
-        }        
+        }
 
         if (isset($_POST)) {
             $this->post = $_POST;
         }
-
     }
 
     // register all routes
-    public function register(string $method, string $action, string $controller, string $actionController): void {
+    public function register(string $method, ?string $action, string $controller, string $actionController): void
+    {
         $route = [
             'method' => $method,
             'action' => $action,
-            'controller' => $controller,	
+            'controller' => $controller,
             'ac' => $actionController,
-        ];    
+        ];
         $this->routes[] = $route;
     }
     
     // Routing entry request
     public function routerRequest(): void
-    {        	
-        if ($this->get){ $method='GET'; };
+    {
+        $method='GET';
+        if ($this->post) {
+            $method='POST';
+        };
         $controller = $this->get['url'][0] ?? null;
         $action = $this->get['url'][1] ?? null;
         
         // if controller is not defined, we set it to frontcontroller (default)
-        if  (!(isset($controller))) {
+        if (!(isset($controller))) {
             $controller = "frontController";
         };
 
         // if we dont want admin section but we have parameters in url, then we switches parameters and set controller to frontcontroller
-        if (($controller <> "admin") && ($controller <> "frontController")){
+        if (($controller <> "admin") && ($controller <> "frontController")) {
             $action = $controller;
             $controller = "frontController";
         };
         // just an alias for admin = backController
-        if ($controller === "admin"){$controller = "backController";};
+        if ($controller === "admin") {
+            $controller = "backController";
+        };
        
         // checking all registred routes, if one matches we call the controller with its method and pass it $get and/or $post as parameters
-        foreach($this->routes as $route) {
-            if ($route['action'] === $action && $route['controller'] === $controller) {
-                
-                if ($route['controller'] === "backController"){
+        foreach ($this->routes as $route) {
+            if ($route['action'] === $action && $route['controller'] === $controller && $route['method'] === $method) {
+                if ($route['controller'] === "backController") {
                     $isAdmin = true; // temporary, it will be a method that check if user has admin rights
-                    if (!$isAdmin){break;};
+                    if (!$isAdmin) {
+                        break;
+                    };
                 }
-                $this->{$route['controller']}->{$route['ac']}($this->get['url']);
-                break;
-            }
-            // if no action, showing homepage
-            if ( !isset($action)) {
-                $this->{$route['controller']}->{$route['ac']}();
+                $this->{$route['controller']}->{$route['ac']}($this->get['url'] ?? null, $this->post ?? null);
                 break;
             }
         }
@@ -120,6 +121,5 @@ class Router
             $this->frontController->home(); // no paramater, no action -> displaying homepage
         }
         */
-        
     }
 }
