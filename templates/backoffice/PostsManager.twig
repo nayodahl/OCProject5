@@ -10,14 +10,12 @@
 
                 {% for post in listposts %}
                     <div class="post-preview">
-                        <a href="#">
                         <h2 class="post-title">
                             {{ post.title }}
                         </h2>
                         <h3 class="post-subtitle">
                             {{ post.chapo }}
                         </h3>
-                        </a>
                         <p class="post-meta">Publié par {{ post.authorLogin }} le {{ post.lastUpdate }}</p>
                     </div>
                     <div class="clearfix">
@@ -28,7 +26,7 @@
 
                 <!-- Pager -->
                 <div class="clearfix"></div>
-                {% include 'backoffice/paginationPostsPage.twig' with {
+                {% include 'backoffice/PaginationPostsPage.twig' with {
                     currentPage: currentPage,
                     lastPage: totalPages
                 } only %}

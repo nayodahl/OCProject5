@@ -39,8 +39,15 @@ class FrontController
     }
     
     // Render the single Post view
-    public function showSinglePost(int $postId, int $commentPage): void
+    public function showSinglePost(array $get): void
     {
+        $postId = ((int)$get[1]);
+        $commentPage=1;
+        // validating $get
+        if (isset($get[2]) &&  ($get[2] > 0)){
+            $commentPage=((int)$get[2]);
+        };        
+        
         // get Post content and its Comments
         $post = $this->postManager->getSinglePost($postId);
         $listComments = $this->commentManager->getApprovedComments($postId);
@@ -50,11 +57,14 @@ class FrontController
         $prevId = $this->postManager->getPreviousPostId($postId);
 
         // Some calculation for the pager on Comments section
-        $limit = 50; // number of Comments per page to display
-        $offset = ($commentPage - 1) * $limit; // offset, to determine the number of the first Comment to display
+        $limit = 50; // number of Comments per page to display        
         $totalComments = count($listComments); // total number of Comments
         $totalCommentPages = ceil($totalComments / $limit);
-        $itemsList = array_splice($listComments, $offset, $limit);
+        if ($commentPage > $totalCommentPages){
+            $commentPage=$totalCommentPages;
+        };
+        $offset = ($commentPage - 1) * $limit; // offset, to determine the number of the first Comment to display
+        $itemsList = array_splice($listComments, (int)$offset, $limit);
 
         // twig rendering with some parameters
         $this->renderer->render('frontoffice/singlePostPage.twig', [
@@ -69,16 +79,25 @@ class FrontController
     }
 
     // Render Posts Page
-    public function showPostsPage(int $currentPage): void
+    public function showPostsPage(array $get): void
     {
+        $currentPage=1;
+        // validating $get
+        if (isset($get[1]) && ($get[1] > 0)){
+            $currentPage=((int)$get[1]);
+        };
+
         $list_posts = $this->postManager->getPosts();
         
         // Some calculation for the pager for Posts page
-        $limit = 4; // number of Posts per page to display
-        $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
+        $limit = 4; // number of Posts per page to display        
         $totalItems = count($list_posts); // total number of Posts
-        $totalPages = ceil($totalItems / $limit);
-        $itemsList = array_splice($list_posts, $offset, $limit);
+        $totalPages = ceil($totalItems / $limit);        
+        if ($currentPage > $totalPages){
+            $currentPage=$totalPages;
+        };
+        $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
+        $itemsList = array_splice($list_posts, (int)$offset, $limit);
         
         $this->renderer->render('frontoffice/postsPage.twig', [
             'listposts' => $itemsList,
