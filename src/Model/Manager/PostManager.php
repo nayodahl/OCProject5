@@ -27,12 +27,12 @@ class PostManager
         $numberofPost = count($postsList);
         $key = null;
         foreach ($postsList as $post) {
-            if ($postId == $post->getPostId()) {
+            if ($postId === $post->getPostId()) {
                 $key = $post;
                 break;
             }
         }
-        $next = array_search($key, $postsList)+1;
+        $next = array_search($key, $postsList, true)+1;
         if ($next < $numberofPost) {
             return $postsList[$next]->getPostId();
         }
@@ -45,12 +45,12 @@ class PostManager
         $postsList = $this->postRepo->getAllPosts();
         $key = null;
         foreach ($postsList as $post) {
-            if ($postId == $post->getPostId()) {
+            if ($postId === $post->getPostId()) {
                 $key = $post;
                 break;
             }
         }
-        $prev = array_search($key, $postsList)-1;
+        $prev = array_search($key, $postsList, true)-1;
         if ($prev >= 0) {
             return $postsList[$prev]->getPostId();
         }

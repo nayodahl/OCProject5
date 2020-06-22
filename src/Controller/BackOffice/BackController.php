@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\BackOffice;
 
 use \App\View\View;
 use \App\Model\Repository\PostRepository;
@@ -38,17 +38,17 @@ class BackController
             $currentPage=((int)$request->getGet()[2]);
         };
 
-        $list_posts = $this->postManager->getPosts();
+        $listPosts = $this->postManager->getPosts();
 
         // Some calculation for the pager for Posts page
         $limit = 4; // number of Posts per page to display
-        $totalItems = count($list_posts); // total number of Posts
+        $totalItems = count($listPosts); // total number of Posts
         $totalPages = ceil($totalItems / $limit);
         if ($currentPage > $totalPages) {
             $currentPage=$totalPages;
         };
         $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
-        $itemsList = array_splice($list_posts, (int)$offset, $limit);
+        $itemsList = array_splice($listPosts, (int)$offset, $limit);
 
         $this->renderer->render('backoffice/PostsManager.twig', [
             'listposts' => $itemsList,

@@ -7,7 +7,7 @@ class FormValidator
 {
     public function sanitizeString(string $data): ?string
     {
-        if ((isset($data) && ($data != '')) && strlen($data) < 500) {
+        if (($data !== '') && (mb_strlen($data) < 500)) {
             $data = trim($data);
             $data = filter_var($data, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
             $data = htmlspecialchars($data);
@@ -19,7 +19,7 @@ class FormValidator
 
     public function sanitizeEmail(string $data): ?string
     {
-        if ((isset($data) && ($data != '')) && strlen($data) < 500) {
+        if (( ($data !== '')) && mb_strlen($data) < 500) {
             $data = filter_var($data, FILTER_SANITIZE_EMAIL);
             return $data;
         }

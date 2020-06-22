@@ -11,19 +11,17 @@ $whoops->register();
 
 $router = new Router();
 
-
 // Routes
 //  Front
-$router->register('GET', null, 'frontController', 'home');
-$router->register('GET', 'posts', 'frontController', 'showPostsPage');
-$router->register('GET', 'post', 'frontController', 'showSinglePost');
-$router->register('GET', 'login', 'frontController', 'showLoginPage');
-$router->register('GET', 'signin', 'frontController', 'showSigninPage');
-$router->register('POST', null, 'frontController', 'contactForm');
-$router->register('POST', 'signin', 'frontController', 'signinForm');
+$router->register('GET', null, 'postController', 'home');
+$router->register('GET', 'posts', 'postController', 'showPostsPage');
+$router->register('GET', 'post', 'postController', 'showSinglePost');
+$router->register('GET', 'login', 'accountController', 'showLoginPage');
+$router->register('GET', 'signin', 'accountController', 'showSigninPage');
+$router->register('POST', null, 'accountController', 'contactForm');
+$router->register('POST', 'signin', 'accountController', 'signinForm');
 
 // Back
 $router->register('GET', 'posts', 'backController', 'showPostsManager');
-
 
 $router->routerRequest();
