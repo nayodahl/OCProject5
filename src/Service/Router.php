@@ -5,32 +5,21 @@ namespace App\Service;
 
 use \App\Controller\FrontController;
 use \App\Controller\BackController;
+use \App\Service\Http\Request;
 
 class Router
 {
     private $frontController;
     private $backController;
-    private $get;
-    private $post;
     private $routes;
+    private $request;
     
     public function __construct()
     {
         // dependancies
         $this->frontController = new FrontController();
         $this->backController = new BackController();
-      
-        // En attendent de mettre en place la class App\Service\Http\Request
-        $this->get = null;
-        $this->post = null;
-        if (isset($_GET['url'])) {
-            $this->get = $_GET;
-            $this->get['url'] = explode('/', $this->get['url']);
-        }
-
-        if (isset($_POST)) {
-            $this->post = $_POST;
-        }
+        $this->request = new Request();
     }
 
     // register all routes
@@ -49,12 +38,16 @@ class Router
     public function routerRequest(): void
     {
         $method='GET';
-        if ($this->post) {
+        if ($this->request->getPost()) {
             $method='POST';
         };
-        $controller = $this->get['url'][0] ?? null;
-        $action = $this->get['url'][1] ?? null;
-        
+        if ($this->request->getGet()) {
+            $controller = $this->request->getGet()[0];
+            $action = $this->request->getGet()[1] ?? null;
+        };
+        if (!$this->request->getGet()) {
+            $controller = $action = null;
+        };
         // if controller is not defined, we set it to frontcontroller (default)
         if (!(isset($controller))) {
             $controller = "frontController";
@@ -73,13 +66,13 @@ class Router
         // checking all registred routes, if one matches we call the controller with its method and pass it $get and/or $post as parameters
         foreach ($this->routes as $route) {
             if ($route['action'] === $action && $route['controller'] === $controller && $route['method'] === $method) {
-                if ($route['controller'] === "backController") {
+                if ($controller === "backController") {
                     $isAdmin = true; // temporary, it will be a method that check if user has admin rights
                     if (!$isAdmin) {
                         break;
                     };
                 }
-                $this->{$route['controller']}->{$route['ac']}($this->get['url'] ?? null, $this->post ?? null);
+                $this->{$route['controller']}->{$route['ac']}($this->request);
                 break;
             }
         }

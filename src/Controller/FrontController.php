@@ -8,9 +8,10 @@ use \App\Model\Repository\PostRepository;
 use \App\Model\Manager\PostManager;
 use \App\Model\Repository\CommentRepository;
 use \App\Model\Manager\CommentManager;
-use \App\Model\Repository\UserRepository;
-use \App\Model\Manager\UserManager;
+//use \App\Model\Repository\UserRepository;
+//use \App\Model\Manager\UserManager;
 use \App\Service\FormValidator;
+use \App\Service\Http\Request;
 
 class FrontController
 {
@@ -39,17 +40,17 @@ class FrontController
     }
     
     // Render the single Post view
-    public function showSinglePost(array $get): void
+    public function showSinglePost(Request $request): void
     {
         // validating $get inputs
         $postId = 1;
-        if (isset($get[1]) &&  ($get[1] > 0)) {
-            $postId=((int)$get[1]);
+        if (isset($request->getGet()[1]) &&  ($request->getGet()[1] > 0)) {
+            $postId=((int)$request->getGet()[1]);
         };
         
         $commentPage=1;
-        if (isset($get[2]) &&  ($get[2] > 0)) {
-            $commentPage=((int)$get[2]);
+        if (isset($request->getGet()[2]) &&  ($request->getGet()[2] > 0)) {
+            $commentPage=((int)$request->getGet()[2]);
         };
         
         // get Post content and its Comments
@@ -83,12 +84,12 @@ class FrontController
     }
 
     // Render Posts Page
-    public function showPostsPage(array $get): void
+    public function showPostsPage(Request $request): void
     {
         $currentPage=1;
-        // validating $get
-        if (isset($get[1]) && ($get[1] > 0)) {
-            $currentPage=((int)$get[1]);
+        // validating $_GET
+        if (isset($request->getGet()[1]) && ($request->getGet()[1] > 0)) {
+            $currentPage=((int)$request->getGet()[1]);
         };
 
         $list_posts = $this->postManager->getPosts();
@@ -123,13 +124,13 @@ class FrontController
     }
 
     // Contact Form
-    public function contactForm(?array $get, ?array $post): void
+    public function contactForm(Request $request): void
     {
         //sanitize input
-        $lastname = $this->formValidator->sanitizeString($post['lastname']);
-        $firstname =  $this->formValidator->sanitizeString($post['firstname']);
-        $email =  $this->formValidator->sanitizeEmail($post['email']);
-        $message =  $this->formValidator->sanitizeString($post['message']);
+        $lastname = $this->formValidator->sanitizeString($request->getPost()['lastname']);
+        $firstname =  $this->formValidator->sanitizeString($request->getPost()['firstname']);
+        $email =  $this->formValidator->sanitizeEmail($request->getPost()['email']);
+        $message =  $this->formValidator->sanitizeString($request->getPost()['message']);
 
         //validate input
         if (!isset($lastname) || !isset($firstname) || !isset($email) || !isset($message) || !$this->formValidator->isEmail($email)) {
@@ -145,11 +146,11 @@ class FrontController
     }
 
     // Signin Form
-    public function signinForm(array $post): void
+    public function signinForm(Request $request): void
     {
         //sanitize input
-        $login = $this->formValidator->sanitizeString($post['login']);
-        $email =  $this->formValidator->sanitizeEmail($post['email']);
+        $login = $this->formValidator->sanitizeString($request->getPost()['login']);
+        $email =  $this->formValidator->sanitizeEmail($request->getPost()['email']);
 
         //validate input
         /*
@@ -158,7 +159,7 @@ class FrontController
             - check if password is complex enought
             needs a login valid, to check is the login is already taken in DB
         */
-        $password = $post['password']; // temporaire, need a hash + salt function
+        $password = $request->getPost()['password']; // temporaire, need a hash + salt function
 
         if (!isset($login) || !isset($password) || !isset($email) || !$this->formValidator->isEmail($email)) {
             echo "Tous les champs ne sont pas remplis ou corrects"; // temporaire

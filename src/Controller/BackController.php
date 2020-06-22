@@ -8,8 +8,9 @@ use \App\Model\Repository\PostRepository;
 use \App\Model\Manager\PostManager;
 use \App\Model\Repository\CommentRepository;
 use \App\Model\Manager\CommentManager;
-use \App\Model\Repository\UserRepository;
-use \App\Model\Manager\UserManager;
+//use \App\Model\Repository\UserRepository;
+//use \App\Model\Manager\UserManager;
+use \App\Service\Http\Request;
 
 class BackController
 {
@@ -29,12 +30,12 @@ class BackController
     }
 
     // Render Posts Manager page (default)
-    public function showPostsManager(array $get): void
+    public function showPostsManager(Request $request): void
     {
         $currentPage=1;
-        // validating $get
-        if (isset($get[2]) && ($get[2] > 0)) {
-            $currentPage=((int)$get[2]);
+        // validating $_GET
+        if (isset($request->getGet()[2]) && ($request->getGet()[2] > 0)) {
+            $currentPage=((int)$request->getGet()[2]);
         };
 
         $list_posts = $this->postManager->getPosts();
