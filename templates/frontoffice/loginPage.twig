@@ -8,7 +8,7 @@
                 <h2 class="section-heading" id="login">Connexion</h2>
             </div>
             <div class="col-lg-6 col-md-4 mx-auto">                
-                <form name="sentLogin" id="loginForm" class="needs-validation" novalidate>
+                <form method="post" action="postController" name="sentLogin" id="loginForm" class="needs-validation" novalidate>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls">
                         <label>Login</label>
@@ -54,7 +54,7 @@
                     })();
                 </script>
                 <div class="col-md-6 mx-auto">
-                    <a href="signin">Pas encore de compte ?</a>
+                    <a href="account/signin">Pas encore de compte ?</a>
                 </div>
             </div>
         </div>

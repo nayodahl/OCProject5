@@ -50,10 +50,9 @@ class Router
         if (!$this->request->getGet()) {
             $controller = $action = null;
         };
-        // if controller is not defined, we set it to postcontroller (default)
-        if (!(isset($controller))) {
-            $controller = "postController";
-        };
+        // if controller is not defined, we set it to default values
+        if (!(isset($controller)) && ($method === 'GET')) {$controller = "postController";};
+        if (!(isset($controller)) && ($method === 'POST')) {$controller = "accountController";};
 
         // just aliases
         if ($controller === "admin") {$controller = "backController";};
@@ -64,11 +63,10 @@ class Router
             $action = $controller;
             $controller = "postController";
         };
-
        
         // checking all registred routes, if one matches we call the controller with its method and pass it $get and/or $post as parameters
         foreach ($this->routes as $route) {
-            if ($route['method'] === $method && $route['action'] === $action && (($route['controller'] === "postController") || ($route['controller'] === "accountController") || ($route['controller'] === "backController"))) {
+            if ($route['method'] === $method && $route['action'] === $action && $route['controller'] === $controller) {
                 if ($controller === "backController") {
                     $isAdmin = true; // temporary, it will be a method that check if user has admin rights
                     if (!$isAdmin) {

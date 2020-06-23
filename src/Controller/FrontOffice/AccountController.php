@@ -94,7 +94,7 @@ class AccountController
 
             */
             echo "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription. <br>";
-            header('location: /account/login');
+            header('location: login');
         }
     }
 }
