@@ -85,16 +85,16 @@ class AccountController
         if (!isset($login) || !isset($password) || !isset($email) || !$this->formValidator->isEmail($email)) {
             echo "Tous les champs ne sont pas remplis ou corrects"; // temporaire
             $this->showSigninPage();
-        } else {
-            /*
-                    Temporaire !!
-                    Traitement de l'inscription:
-                    - create user with status =  not activated
-                    - send mail with token
+            return;
+        }  
+        /*
+                Temporaire !!
+                Traitement de l'inscription:
+                - create user with status =  not activated
+                - send mail with token
 
-            */
-            echo "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription. <br>";
-            header('location: login');
-        }
+        */
+        echo "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription. <br>";
+        header('location: login');       
     }
 }

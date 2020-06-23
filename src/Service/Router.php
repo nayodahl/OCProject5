@@ -10,7 +10,8 @@ use \App\Service\Http\Request;
 
 class Router
 {
-    private $frontController;
+    private $postController;
+    private $accountController;
     private $backController;
     private $routes;
     private $request;
