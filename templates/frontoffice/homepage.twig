@@ -1,4 +1,4 @@
-{% extends 'layoutfront.twig' %}
+{% extends 'LayoutFront.twig' %}
 
 {% block content %}
     <!-- Main Content -->
@@ -7,62 +7,28 @@
             <div class="col-lg-8 col-md-10 mx-auto">
                 <h2 class="section-heading">Les derniers articles</h2>
                 <hr>
-                <div class="post-preview">
-                    <a href="post.html">
-                    <h2 class="post-title">
-                        Man must explore, and this is exploration at its greatest
-                    </h2>
-                    <h3 class="post-subtitle">
-                        Problems look mighty small from 150 miles up
-                    </h3>
-                    </a>
-                    <p class="post-meta">Posted by
-                    <a href="#">Start Bootstrap</a>
-                    on September 24, 2019</p>
+
+                {% for post in listposts %}
+                    <div class="post-preview">
+                        <a href="post&#47;{{ post.postId }}">
+                        <h2 class="post-title">
+                            {{ post.title }}
+                        </h2>
+                        <h3 class="post-subtitle">
+                            {{ post.chapo }}
+                        </h3>
+                        </a>
+                        <p class="post-meta">Publié par {{ post.authorLogin }} le {{ post.lastUpdate }}</p>
+                    </div>
+                    <div class="clearfix">
+                    <a class="btn btn-primary float-right" href="post&#47;{{ post.postId }}">Lire la suite &rarr;</a>
                 </div>
-                <hr>
-                <div class="post-preview">
-                    <a href="post.html">
-                    <h2 class="post-title">
-                        I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.
-                    </h2>
-                    </a>
-                    <p class="post-meta">Posted by
-                    <a href="#">Start Bootstrap</a>
-                    on September 18, 2019</p>
-                </div>
-                <hr>
-                <div class="post-preview">
-                    <a href="post.html">
-                    <h2 class="post-title">
-                        Science has not yet mastered prophecy
-                    </h2>
-                    <h3 class="post-subtitle">
-                        We predict too much for the next year and yet far too little for the next ten.
-                    </h3>
-                    </a>
-                    <p class="post-meta">Posted by
-                    <a href="#">Start Bootstrap</a>
-                    on August 24, 2019</p>
-                </div>
-                <hr>
-                <div class="post-preview">
-                    <a href="post.html">
-                    <h2 class="post-title">
-                        Failure is not an option
-                    </h2>
-                    <h3 class="post-subtitle">
-                        Many say exploration is part of our destiny, but it’s actually our duty to future generations.
-                    </h3>
-                    </a>
-                    <p class="post-meta">Posted by
-                    <a href="#">Start Bootstrap</a>
-                    on July 8, 2019</p>
-                </div>
-                <hr>
+                    <hr>
+                {% endfor %}
+
                 <!-- Pager -->
                 <div class="clearfix">
-                    <a class="btn btn-primary float-right" href="#">Anciens Articles &rarr;</a>
+                    <a class="btn btn-primary float-right" href="posts">Anciens Articles &rarr;</a>
                 </div>
             </div>
         </div>
@@ -74,44 +40,69 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
-                <h2 class="section-heading">Contactez-moi</h2>
+                <h2 class="section-heading" id="contact">Contactez-moi</h2>
                 <p>Envoyez-moi un message et je vous répondrai dans les plus brefs délais !</p>
 
-                <form name="sentMessage" id="contactForm" novalidate>
-                <div class="control-group">
-                    <div class="form-row">
-                        <div class="form-group col-lg-6 floating-label-form-group controls">
-                        <label>Nom</label>
-                        <input type="text" class="form-control" placeholder="Nom" id="name" required data-validation-required-message="Entrez votre nom.">
-                        <p class="help-block text-danger"></p>
+                <form method="post" action="#contactForm" name="sentMessage" id="contactForm" class="needs-validation" novalidate>
+                    <div class="control-group">
+                        <div class="form-row">
+                            <div class="form-group col-lg-6 floating-label-form-group controls">
+                                <label>Nom</label>
+                                <input name="lastname" type="text" class="form-control" placeholder="Nom" id="lastname" required data-validation-required-message="Entrez votre nom.">
+                                <div class="invalid-feedback">Entrez un nom valide.</div>
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <div class="form-group col-lg-6 floating-label-form-group controls">
+                                <label>Prénom</label>
+                                <input name="firstname" type="text" class="form-control" placeholder="Prénom" id="firstname" required data-validation-required-message="Entrez votre prénom.">
+                                <div class="invalid-feedback">Entrez un prénom valide.</div>
+                                <p class="help-block text-danger"></p>
+                            </div>
                         </div>
-                        <div class="form-group col-lg-6 floating-label-form-group controls">
-                        <label>Prénom</label>
-                        <input type="text" class="form-control" placeholder="Prénom" id="surname" required data-validation-required-message="Entrez votre prénom.">
-                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls">
+                            <label>Email</label>
+                            <input name="email" type="email" class="form-control" placeholder="Email" id="email" required data-validation-required-message="Entrez votre adresse email.">
+                            <div class="invalid-feedback">Entrez un email valide.</div>
+                            <p class="help-block text-danger"></p>
                         </div>
                     </div>
-                </div>
-                <div class="control-group">
-                    <div class="form-group floating-label-form-group controls">
-                    <label>Email</label>
-                    <input type="email" class="form-control" placeholder="Email" id="email" required data-validation-required-message="Entrez votre adresse email.">
-                    <p class="help-block text-danger"></p>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls">
+                            <label>Message</label>
+                            <textarea name="message" rows="5" class="form-control" placeholder="Message" id="message" maxlength="500" required data-validation-required-message="Entrez votre message ici."></textarea>
+                            <div class="invalid-feedback">Entrez un message valide.</div>
+                            <p class="help-block text-danger"></p>
+                        </div>
                     </div>
-                </div>
-                <div class="control-group">
-                    <div class="form-group floating-label-form-group controls">
-                    <label>Message</label>
-                    <textarea rows="5" class="form-control" placeholder="Message" id="message" required data-validation-required-message="Entre votre message ici."></textarea>
-                    <p class="help-block text-danger"></p>
+                    <br>
+                    <div id="success"></div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="sendMessageButton">Envoyer</button>
                     </div>
-                </div>
-                <br>
-                <div id="success"></div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary" id="sendMessageButton">Envoyer</button>
-                </div>
                 </form>
+
+                <script>
+                    // starter JavaScript for disabling form submissions if there are invalid fields, from bootstrap4 doc
+                    (function() {
+                    'use strict';
+                    window.addEventListener('load', function() {
+                        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                        var forms = document.getElementsByClassName('needs-validation');
+                        // Loop over them and prevent submission
+                        var validation = Array.prototype.filter.call(forms, function(form) {
+                        form.addEventListener('submit', function(event) {
+                            if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            }
+                            form.classList.add('was-validated');
+                        }, false);
+                        });
+                    }, false);
+                    })();
+                </script>
 
             </div>
         </div>

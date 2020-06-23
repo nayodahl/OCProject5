@@ -1,0 +1,36 @@
+{% extends 'LayoutBack.twig' %}
+
+{% block content %}
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <a class="btn btn-primary left" href="#">Ecrire un Article</a
+                <hr>
+
+                {% for post in listposts %}
+                    <div class="post-preview">
+                        <h2 class="post-title">
+                            {{ post.title }}
+                        </h2>
+                        <h3 class="post-subtitle">
+                            {{ post.chapo }}
+                        </h3>
+                        <p class="post-meta">Publié par {{ post.authorLogin }} le {{ post.lastUpdate }}</p>
+                    </div>
+                    <div class="clearfix">
+                    <a class="btn btn-primary float-right" href="#">Modifier &rarr;</a>
+                </div>
+                    <hr>
+                {% endfor %}
+
+                <!-- Pager -->
+                <div class="clearfix"></div>
+                {% include 'backoffice/PaginationPostsPage.twig' with {
+                    currentPage: currentPage,
+                    lastPage: totalPages
+                } only %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
