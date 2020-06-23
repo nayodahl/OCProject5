@@ -86,7 +86,7 @@ class AccountController
             echo "Tous les champs ne sont pas remplis ou corrects"; // temporaire
             $this->showSigninPage();
             return;
-        }  
+        }
         /*
                 Temporaire !!
                 Traitement de l'inscription:
@@ -95,6 +95,6 @@ class AccountController
 
         */
         echo "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription. <br>";
-        header('location: login');       
+        header('location: login');
     }
 }

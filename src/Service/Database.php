@@ -8,6 +8,9 @@ class Database
 {
     protected function dbConnect()
     {
-        return new \PDO('mysql:host=localhost;dbname=blog;charset=utf8', 'blog', 'blog');
+        return new \PDO('mysql:host=localhost;dbname=blog;charset=utf8', 'blog', 'blog', [
+            \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
+        ]);
     }
 }

@@ -21,7 +21,7 @@ class PostRepository extends Database
         $result->bindValue(':postId', $postId, \PDO::PARAM_INT);
         $result->execute();
                 
-        return new Post($result->fetch(\PDO::FETCH_ASSOC));
+        return new Post($result->fetch());
     }
     // get last X Posts, sorted by most recent
     // return an array of Posts
@@ -37,7 +37,7 @@ class PostRepository extends Database
         $result->execute();
         $customArray = [];
 
-        while ($data = $result->fetch(\PDO::FETCH_ASSOC)) {
+        while ($data = $result->fetch()) {
             array_push($customArray, new Post($data));
         }
         return $customArray;
@@ -56,7 +56,7 @@ class PostRepository extends Database
         $result->execute();
         $customArray = [];
 
-        while ($data = $result->fetch(\PDO::FETCH_ASSOC)) {
+        while ($data = $result->fetch()) {
             array_push($customArray, new Post($data));
         }
         return $customArray;
@@ -64,13 +64,37 @@ class PostRepository extends Database
 
     // get total number of Posts
     // return an int
-    public function CountPosts(): int
+    public function countPosts()
+    {
+        return (int)current($this->dbConnect()->query("SELECT COUNT(id) from post")->fetch());
+    }
+
+    // get next Post id, base on creation date, useful for pager
+    // return an int
+    public function getNextId(int $postId): ?int
     {
         $result = $this->dbConnect()->prepare(
-            'SELECT * FROM post'
+            'SELECT id FROM post WHERE created = (
+                SELECT MAX(created) FROM post WHERE id < :postId )'
         );
+        $result->bindValue(':postId', $postId, \PDO::PARAM_INT);
         $result->execute();
+        if ($result->rowCount() > 0) {
+            return (int)$result->fetch()['id'];
+        };
+        return null;
+    }
 
-        return $result->rowCount();
+    // to do
+    public function getPrev(int $postId): int
+    {
+        $result = $this->dbConnect()->prepare(
+            'SELECT id FROM post WHERE created = (
+                SELECT MAX(created) FROM post WHERE id < :postId )'
+        );
+        $result->bindValue(':postId', $postId, \PDO::PARAM_INT);
+        $result->execute();
+               
+        return (int)$result->fetch()['id'];
     }
 }

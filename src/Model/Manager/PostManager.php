@@ -23,20 +23,7 @@ class PostManager
     // get next Post id, based on their creation date, else null
     public function getNextPostId(int $postId): ?int
     {
-        $postsList = $this->postRepo->getAllPosts();
-        $numberofPost = count($postsList);
-        $key = null;
-        foreach ($postsList as $post) {
-            if ($postId === $post->getPostId()) {
-                $key = $post;
-                break;
-            }
-        }
-        $next = array_search($key, $postsList, true)+1;
-        if ($next < $numberofPost) {
-            return $postsList[$next]->getPostId();
-        }
-        return null;
+        return $this->postRepo->getNextId($postId);
     }
 
     // get previous Post id, based on their creation date, else null
@@ -73,6 +60,6 @@ class PostManager
     public function getNumberOfPosts(): int
     {
         // get the total number of posts, needed for pager calculation
-        return $this->postRepo->CountPosts();
+        return $this->postRepo->countPosts();
     }
 }

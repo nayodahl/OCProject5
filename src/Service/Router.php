@@ -52,12 +52,20 @@ class Router
             $controller = $action = null;
         };
         // if controller is not defined, we set it to default values
-        if (!(isset($controller)) && ($method === 'GET')) {$controller = "postController";};
-        if (!(isset($controller)) && ($method === 'POST')) {$controller = "accountController";};
+        if (!(isset($controller)) && ($method === 'GET')) {
+            $controller = "postController";
+        };
+        if (!(isset($controller)) && ($method === 'POST')) {
+            $controller = "accountController";
+        };
 
         // just aliases
-        if ($controller === "admin") {$controller = "backController";};
-        if ($controller === "account") {$controller = "accountController";};
+        if ($controller === "admin") {
+            $controller = "backController";
+        };
+        if ($controller === "account") {
+            $controller = "accountController";
+        };
 
         // if we dont want admin section but we have parameters in url, then we switches parameters and set controller to postcontroller
         if (($controller !== "backController") && ($controller !== "postController") && ($controller !== "accountController")) {
