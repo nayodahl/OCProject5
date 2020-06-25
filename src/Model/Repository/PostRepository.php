@@ -86,15 +86,17 @@ class PostRepository extends Database
     }
 
     // to do
-    public function getPrev(int $postId): int
+    public function getPrevId(int $postId): ?int
     {
         $result = $this->dbConnect()->prepare(
             'SELECT id FROM post WHERE created = (
-                SELECT MAX(created) FROM post WHERE id < :postId )'
+                SELECT MIN(created) FROM post WHERE id > :postId )'
         );
         $result->bindValue(':postId', $postId, \PDO::PARAM_INT);
         $result->execute();
-               
-        return (int)$result->fetch()['id'];
+        if ($result->rowCount() > 0) {
+            return (int)$result->fetch()['id'];
+        };
+        return null;
     }
 }

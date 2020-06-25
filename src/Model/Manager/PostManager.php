@@ -29,19 +29,7 @@ class PostManager
     // get previous Post id, based on their creation date, else null
     public function getPreviousPostId(int $postId): ?int
     {
-        $postsList = $this->postRepo->getAllPosts();
-        $key = null;
-        foreach ($postsList as $post) {
-            if ($postId === $post->getPostId()) {
-                $key = $post;
-                break;
-            }
-        }
-        $prev = array_search($key, $postsList, true)-1;
-        if ($prev >= 0) {
-            return $postsList[$prev]->getPostId();
-        }
-        return null;
+        return $this->postRepo->getPrevId($postId);
     }
 
 
