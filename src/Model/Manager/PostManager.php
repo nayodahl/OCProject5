@@ -32,17 +32,16 @@ class PostManager
         return $this->postRepo->getPrevId($postId);
     }
 
-
     public function getHomepagePosts(): array
     {
         // get only last 4 posts to display on homepage.
         return $this->postRepo->getMostXRecentPosts(4);
     }
 
-    public function getPosts(): array
+    public function getPostsPage(int $offset, int $limit): array
     {
-        //  getting all posts and displaying on one single plage
-        return $this->postRepo->getAllPosts();
+        //  getting all posts and displaying on one single page
+        return $this->postRepo->getPosts($offset, $limit);
     }
 
     public function getNumberOfPosts(): int

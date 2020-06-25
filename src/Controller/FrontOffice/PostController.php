@@ -91,21 +91,21 @@ class PostController
         if (isset($request->getGet()[1]) && ($request->getGet()[1] > 0)) {
             $currentPage=((int)$request->getGet()[1]);
         };
-
-        $listPosts = $this->postManager->getPosts(); // à corriger
-        
+       
         // Some calculation for the pager for Posts page
-        $limit = 4; // number of Posts per page to display
-        $totalItems = count($listPosts); // total number of Posts
+        $limit = 4; // number of Posts per page to display    
+        $totalItems = $this->postManager->getNumberOfPosts(); // total number of Posts
         $totalPages = ceil($totalItems / $limit);
         if ($currentPage > $totalPages) {
-            $currentPage=$totalPages;
+            $currentPage=$totalPages; // exit 404 à faire !!
         };
         $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
-        $itemsList = array_splice($listPosts, (int)$offset, $limit);
+        
+        // getting the Posts from DB
+        $listPosts = $this->postManager->getPostsPage($offset, $limit); 
         
         $this->renderer->render('frontoffice/PostsPage.twig', [
-            'listposts' => $itemsList,
+            'listposts' => $listPosts,
             'currentPage' => $currentPage,
             'totalPages' => $totalPages
             ]);

@@ -43,16 +43,18 @@ class PostRepository extends Database
         return $customArray;
     }
 
-    // get all Posts, sorted by most recent
+    // get last X Posts, sorted by most recent, with limit and offset as parameters
     // return an array of Posts
-    public function getAllPosts(): array
+    public function getPosts(int $offset, int $postsNumberLimit): array
     {
         $result = $this->dbConnect()->prepare(
             'SELECT post.id AS postId, post.title, post.chapo, post.content, DATE_FORMAT(post.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(post.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate, post.user_id AS authorId, user.login AS authorLogin 
             FROM post 
             INNER JOIN user ON post.user_id = user.id
-            ORDER BY post.created DESC '
+            ORDER BY post.created DESC LIMIT :offset, :postsNumberLimit '
         );
+        $result->bindValue(':offset', $offset, \PDO::PARAM_INT);
+        $result->bindValue(':postsNumberLimit', $postsNumberLimit, \PDO::PARAM_INT);
         $result->execute();
         $customArray = [];
 
@@ -85,7 +87,8 @@ class PostRepository extends Database
         return null;
     }
 
-    // to do
+    // get previous Post id, base on creation date, useful for pager
+    // return an int
     public function getPrevId(int $postId): ?int
     {
         $result = $this->dbConnect()->prepare(
