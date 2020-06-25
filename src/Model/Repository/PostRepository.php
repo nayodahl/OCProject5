@@ -5,6 +5,7 @@ namespace App\Model\Repository;
 
 use \App\Model\Entity\Post;
 use \App\Service\Database;
+use \PDO;
 
 class PostRepository extends Database
 {
@@ -18,7 +19,7 @@ class PostRepository extends Database
             INNER JOIN user ON post.user_id = user.id
             WHERE post.id= :postId'
         );
-        $result->bindValue(':postId', $postId, \PDO::PARAM_INT);
+        $result->bindValue(':postId', $postId, PDO::PARAM_INT);
         $result->execute();
                 
         return new Post($result->fetch());
@@ -33,7 +34,7 @@ class PostRepository extends Database
             INNER JOIN user ON post.user_id = user.id
             ORDER BY post.created DESC LIMIT :postsNumberLimit'
         );
-        $result->bindValue(':postsNumberLimit', $postsNumberLimit, \PDO::PARAM_INT);
+        $result->bindValue(':postsNumberLimit', $postsNumberLimit, PDO::PARAM_INT);
         $result->execute();
         $customArray = [];
 
@@ -53,8 +54,8 @@ class PostRepository extends Database
             INNER JOIN user ON post.user_id = user.id
             ORDER BY post.created DESC LIMIT :offset, :postsNumberLimit '
         );
-        $result->bindValue(':offset', $offset, \PDO::PARAM_INT);
-        $result->bindValue(':postsNumberLimit', $postsNumberLimit, \PDO::PARAM_INT);
+        $result->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $result->bindValue(':postsNumberLimit', $postsNumberLimit, PDO::PARAM_INT);
         $result->execute();
         $customArray = [];
 
@@ -79,7 +80,7 @@ class PostRepository extends Database
             'SELECT id FROM post WHERE created = (
                 SELECT MAX(created) FROM post WHERE id < :postId )'
         );
-        $result->bindValue(':postId', $postId, \PDO::PARAM_INT);
+        $result->bindValue(':postId', $postId, PDO::PARAM_INT);
         $result->execute();
         if ($result->rowCount() > 0) {
             return (int)$result->fetch()['id'];
@@ -95,7 +96,7 @@ class PostRepository extends Database
             'SELECT id FROM post WHERE created = (
                 SELECT MIN(created) FROM post WHERE id > :postId )'
         );
-        $result->bindValue(':postId', $postId, \PDO::PARAM_INT);
+        $result->bindValue(':postId', $postId, PDO::PARAM_INT);
         $result->execute();
         if ($result->rowCount() > 0) {
             return (int)$result->fetch()['id'];

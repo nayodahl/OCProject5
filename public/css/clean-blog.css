@@ -433,3 +433,8 @@ footer .copyright {
   pointer-events: none;
   cursor: auto;
 }
+
+thead{
+  background-color: #0085A1;
+  color: #fff;
+}

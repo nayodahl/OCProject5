@@ -23,5 +23,10 @@ $router->register('POST', 'signin', 'accountController', 'signinForm');
 
 // Back
 $router->register('GET', 'posts', 'backController', 'showPostsManager');
+$router->register('GET', 'post', 'backController', 'EditPost');
+// TO DO   $router->register('POST', 'post', 'backController', ''); 
+$router->register('GET', 'newpost', 'backController', 'AddPost');
+// TO DO  $router->register('POST', 'newpost', 'backController', '');
+$router->register('GET', 'comments', 'backController', 'showCommentsManager');
 
 $router->routerRequest();

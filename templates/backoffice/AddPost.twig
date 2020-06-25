@@ -1,0 +1,63 @@
+{% extends 'LayoutBack.twig' %}
+
+{% block content %}
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <h2 class="section-heading">Nouvel article :</h2>
+                <hr>                               
+                <form method="post" action="admin/newpost" name="sentMessage" id="PostForm" class="needs-validation" novalidate>
+                    <div class="control-group">
+                        <div class="form-group controls">
+                            <label>Titre :</label>
+                            <input name="title" type="text" class="form-control" id="title" required data-validation-required-message="Entrez le titre.">
+                            <div class="invalid-feedback">Entrez un titre valide.</div>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group controls">
+                            <label>Chapô :</label>
+                            <input name="chapo" type="text" class="form-control"  id="chapo" required data-validation-required-message="Ecrivez le chapo.">
+                            <div class="invalid-feedback">Entrez un chapô valide.</div>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group controls">
+                            <label>Auteur :</label>
+                            <select name="author" type="text" class="form-control" id="author" required data-validation-required-message="Sélectionnez un auteur.">
+                               <option>Auteur1</option>
+                               <option>Auteur2</option>
+                               <option>Auteur3</option>
+                               <option>Auteur4</option>
+                               <option>Auteur5</option> 
+                            </select>
+                            <div class="invalid-feedback">Sélectionnez un auteur.</div>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group  controls">
+                            <label>Contenu : </label>
+                            <textarea name="content" rows="20" class="form-control" id="content" maxlength="4000" required data-validation-required-message="Tapez le contenu de l'article ici."></textarea>
+                            <div class="invalid-feedback">Tapez un contenu d'article valide.</div>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <br>
+                    <div id="success"></div>
+                    <div class="form-group">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item"><a class="page-link" href="admin/posts">Annuler</a></li>
+                            <li class="page-item"><button type="submit" class="btn btn-primary" id="sendMessageButton">Publier</button></li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+            
+
+{% endblock %}

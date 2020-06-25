@@ -93,7 +93,7 @@ class PostController
         };
        
         // Some calculation for the pager for Posts page
-        $limit = 4; // number of Posts per page to display    
+        $limit = 4; // number of Posts per page to display
         $totalItems = $this->postManager->getNumberOfPosts(); // total number of Posts
         $totalPages = ceil($totalItems / $limit);
         if ($currentPage > $totalPages) {
@@ -102,7 +102,7 @@ class PostController
         $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
         
         // getting the Posts from DB
-        $listPosts = $this->postManager->getPostsPage($offset, $limit); 
+        $listPosts = $this->postManager->getPostsPage($offset, $limit);
         
         $this->renderer->render('frontoffice/PostsPage.twig', [
             'listposts' => $listPosts,

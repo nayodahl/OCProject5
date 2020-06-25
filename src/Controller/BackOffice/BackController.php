@@ -38,22 +38,83 @@ class BackController
             $currentPage=((int)$request->getGet()[2]);
         };
 
-        $listPosts = $this->postManager->getPosts();
-
         // Some calculation for the pager for Posts page
         $limit = 4; // number of Posts per page to display
-        $totalItems = count($listPosts); // total number of Posts
+        $totalItems = $this->postManager->getNumberOfPosts(); // total number of Posts
         $totalPages = ceil($totalItems / $limit);
         if ($currentPage > $totalPages) {
-            $currentPage=$totalPages;
+            $currentPage=$totalPages; // exit 404 à faire !!
         };
         $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
-        $itemsList = array_splice($listPosts, (int)$offset, $limit);
+
+        // getting the Posts from DB
+        $listPosts = $this->postManager->getPostsPage($offset, $limit);
 
         $this->renderer->render('backoffice/PostsManager.twig', [
-            'listposts' => $itemsList,
+            'listposts' => $listPosts,
             'currentPage' => $currentPage,
             'totalPages' => $totalPages
+            ]);
+    }
+    
+    public function EditPost(Request $request): void
+    {
+        // validating $get inputs
+        $postId = 1;
+        if (isset($request->getGet()[2]) &&  ($request->getGet()[2] > 0)) {
+            $postId=((int)$request->getGet()[2]);
+        };
+        if (!isset($request->getGet()[2])) {
+            // redirect vers 404 à faire
+        };
+        $post = $this->postManager->getSinglePost($postId);
+
+        // twig rendering with some parameters
+        $this->renderer->render('backoffice/EditPost.twig', [
+            'post' => $post,
+            'postId' => $postId,
+            ]);
+    }
+
+    public function AddPost(Request $request): void
+    {
+        // validating $get inputs
+        if (isset($request->getGet()[2])) {
+            // redirect vers 404 à faire
+        };
+        
+        // twig rendering with some parameters
+        $this->renderer->render('backoffice/AddPost.twig');
+    }
+
+    public function showCommentsManager(Request $request): void
+    {
+        // validating $get inputs
+        if (isset($request->getGet()[2])) {
+            // redirect vers 404 à faire
+        };
+        $commentPage=1;
+        if (isset($request->getGet()[1]) &&  ($request->getGet()[1] > 0)) {
+            $commentPage=((int)$request->getGet()[1]);
+        };
+
+        $listComments = $this->commentManager->getNotApprovedComments();
+
+        // Some calculation for the pager on Comments section
+        $limit = 50; // number of Comments per page to display
+        $totalComments = count($listComments); // total number of Comments
+        $totalCommentPages = ceil($totalComments / $limit);
+        if ($commentPage > $totalCommentPages) {
+            $commentPage=$totalCommentPages;
+        };
+        $offset = ($commentPage - 1) * $limit; // offset, to determine the number of the first Comment to display
+        $itemsList = array_splice($listComments, (int)$offset, $limit);
+
+        // twig rendering with some parameters
+        $this->renderer->render('backoffice/CommentsManager.twig', [
+            'listcomments' => $itemsList,
+            'currentPage' => $commentPage,
+            'totalPages' => $totalCommentPages,
             ]);
     }
 }
