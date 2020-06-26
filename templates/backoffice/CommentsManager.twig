@@ -24,7 +24,7 @@
                 {% endfor %}
                 <!-- Pager for Comments-->
                 <div class="clearfix">
-                    {% include 'frontoffice/PaginationComment.twig' with {
+                    {% include 'backoffice/PaginationComment.twig' with {
                         currentPage: currentPage,
                         lastPage: totalPages,    
                     } only %}

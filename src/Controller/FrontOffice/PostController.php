@@ -47,35 +47,34 @@ class PostController
         if (isset($request->getGet()[1]) &&  ($request->getGet()[1] > 0)) {
             $postId=((int)$request->getGet()[1]);
         };
-        
         $commentPage=1;
         if (isset($request->getGet()[2]) &&  ($request->getGet()[2] > 0)) {
             $commentPage=((int)$request->getGet()[2]);
         };
-        
-        // get Post content and its Comments
-        $post = $this->postManager->getSinglePost($postId);
-        $listComments = $this->commentManager->getApprovedComments($postId);
 
-        // getting previous and next postId based on creation date, needed for the pager
+        $post = $this->postManager->getSinglePost($postId);
         $nextId = $this->postManager->getNextPostId($postId);
         $prevId = $this->postManager->getPreviousPostId($postId);
 
         // Some calculation for the pager on Comments section
         $limit = 50; // number of Comments per page to display
-        $totalComments = count($listComments); // total number of Comments
+        $totalComments = $this->commentManager->getNumberOfApprovedCommentsFromPost($postId); // total number of Comments
         $totalCommentPages = ceil($totalComments / $limit);
         if ($commentPage > $totalCommentPages) {
-            $commentPage=$totalCommentPages;
+            $commentPage=$totalCommentPages; //exit 404 à faire !
         };
         $offset = ($commentPage - 1) * $limit; // offset, to determine the number of the first Comment to display
-        $itemsList = array_splice($listComments, (int)$offset, $limit);
+        if ($offset < 0) {
+            $offset = 0;
+        };
+
+        $listComments = $this->commentManager->getApprovedComments($postId, (int)$offset, $limit);
 
         // twig rendering with some parameters
         $this->renderer->render('frontoffice/SinglePostPage.twig', [
             'post' => $post,
             'postId' => $postId,
-            'listcomments' => $itemsList,
+            'listcomments' => $listComments,
             'currentPage' => $commentPage,
             'totalPages' => $totalCommentPages,
             'prevId' => $prevId,

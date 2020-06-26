@@ -82,8 +82,6 @@ class BackController
         if (isset($request->getGet()[2])) {
             // redirect vers 404 à faire
         };
-        
-        // twig rendering with some parameters
         $this->renderer->render('backoffice/AddPost.twig');
     }
 
@@ -94,25 +92,24 @@ class BackController
             // redirect vers 404 à faire
         };
         $commentPage=1;
-        if (isset($request->getGet()[1]) &&  ($request->getGet()[1] > 0)) {
-            $commentPage=((int)$request->getGet()[1]);
+        if (isset($request->getGet()[2]) &&  ($request->getGet()[2] > 0)) {
+            $commentPage=((int)$request->getGet()[2]);
         };
 
-        $listComments = $this->commentManager->getNotApprovedComments();
-
-        // Some calculation for the pager on Comments section
+        // Some calculation for the pager on Comments
         $limit = 50; // number of Comments per page to display
-        $totalComments = count($listComments); // total number of Comments
+        $totalComments = $this->commentManager->getNumberofNotApprovedComments(); // total number of Comments
         $totalCommentPages = ceil($totalComments / $limit);
         if ($commentPage > $totalCommentPages) {
-            $commentPage=$totalCommentPages;
+            $commentPage=$totalCommentPages; //exit 404 à faire !
         };
         $offset = ($commentPage - 1) * $limit; // offset, to determine the number of the first Comment to display
-        $itemsList = array_splice($listComments, (int)$offset, $limit);
+        
+        $listComments = $this->commentManager->getNotApprovedComments((int)$offset, $limit);
 
         // twig rendering with some parameters
         $this->renderer->render('backoffice/CommentsManager.twig', [
-            'listcomments' => $itemsList,
+            'listcomments' => $listComments,
             'currentPage' => $commentPage,
             'totalPages' => $totalCommentPages,
             ]);
