@@ -44,7 +44,7 @@ class PostRepository extends Database
         return $customArray;
     }
 
-    // get last X Posts, sorted by most recent, with limit and offset as parameters
+    // get last Posts, sorted by most recent, with limit and offset as parameters
     // return an array of Posts
     public function getPosts(int $offset, int $postsNumberLimit): array
     {

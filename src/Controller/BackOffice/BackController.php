@@ -8,8 +8,8 @@ use \App\Model\Repository\PostRepository;
 use \App\Model\Manager\PostManager;
 use \App\Model\Repository\CommentRepository;
 use \App\Model\Manager\CommentManager;
-//use \App\Model\Repository\UserRepository;
-//use \App\Model\Manager\UserManager;
+use \App\Model\Repository\UserRepository;
+use \App\Model\Manager\UserManager;
 use \App\Service\Http\Request;
 
 class BackController
@@ -19,6 +19,8 @@ class BackController
     private $postManager;
     private $commentRepo;
     private $commentManager;
+    private $userManager;
+    private $userRepo;
 
     public function __construct()
     {
@@ -27,6 +29,8 @@ class BackController
         $this->postManager = new PostManager($this->postRepo);
         $this->commentRepo = new CommentRepository();
         $this->commentManager = new CommentManager($this->commentRepo);
+        $this->userRepo = new UserRepository();
+        $this->userManager = new UserManager($this->userRepo);
     }
 
     // Render Posts Manager page (default)
@@ -112,6 +116,32 @@ class BackController
             'listcomments' => $listComments,
             'currentPage' => $commentPage,
             'totalPages' => $totalCommentPages,
+            ]);
+    }
+
+    public function showUsersManager(Request $request): void
+    {
+        $userPage=1;
+        if (isset($request->getGet()[2]) &&  ($request->getGet()[2] > 0)) {
+            $userPage=((int)$request->getGet()[2]);
+        };
+
+        // Some calculation for the pager on Users
+        $limit = 20; // number of Users per page to display
+        $totalUsers = $this->userManager->getNumberOfUsers();
+        $totalUserPages = ceil($totalUsers / $limit);
+        if ($userPage > $totalUserPages) {
+            $userPage=$totalUserPages; //exit 404 à faire !
+        };
+        $offset = ($userPage - 1) * $limit; // offset, to determine the number of the first User to display
+        
+        // getting the Members from DB
+        $listUsers = $this->userManager->getUsersPage((int)$offset, $limit);
+        
+        $this->renderer->render('backoffice/UsersManager.twig', [
+            'listUsers' => $listUsers,
+            'currentPage' => $userPage,
+            'totalPages' => $totalUserPages
             ]);
     }
 }

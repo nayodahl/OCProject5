@@ -28,5 +28,8 @@ $router->register('GET', 'post', 'backController', 'EditPost');
 $router->register('GET', 'newpost', 'backController', 'AddPost');
 // TO DO  $router->register('POST', 'newpost', 'backController', '');
 $router->register('GET', 'comments', 'backController', 'showCommentsManager');
+$router->register('GET', 'members', 'backController', 'showUsersManager');
+// TO DO  $router->register('GET', 'promote', 'backController', '');
+// TO DO  $router->register('GET', 'demote', 'backController', '');
 
 $router->routerRequest();

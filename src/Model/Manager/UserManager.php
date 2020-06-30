@@ -14,6 +14,17 @@ class UserManager
     {
         $this->userRepo = $userRepository;
     }
+
+    public function getUsersPage(int $offset, int $limit): array
+    {
+        return $this->userRepo->getNonSuperAdminUsers($offset, $limit);
+    }
+
+    public function getNumberOfUsers(): int
+    {
+        // get the total number of users, needed for pager calculation
+        return $this->userRepo->countUsers();
+    }
     
     /*
     public function getSingleUser(int $userId): ?User

@@ -38,7 +38,7 @@ class User
         return (int)$this->userId;
     }
 
-    public function setPostId(int $userId): self
+    public function setUserId($userId): self
     {
         $this->userId = $userId;
         return $this;
@@ -93,7 +93,7 @@ class User
         return $this->token;
     }
 
-    public function setToken(string $token): self
+    public function setToken(?string $token): self
     {
         $this->token = $token;
         return $this;
