@@ -37,8 +37,7 @@ class BackController
     public function showPostsManager(Request $request): void
     {
         $currentPage=1;
-        // validating $_GET
-        if (isset($request->getGet()[2]) && ($request->getGet()[2] > 0)) {
+        if (isset($request->getGet()[2])) {
             $currentPage=((int)$request->getGet()[2]);
         };
 
@@ -63,14 +62,7 @@ class BackController
     
     public function EditPost(Request $request): void
     {
-        // validating $get inputs
-        $postId = 1;
-        if (isset($request->getGet()[2]) &&  ($request->getGet()[2] > 0)) {
-            $postId=((int)$request->getGet()[2]);
-        };
-        if (!isset($request->getGet()[2])) {
-            // redirect vers 404 à faire
-        };
+        $postId=((int)$request->getGet()[2]);
         $post = $this->postManager->getSinglePost($postId);
 
         // twig rendering with some parameters
@@ -82,21 +74,13 @@ class BackController
 
     public function AddPost(Request $request): void
     {
-        // validating $get inputs
-        if (isset($request->getGet()[2])) {
-            // redirect vers 404 à faire
-        };
         $this->renderer->render('backoffice/AddPost.twig');
     }
 
     public function showCommentsManager(Request $request): void
     {
-        // validating $get inputs
-        if (isset($request->getGet()[2])) {
-            // redirect vers 404 à faire
-        };
         $commentPage=1;
-        if (isset($request->getGet()[2]) &&  ($request->getGet()[2] > 0)) {
+        if (isset($request->getGet()[2])) {
             $commentPage=((int)$request->getGet()[2]);
         };
 
@@ -122,7 +106,7 @@ class BackController
     public function showUsersManager(Request $request): void
     {
         $userPage=1;
-        if (isset($request->getGet()[2]) &&  ($request->getGet()[2] > 0)) {
+        if (isset($request->getGet()[2])) {
             $userPage=((int)$request->getGet()[2]);
         };
 

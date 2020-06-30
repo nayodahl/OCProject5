@@ -42,13 +42,9 @@ class PostController
     // Render the single Post view
     public function showSinglePost(Request $request): void
     {
-        // validating $get inputs
-        $postId = 1;
-        if (isset($request->getGet()[1]) &&  ($request->getGet()[1] > 0)) {
-            $postId=((int)$request->getGet()[1]);
-        };
+        $postId=((int)$request->getGet()[1]);        
         $commentPage=1;
-        if (isset($request->getGet()[2]) &&  ($request->getGet()[2] > 0)) {
+        if (isset($request->getGet()[2])) {
             $commentPage=((int)$request->getGet()[2]);
         };
 
