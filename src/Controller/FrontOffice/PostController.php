@@ -10,7 +10,6 @@ use \App\Model\Repository\CommentRepository;
 use \App\Model\Manager\CommentManager;
 //use \App\Model\Repository\UserRepository;
 //use \App\Model\Manager\UserManager;
-use \App\Service\FormValidator;
 use \App\Service\Http\Request;
 
 class PostController
@@ -20,7 +19,6 @@ class PostController
     private $postManager;
     private $commentRepo;
     private $commentManager;
-    private $formValidator;
 
     public function __construct()
     {
@@ -29,7 +27,6 @@ class PostController
         $this->postManager = new PostManager($this->postRepo);
         $this->commentRepo = new CommentRepository();
         $this->commentManager = new CommentManager($this->commentRepo);
-        $this->formValidator = new FormValidator();
     }
 
     // Render homepage, by getting the last 4 most recent posts
@@ -43,10 +40,7 @@ class PostController
     public function showSinglePost(Request $request): void
     {
         $postId=((int)$request->getGet()[1]);        
-        $commentPage=1;
-        if (isset($request->getGet()[2])) {
-            $commentPage=((int)$request->getGet()[2]);
-        };
+        $commentPage=((int)$request->getGet()[2]);        
 
         $post = $this->postManager->getSinglePost($postId);
         $nextId = $this->postManager->getNextPostId($postId);
@@ -81,11 +75,7 @@ class PostController
     // Render Posts Page
     public function showPostsPage(Request $request): void
     {
-        $currentPage=1;
-        // validating $_GET
-        if (isset($request->getGet()[1]) && ($request->getGet()[1] > 0)) {
-            $currentPage=((int)$request->getGet()[1]);
-        };
+        $currentPage=((int)$request->getGet()[1]);
        
         // Some calculation for the pager for Posts page
         $limit = 4; // number of Posts per page to display

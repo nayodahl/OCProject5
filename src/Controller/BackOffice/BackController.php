@@ -36,10 +36,7 @@ class BackController
     // Render Posts Manager page (default)
     public function showPostsManager(Request $request): void
     {
-        $currentPage=1;
-        if (isset($request->getGet()[2])) {
-            $currentPage=((int)$request->getGet()[2]);
-        };
+        $currentPage=((int)$request->getGet()[2]);
 
         // Some calculation for the pager for Posts page
         $limit = 4; // number of Posts per page to display
@@ -79,10 +76,7 @@ class BackController
 
     public function showCommentsManager(Request $request): void
     {
-        $commentPage=1;
-        if (isset($request->getGet()[2])) {
-            $commentPage=((int)$request->getGet()[2]);
-        };
+        $commentPage=((int)$request->getGet()[2]);
 
         // Some calculation for the pager on Comments
         $limit = 50; // number of Comments per page to display
@@ -105,10 +99,7 @@ class BackController
 
     public function showUsersManager(Request $request): void
     {
-        $userPage=1;
-        if (isset($request->getGet()[2])) {
-            $userPage=((int)$request->getGet()[2]);
-        };
+        $userPage=((int)$request->getGet()[2]);
 
         // Some calculation for the pager on Users
         $limit = 20; // number of Users per page to display
