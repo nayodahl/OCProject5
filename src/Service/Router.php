@@ -89,13 +89,13 @@ class Router
                 if ($controller === "backController") {
                     $isAdmin = true; // temporary, it will be a method that check if user has admin rights
                     if (!$isAdmin) {
-                        exit;
+                        exit();
                     };
                 }
                 $validationPath = 'validate'.ucwords($route['ac']);
                 if ($this->requestValidator->{$validationPath}($this->request)) {
                     $this->{$route['controller']}->{$route['ac']}($this->request);
-                    exit;
+                    exit();
                 }
             }
         }

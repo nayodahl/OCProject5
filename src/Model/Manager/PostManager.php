@@ -20,7 +20,7 @@ class PostManager
         return $this->postRepo->getPost($postId);
     }
 
-    public function getSinglePostPager(int $postId, int $commentPage, int $totalComments): array
+    public function getSinglePostPager(int $commentPage, int $totalComments): array
     {
         $limit = 4; // number of Comments per page to display
         $totalCommentPages = ceil($totalComments / $limit);

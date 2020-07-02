@@ -50,7 +50,7 @@ class PostController
         $nextId = $this->postManager->getNextPostId($postId);
         $prevId = $this->postManager->getPreviousPostId($postId);
         $totalComments = $this->commentManager->getNumberOfApprovedCommentsFromPost($postId); // total number of Comments
-        $pagerArray = $this->postManager->getSinglePostPager($postId, $commentPage, $totalComments);
+        $pagerArray = $this->postManager->getSinglePostPager($commentPage, $totalComments);
         
         $offset = $pagerArray[0];
         $limit = $pagerArray[1];
