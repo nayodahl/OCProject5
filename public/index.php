@@ -32,4 +32,7 @@ $router->register('GET', 'members', 'backController', 'showUsersManager');
 // TO DO  $router->register('GET', 'promote', 'backController', '');
 // TO DO  $router->register('GET', 'demote', 'backController', '');
 
+// Error
+$router->register('GET', '404', 'errorController', 'show404');
+
 $router->routerRequest();

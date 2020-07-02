@@ -67,11 +67,18 @@ class Router
         };
 
         // just aliases
-        if ($controller === "admin") {$controller = "backController";};
-        if ($controller === "account") {$controller = "accountController";};
+        if ($controller === "admin") {
+            $controller = "backController";
+        };
+        if ($controller === "account") {
+            $controller = "accountController";
+        };
+        if ($controller === "error") {
+            $controller = "errorController";
+        };
 
         // if we dont want admin section but we have parameters in url, then we switches parameters and set controller to postcontroller
-        if (($controller !== "backController") && ($controller !== "postController") && ($controller !== "accountController")) {
+        if (($controller !== "backController") && ($controller !== "postController") && ($controller !== "accountController") && ($controller !== "errorController")) {
             $action = $controller;
             $controller = "postController";
         };
@@ -86,14 +93,13 @@ class Router
                     };
                 }
                 $validationPath = 'validate'.ucwords($route['ac']);
-                if ( $this->requestValidator->{$validationPath}($this->request)){
+                if ($this->requestValidator->{$validationPath}($this->request)) {
                     $this->{$route['controller']}->{$route['ac']}($this->request);
                     exit;
                 }
             }
         }
 
-        //TO DO
         // if no route, then 404
         $this->errorController->show404();
     }

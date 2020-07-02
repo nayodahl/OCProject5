@@ -39,24 +39,23 @@ class PostController
     // Render the single Post view
     public function showSinglePost(Request $request): void
     {
-        $postId=((int)$request->getGet()[1]);        
-        $commentPage=((int)$request->getGet()[2]);        
+        $postId=((int)$request->getGet()[1]);
+        $commentPage=((int)$request->getGet()[2]);
 
         $post = $this->postManager->getSinglePost($postId);
+        if ($post->getPostId() === 0) {
+            header('location: ../error/404');
+            exit();
+        }
         $nextId = $this->postManager->getNextPostId($postId);
         $prevId = $this->postManager->getPreviousPostId($postId);
-
-        // Some calculation for the pager on Comments section
-        $limit = 50; // number of Comments per page to display
         $totalComments = $this->commentManager->getNumberOfApprovedCommentsFromPost($postId); // total number of Comments
-        $totalCommentPages = ceil($totalComments / $limit);
-        if ($commentPage > $totalCommentPages) {
-            $commentPage=$totalCommentPages; //exit 404 à faire !
-        };
-        $offset = ($commentPage - 1) * $limit; // offset, to determine the number of the first Comment to display
-        if ($offset < 0) {
-            $offset = 0;
-        };
+        $pagerArray = $this->postManager->getSinglePostPager($postId, $commentPage, $totalComments);
+        
+        $offset = $pagerArray[0];
+        $limit = $pagerArray[1];
+        $totalCommentPages =  $pagerArray[2];
+        $commentPage= $pagerArray[3];
 
         $listComments = $this->commentManager->getApprovedComments($postId, (int)$offset, $limit);
 
@@ -77,18 +76,16 @@ class PostController
     {
         $currentPage=((int)$request->getGet()[1]);
        
-        // Some calculation for the pager for Posts page
-        $limit = 4; // number of Posts per page to display
         $totalItems = $this->postManager->getNumberOfPosts(); // total number of Posts
-        $totalPages = ceil($totalItems / $limit);
-        if ($currentPage > $totalPages) {
-            $currentPage=$totalPages; // exit 404 à faire !!
-        };
-        $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
-        
+        $pagerArray = $this->postManager->getPostsPagePager($currentPage, $totalItems);
+        $offset = $pagerArray[0];
+        $limit = $pagerArray[1];
+        $totalPages = $pagerArray[2];
+        $currentPage = $pagerArray[3];
+
         // getting the Posts from DB
-        $listPosts = $this->postManager->getPostsPage($offset, $limit);
-        
+        $listPosts = $this->postManager->getPostsPage((int)$offset, $limit);
+
         $this->renderer->render('frontoffice/PostsPage.twig', [
             'listposts' => $listPosts,
             'currentPage' => $currentPage,

@@ -38,15 +38,13 @@ class BackController
     {
         $currentPage=((int)$request->getGet()[2]);
 
-        // Some calculation for the pager for Posts page
-        $limit = 4; // number of Posts per page to display
         $totalItems = $this->postManager->getNumberOfPosts(); // total number of Posts
-        $totalPages = ceil($totalItems / $limit);
-        if ($currentPage > $totalPages) {
-            $currentPage=$totalPages; // exit 404 à faire !!
-        };
-        $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
-
+        $pagerArray = $this->postManager->getPostsPagePager($currentPage, $totalItems);
+        $offset = $pagerArray[0];
+        $limit = $pagerArray[1];
+        $totalPages = $pagerArray[2];
+        $currentPage = $pagerArray[3];
+        
         // getting the Posts from DB
         $listPosts = $this->postManager->getPostsPage($offset, $limit);
 
@@ -77,15 +75,13 @@ class BackController
     public function showCommentsManager(Request $request): void
     {
         $commentPage=((int)$request->getGet()[2]);
-
-        // Some calculation for the pager on Comments
-        $limit = 50; // number of Comments per page to display
+       
         $totalComments = $this->commentManager->getNumberofNotApprovedComments(); // total number of Comments
-        $totalCommentPages = ceil($totalComments / $limit);
-        if ($commentPage > $totalCommentPages) {
-            $commentPage=$totalCommentPages; //exit 404 à faire !
-        };
-        $offset = ($commentPage - 1) * $limit; // offset, to determine the number of the first Comment to display
+        $pagerArray = $this->commentManager->getCommentsManagerPager($commentPage, $totalComments);
+        $offset = $pagerArray[0];
+        $limit = $pagerArray[1];
+        $totalCommentPages = $pagerArray[2];
+        $commentPage = $pagerArray[3];
         
         $listComments = $this->commentManager->getNotApprovedComments((int)$offset, $limit);
 
@@ -101,14 +97,12 @@ class BackController
     {
         $userPage=((int)$request->getGet()[2]);
 
-        // Some calculation for the pager on Users
-        $limit = 20; // number of Users per page to display
         $totalUsers = $this->userManager->getNumberOfUsers();
-        $totalUserPages = ceil($totalUsers / $limit);
-        if ($userPage > $totalUserPages) {
-            $userPage=$totalUserPages; //exit 404 à faire !
-        };
-        $offset = ($userPage - 1) * $limit; // offset, to determine the number of the first User to display
+        $pagerArray = $this->userManager->getUsersManagerPager($userPage, $totalUsers);
+        $offset = $pagerArray[0];
+        $limit = $pagerArray[1];
+        $totalUserPages = $pagerArray[2];
+        $userPage = $pagerArray[3];
         
         // getting the Members from DB
         $listUsers = $this->userManager->getUsersPage((int)$offset, $limit);

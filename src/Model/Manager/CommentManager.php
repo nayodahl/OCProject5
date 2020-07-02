@@ -43,4 +43,17 @@ class CommentManager
         // get the total number of comments, needed for pager calculation, that are not approved
         return $this->commentRepo->countComments(0);
     }
+
+    public function getCommentsManagerPager(int $commentPage, int $totalComments): array
+    {
+        // Some calculation for the pager for Posts page
+        $limit = 50; // number of Posts per page to display
+        $totalCommentPages = ceil($totalComments / $limit);
+        if ($commentPage > $totalCommentPages) {
+            $commentPage=$totalCommentPages; //correcting user input
+        };
+        $offset = ($commentPage - 1) * $limit; // offset, to determine the number of the first Post to display
+
+        return [$offset, $limit, $totalCommentPages, $commentPage];
+    }
 }
