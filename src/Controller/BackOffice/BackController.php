@@ -67,7 +67,7 @@ class BackController
             ]);
     }
 
-    public function AddPost(Request $request): void
+    public function AddPost(): void
     {
         $this->renderer->render('backoffice/AddPost.twig');
     }
