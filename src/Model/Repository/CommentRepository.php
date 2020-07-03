@@ -70,12 +70,31 @@ class CommentRepository extends Database
     }
 
     // write Comment in DB
-    public function setCommentToPost(int $postId, int $authorId, string $comment): bool
+    public function insertCommentToPost(int $postId, int $authorId, string $comment): bool
     {
         $result = $this->dbConnect()->prepare('INSERT INTO comment(post_id, comment.user_id, content) VALUES (:postId, :authorId, :comment)');
         $result->bindValue(':postId', $postId, PDO::PARAM_INT);
         $result->bindValue(':authorId', $authorId, PDO::PARAM_INT);
         $result->bindValue(':comment', $comment, PDO::PARAM_STR);
+
+        return $result->execute();
+    }
+
+    // approve Comment in DB
+    public function setCommentToApproved(int $commentId): bool
+    {
+        $result = $this->dbConnect()->prepare('UPDATE comment SET approved = 1, last_update=NOW() WHERE id = :commentId');
+        $result->bindValue(':commentId', $commentId, PDO::PARAM_INT);
+
+        return $result->execute();
+    }
+
+    // refuse Comment in DB
+    public function deleteComment(int $commentId): bool
+    {
+        $result = $this->dbConnect()->prepare('DELETE FROM comment WHERE id = :commentId');
+        $result->bindValue(':commentId', $commentId, PDO::PARAM_INT);
+
         return $result->execute();
     }
 }

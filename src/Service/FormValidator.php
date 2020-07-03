@@ -26,6 +26,15 @@ class FormValidator
         return null;
     }
 
+    public function sanitizeTextArea(string $data): ?string
+    {
+        if (($data !== '')) {
+            $data = htmlspecialchars($data);
+            return $data;
+        }
+        return null;
+    }
+
     public function isEmail(string $value): bool
     {
         if (filter_var($value, FILTER_VALIDATE_EMAIL) && !empty($value)) {

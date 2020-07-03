@@ -24,16 +24,16 @@ $router->register('POST', 'addcomment', 'postController', 'addComment');
 
 // Back
 $router->register('GET', 'posts', 'backController', 'showPostsManager');
-$router->register('GET', 'post', 'backController', 'EditPost');
-// TO DO   $router->register('POST', 'post', 'backController', ''); 
-$router->register('GET', 'newpost', 'backController', 'AddPost');
+$router->register('GET', 'post', 'backController', 'editPost');
+$router->register('POST', 'post', 'backController', 'modifyPost'); 
+$router->register('GET', 'newpost', 'backController', 'addPost');
 // TO DO  $router->register('POST', 'newpost', 'backController', '');
 $router->register('GET', 'comments', 'backController', 'showCommentsManager');
 $router->register('GET', 'members', 'backController', 'showUsersManager');
 // TO DO  $router->register('GET', 'promote', 'backController', '');
 // TO DO  $router->register('GET', 'demote', 'backController', '');
-// TO DO  $router->register('GET', 'approve', 'backController', '');
-// TO DO  $router->register('GET', 'refuse', 'backController', '');
+$router->register('GET', 'approve', 'backController', 'approve');
+$router->register('GET', 'refuse', 'backController', 'refuse');
 
 // Error
 $router->register('GET', '404', 'errorController', 'show404');

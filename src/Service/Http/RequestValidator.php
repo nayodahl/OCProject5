@@ -130,19 +130,21 @@ class RequestValidator
 
     public function validateAddComment(Request $request): ?Request
     {
-        if ( $request->getPost() ) {
+        if ($request->getPost() && isset($request->getGet()[1]) && ($request->getGet()[1] > 0)) {
             // sanitize input
             $request->setPost([
-                'comment' => $this->formValidator->sanitizeString($request->getPost()['comment']),
+                'comment' => $this->formValidator->sanitizeTextArea($request->getPost()['comment']),
             ]);
+
             return $request;
-        };    
+        };
+
         /* temporaire, message à envoyer vers session
-            
+
                 exit avec message 'tous les champs ne sont pas remplis ou corrects' dans session
                 ou vous n'êtes pas loggé
             }
-        */        
+        */
         return null;
     }
 
@@ -173,6 +175,28 @@ class RequestValidator
         return null;
     }
 
+    public function validateModifyPost(Request $request): ?Request
+    {
+        if (isset($request->getGet()[2]) && ($request->getGet()[2] > 0)) {
+
+            // sanitize input
+            $request->setPost([
+                'title' => $this->formValidator->sanitizeString($request->getPost()['title']),
+                'chapo' => $this->formValidator->sanitizeString($request->getPost()['chapo']),
+                'content' => $this->formValidator->sanitizeTextArea($request->getPost()['content'])
+            ]);
+            if (isset($request->getPost()['title']) && isset($request->getPost()['chapo']) && isset($request->getPost()['content'])) {
+                return $request;
+            }
+            /* temporaire, message à envoyer vers session
+            if isset($request->getPost()['title']) && isset($request->getPost()['chapo']) && isset($request->getPost()['content']) {
+                exit avec message 'tous les champs ne sont pas remplis ou corrects' dans session
+            }
+            */
+        };
+        return null;
+    }
+
     public function validateAddPost(Request $request): ?Request
     {
         if (!isset($request->getGet()[2])) {
@@ -194,6 +218,22 @@ class RequestValidator
         if (($request->getGet()[2] > 0)) {
             return $request;
         }
+        return null;
+    }
+
+    public function validateApprove(Request $request): ?Request
+    {
+        if (isset($request->getGet()[2]) && ($request->getGet()[2] > 0)) { // commentId
+            return $request;
+        };
+        return null;
+    }
+
+    public function validateRefuse(Request $request): ?Request
+    {
+        if (isset($request->getGet()[2]) && ($request->getGet()[2] > 0)) { // commentId
+            return $request;
+        };
         return null;
     }
 

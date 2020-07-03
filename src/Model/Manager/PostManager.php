@@ -76,4 +76,9 @@ class PostManager
         // get the total number of posts, needed for pager calculation
         return $this->postRepo->countPosts();
     }
+
+    public function modifyPostContent(int $postId, string $title, string $chapo, int $authorId, string $content): bool
+    {
+        return $this->postRepo->updatePost($postId, $title, $chapo, $authorId, $content);
+    }
 }

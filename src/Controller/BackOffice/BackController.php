@@ -55,7 +55,7 @@ class BackController
             ]);
     }
     
-    public function EditPost(Request $request): void
+    public function editPost(Request $request): void
     {
         $postId=((int)$request->getGet()[2]);
         $post = $this->postManager->getSinglePost($postId);
@@ -67,7 +67,28 @@ class BackController
             ]);
     }
 
-    public function AddPost(): void
+    public function modifyPost(Request $request): void
+    {
+        $postId=((int)$request->getGet()[2]);
+        $title = $request->getPost()['title'];
+        $chapo = $request->getPost()['chapo'];
+        $authorId = 8; // TO DO, get id from login
+        $content = $request->getPost()['content'];
+        
+        $req = $this->postManager->modifyPostContent($postId, $title, $chapo, $authorId, $content);
+        
+        if ($req === true) {
+            echo "Article modifié.";
+            header("location: ../../admin/post/$postId");
+            exit();
+        }
+
+        echo "Impossible de modifier l'article <br>";
+        header("location: ../../admin/post/$postId");
+        exit();
+    }
+
+    public function addPost(): void
     {
         $this->renderer->render('backoffice/AddPost.twig');
     }
@@ -91,6 +112,38 @@ class BackController
             'currentPage' => $commentPage,
             'totalPages' => $totalCommentPages,
             ]);
+    }
+
+    public function approve(Request $request): void
+    {
+        $commentId=((int)$request->getGet()[2]);
+        $req = $this->commentManager->approveComment($commentId);
+
+        if ($req === true) {
+            echo "Commentaire approuvé.";
+            header("location: ../../admin/comments");
+            exit();
+        }
+
+        echo "Impossible d'approuver le commentaire <br>";
+        header("location: ../../admin/comments");
+        exit();
+    }
+
+    public function refuse(Request $request): void
+    {
+        $commentId=((int)$request->getGet()[2]);
+        $req = $this->commentManager->refuseComment($commentId);
+
+        if ($req === true) {
+            echo "Commentaire supprimé.";
+            header("location: ../../admin/comments");
+            exit();
+        }
+
+        echo "Impossible de supprimer le commentaire <br>";
+        header("location: ../../admin/comments");
+        exit();
     }
 
     public function showUsersManager(Request $request): void
