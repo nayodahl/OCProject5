@@ -36,12 +36,8 @@ class PostRepository extends Database
         );
         $result->bindValue(':postsNumberLimit', $postsNumberLimit, PDO::PARAM_INT);
         $result->execute();
-        $customArray = [];
 
-        while ($data = $result->fetch()) {
-            array_push($customArray, new Post($data));
-        }
-        return $customArray;
+        return $result->fetchAll(PDO::FETCH_CLASS, '\App\Model\Entity\Post');
     }
 
     // get last Posts, sorted by most recent, with limit and offset as parameters
@@ -57,12 +53,8 @@ class PostRepository extends Database
         $result->bindValue(':offset', $offset, PDO::PARAM_INT);
         $result->bindValue(':postsNumberLimit', $postsNumberLimit, PDO::PARAM_INT);
         $result->execute();
-        $customArray = [];
-
-        while ($data = $result->fetch()) {
-            array_push($customArray, new Post($data));
-        }
-        return $customArray;
+        
+        return $result->fetchAll(PDO::FETCH_CLASS, '\App\Model\Entity\Post');
     }
 
     // get total number of Posts

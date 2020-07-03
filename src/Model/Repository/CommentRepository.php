@@ -27,13 +27,8 @@ class CommentRepository extends Database
         $result->bindValue(':commentsNumberLimit', $commentsNumberLimit, PDO::PARAM_INT);
         $result->bindValue(':approved', $approved, PDO::PARAM_INT);
         $result->execute();
-        $customArray = [];
 
-        while ($data = $result->fetch()) {
-            array_push($customArray, new Comment($data));
-        }
-
-        return $customArray;
+        return $result->fetchAll(PDO::FETCH_CLASS, '\App\Model\Entity\Comment');
     }
 
     // get not approved Comments, sorted by least recent, with limit and offset as parameters
@@ -50,13 +45,8 @@ class CommentRepository extends Database
         $result->bindValue(':offset', $offset, PDO::PARAM_INT);
         $result->bindValue(':commentsNumberLimit', $commentsNumberLimit, PDO::PARAM_INT);
         $result->execute();
-        $customArray = [];
 
-        while ($data = $result->fetch()) {
-            array_push($customArray, new Comment($data));
-        }
-
-        return $customArray;
+        return $result->fetchAll(PDO::FETCH_CLASS, '\App\Model\Entity\Comment');
     }
 
     // get total number of Comments

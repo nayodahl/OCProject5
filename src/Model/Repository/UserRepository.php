@@ -21,7 +21,7 @@ class UserRepository extends Database
     public function getNonSuperAdminUsers(int $offset, int $limit): array
     {
         $result = $this->dbConnect()->prepare(
-            'SELECT id AS userID, user.login, user.password, user.email, user.type, user.token, DATE_FORMAT(user.created, \'%d/%m/%Y à %Hh%i\') AS created 
+            'SELECT id AS userId, user.login, user.password, user.email, user.type, user.token, DATE_FORMAT(user.created, \'%d/%m/%Y à %Hh%i\') AS created 
             FROM user 
             WHERE user.type <> "superadmin"
             ORDER BY user.login ASC LIMIT :offset, :usersNumberLimit '
@@ -29,12 +29,8 @@ class UserRepository extends Database
         $result->bindValue(':offset', $offset, PDO::PARAM_INT);
         $result->bindValue(':usersNumberLimit', $limit, PDO::PARAM_INT);
         $result->execute();
-        $customArray = [];
-
-        while ($data = $result->fetch()) {
-            array_push($customArray, new User($data));
-        }
-        return $customArray;
+         
+        return $result->fetchAll(PDO::FETCH_CLASS, '\App\Model\Entity\User');
     }
 
     /*
