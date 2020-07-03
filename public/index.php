@@ -24,10 +24,11 @@ $router->register('POST', 'addcomment', 'postController', 'addComment');
 
 // Back
 $router->register('GET', 'posts', 'backController', 'showPostsManager');
-$router->register('GET', 'post', 'backController', 'editPost');
+$router->register('GET', 'post', 'backController', 'showEditPost');
 $router->register('POST', 'post', 'backController', 'modifyPost'); 
-$router->register('GET', 'newpost', 'backController', 'addPost');
-// TO DO  $router->register('POST', 'newpost', 'backController', '');
+$router->register('GET', 'newpost', 'backController', 'showAddPost');
+// TO DO  $router->register('POST', 'newpost', 'backController', 'addPost');
+// TO DO  $router->register('GET', 'delete', 'backController', 'delete');
 $router->register('GET', 'comments', 'backController', 'showCommentsManager');
 $router->register('GET', 'members', 'backController', 'showUsersManager');
 // TO DO  $router->register('GET', 'promote', 'backController', '');

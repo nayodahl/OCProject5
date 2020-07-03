@@ -167,7 +167,7 @@ class RequestValidator
         return null;
     }
 
-    public function validateEditPost(Request $request): ?Request
+    public function validateShowEditPost(Request $request): ?Request
     {
         if (isset($request->getGet()[2]) && ($request->getGet()[2] > 0)) {
             return $request;
@@ -183,9 +183,10 @@ class RequestValidator
             $request->setPost([
                 'title' => $this->formValidator->sanitizeString($request->getPost()['title']),
                 'chapo' => $this->formValidator->sanitizeString($request->getPost()['chapo']),
-                'content' => $this->formValidator->sanitizeTextArea($request->getPost()['content'])
+                'content' => $this->formValidator->sanitizeTextArea($request->getPost()['content']),
+                'author' => $request->getPost()['author'],
             ]);
-            if (isset($request->getPost()['title']) && isset($request->getPost()['chapo']) && isset($request->getPost()['content'])) {
+            if (isset($request->getPost()['title']) && isset($request->getPost()['chapo']) && isset($request->getPost()['content']) && isset($request->getPost()['author'])) {
                 return $request;
             }
             /* temporaire, message à envoyer vers session
@@ -197,7 +198,7 @@ class RequestValidator
         return null;
     }
 
-    public function validateAddPost(Request $request): ?Request
+    public function validateShowAddPost(Request $request): ?Request
     {
         if (!isset($request->getGet()[2])) {
             return $request;

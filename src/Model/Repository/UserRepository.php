@@ -33,25 +33,18 @@ class UserRepository extends Database
         return $result->fetchAll(PDO::FETCH_CLASS, '\App\Model\Entity\User');
     }
 
-    /*
-    public function getSingleUser(int $userId): array
+    // get Users that have at least admin profile (so including the superadmin), sorted by alphabetical order,
+    // return an array of Users
+    public function getAllAdminUsers(): array
     {
-    $result = $this->dbConnect()->prepare(
-        'SELECT comment.id AS commentId, comment.content, DATE_FORMAT(comment.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(comment.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate, comment.post_id AS postId, comment.user_id AS authorId, user.login AS authorLogin
-        FROM comment
-        INNER JOIN user ON comment.user_id = user.id
-        WHERE user.user_id= :userId
-        AND comment.approved= :approved'
-    );
-    $result->bindValue(':userId', $userId, \PDO::PARAM_INT);
-    $result->execute();
-    $custom_array = [];
-
-    while ($data = $result->fetch(\PDO::FETCH_ASSOC)) {
-        array_push($custom_array, new Comment($data));
+        $result = $this->dbConnect()->prepare(
+            'SELECT id AS userId, user.login, user.password, user.email, user.type, user.token, DATE_FORMAT(user.created, \'%d/%m/%Y à %Hh%i\') AS created 
+            FROM user 
+            WHERE user.type = "admin" OR user.type = "superadmin"
+            ORDER BY user.login ASC'
+        );
+        $result->execute();
+         
+        return $result->fetchAll(PDO::FETCH_CLASS, '\App\Model\Entity\User');
     }
-
-    return $custom_array;
-    }
-    */
 }

@@ -26,13 +26,11 @@
                     </div>
                     <div class="control-group">
                         <div class="form-group controls">
-                            <label>Auteur :</label>
-                            <select name="author" type="text" class="form-control" id="author" required data-validation-required-message="Sélectionnez un auteur.">
-                               <option>Auteur1</option>
-                               <option>Auteur2</option>
-                               <option>Auteur3</option>
-                               <option>Auteur4</option>
-                               <option>Auteur5</option> 
+                            <label for="author">Auteur :</label>
+                            <select id="author" name="author" type="text" class="form-control" form="PostForm" required data-validation-required-message="Sélectionnez un auteur.">
+                                {% for adminUser in adminUsers %}
+                                    <option value="{{ adminUser.userId }}">{{ adminUser.login }}</option>
+                                {% endfor %}
                             </select>
                             <div class="invalid-feedback">Sélectionnez un auteur.</div>
                             <p class="help-block text-danger"></p>

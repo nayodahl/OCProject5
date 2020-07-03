@@ -38,11 +38,9 @@ class UserManager
 
         return [$offset, $limit, $totalUsersPages, $userPage];
     }
-    
-    /*
-    public function getSingleUser(int $userId): ?User
+
+    public function getAdminUsers(): array
     {
-        return $this->userRepo->getUser($userId);
+        return $this->userRepo->getAllAdminUsers();
     }
-    */
 }

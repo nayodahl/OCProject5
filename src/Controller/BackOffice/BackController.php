@@ -55,15 +55,17 @@ class BackController
             ]);
     }
     
-    public function editPost(Request $request): void
+    public function showEditPost(Request $request): void
     {
         $postId=((int)$request->getGet()[2]);
         $post = $this->postManager->getSinglePost($postId);
+        $adminUsers = $this->userManager->getAdminUsers();
 
         // twig rendering with some parameters
         $this->renderer->render('backoffice/EditPost.twig', [
             'post' => $post,
             'postId' => $postId,
+            'adminUsers' => $adminUsers
             ]);
     }
 
@@ -72,7 +74,7 @@ class BackController
         $postId=((int)$request->getGet()[2]);
         $title = $request->getPost()['title'];
         $chapo = $request->getPost()['chapo'];
-        $authorId = 8; // TO DO, get id from login
+        $authorId = ((int)$request->getPost()['author']);
         $content = $request->getPost()['content'];
         
         $req = $this->postManager->modifyPostContent($postId, $title, $chapo, $authorId, $content);
@@ -88,9 +90,10 @@ class BackController
         exit();
     }
 
-    public function addPost(): void
+    public function showAddPost(): void
     {
-        $this->renderer->render('backoffice/AddPost.twig');
+        $adminUsers = $this->userManager->getAdminUsers();
+        $this->renderer->render('backoffice/AddPost.twig', ['adminUsers' => $adminUsers]);
     }
 
     public function showCommentsManager(Request $request): void
