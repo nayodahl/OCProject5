@@ -68,4 +68,14 @@ class CommentRepository extends Database
 
         return (int)current($result->fetch());
     }
+
+    // write Comment in DB
+    public function setCommentToPost(int $postId, int $authorId, string $comment): bool
+    {
+        $result = $this->dbConnect()->prepare('INSERT INTO comment(post_id, comment.user_id, content) VALUES (:postId, :authorId, :comment)');
+        $result->bindValue(':postId', $postId, PDO::PARAM_INT);
+        $result->bindValue(':authorId', $authorId, PDO::PARAM_INT);
+        $result->bindValue(':comment', $comment, PDO::PARAM_STR);
+        return $result->execute();
+    }
 }

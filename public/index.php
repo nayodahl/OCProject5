@@ -20,6 +20,7 @@ $router->register('GET', 'login', 'accountController', 'showLoginPage');
 $router->register('GET', 'signin', 'accountController', 'showSigninPage');
 $router->register('POST', null, 'accountController', 'contactForm');
 $router->register('POST', 'signin', 'accountController', 'signinForm');
+$router->register('POST', 'addcomment', 'postController', 'addComment');
 
 // Back
 $router->register('GET', 'posts', 'backController', 'showPostsManager');
@@ -31,6 +32,8 @@ $router->register('GET', 'comments', 'backController', 'showCommentsManager');
 $router->register('GET', 'members', 'backController', 'showUsersManager');
 // TO DO  $router->register('GET', 'promote', 'backController', '');
 // TO DO  $router->register('GET', 'demote', 'backController', '');
+// TO DO  $router->register('GET', 'approve', 'backController', '');
+// TO DO  $router->register('GET', 'refuse', 'backController', '');
 
 // Error
 $router->register('GET', '404', 'errorController', 'show404');

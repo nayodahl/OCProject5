@@ -56,4 +56,9 @@ class CommentManager
 
         return [$offset, $limit, $totalCommentPages, $commentPage];
     }
+
+    public function addCommentToPost(int $postId, int $authorId, string $comment): bool
+    {
+        return $this->commentRepo->setCommentToPost($postId, $authorId, $comment);
+    }
 }

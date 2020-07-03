@@ -128,7 +128,23 @@ class RequestValidator
         return null;
     }
 
-
+    public function validateAddComment(Request $request): ?Request
+    {
+        if ( $request->getPost() ) {
+            // sanitize input
+            $request->setPost([
+                'comment' => $this->formValidator->sanitizeString($request->getPost()['comment']),
+            ]);
+            return $request;
+        };    
+        /* temporaire, message à envoyer vers session
+            
+                exit avec message 'tous les champs ne sont pas remplis ou corrects' dans session
+                ou vous n'êtes pas loggé
+            }
+        */        
+        return null;
+    }
 
 
     ///////// Back //////////////
