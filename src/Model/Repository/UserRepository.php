@@ -47,4 +47,15 @@ class UserRepository extends Database
          
         return $result->fetchAll(PDO::FETCH_CLASS, '\App\Model\Entity\User');
     }
+
+    // give or remove admin rights to one User, so updating its "type" attribute
+    // return true if updated successfully
+    public function updateUserType(int $userId, string $type): bool
+    {
+        $result = $this->dbConnect()->prepare('UPDATE user SET user.type = :userType, last_update=NOW() WHERE user.id = :userId');
+        $result->bindValue(':userId', $userId, PDO::PARAM_INT);
+        $result->bindValue(':userType', $type, PDO::PARAM_STR);
+
+        return $result->execute();
+    }
 }

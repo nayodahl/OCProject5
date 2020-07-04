@@ -92,7 +92,7 @@ class BackController
 
     public function delete(Request $request): void
     {
-        $postId=((int)$request->getGet()[2]);      
+        $postId=((int)$request->getGet()[2]);
         $req = $this->postManager->deletePost($postId);
         
         if ($req === true) {
@@ -204,5 +204,37 @@ class BackController
             'currentPage' => $userPage,
             'totalPages' => $totalUserPages
             ]);
+    }
+
+    public function promote(Request $request): void
+    {
+        $userId=((int)$request->getGet()[2]);
+        $req = $this->userManager->promoteUser($userId);
+
+        if ($req === true) {
+            echo "Droits admin donnés à l'utilisateur.";
+            header("location: ../../admin/members");
+            exit();
+        }
+
+        echo "Impossible de donner les droits admin à l'utilisateur <br>";
+        header("location: ../../admin/members");
+        exit();
+    }
+
+    public function demote(Request $request): void
+    {
+        $userId=((int)$request->getGet()[2]);
+        $req = $this->userManager->demoteUser($userId);
+
+        if ($req === true) {
+            echo "Droits admin retirés à l'utilisateur.";
+            header("location: ../../admin/members");
+            exit();
+        }
+
+        echo "Impossible de retirer les droits admin à l'utilisateur <br>";
+        header("location: ../../admin/members");
+        exit();
     }
 }

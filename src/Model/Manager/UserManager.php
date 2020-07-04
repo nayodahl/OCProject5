@@ -43,4 +43,14 @@ class UserManager
     {
         return $this->userRepo->getAllAdminUsers();
     }
+
+    public function promoteUser(int $userId): bool
+    {
+        return $this->userRepo->updateUserType($userId, 'admin');
+    }
+
+    public function demoteUser(int $userId): bool
+    {
+        return $this->userRepo->updateUserType($userId, 'member');
+    }
 }

@@ -31,8 +31,8 @@ $router->register('POST', 'newpost', 'backController', 'addPost');
 $router->register('GET', 'delete', 'backController', 'delete');
 $router->register('GET', 'comments', 'backController', 'showCommentsManager');
 $router->register('GET', 'members', 'backController', 'showUsersManager');
-// TO DO  $router->register('GET', 'promote', 'backController', '');
-// TO DO  $router->register('GET', 'demote', 'backController', '');
+$router->register('GET', 'promote', 'backController', 'promote');
+$router->register('GET', 'demote', 'backController', 'demote');
 $router->register('GET', 'approve', 'backController', 'approve');
 $router->register('GET', 'refuse', 'backController', 'refuse');
 

@@ -285,6 +285,22 @@ class RequestValidator
         return null;
     }
 
+    public function validatePromote(Request $request): ?Request
+    {
+        if (isset($request->getGet()[2]) &&  ($request->getGet()[2] > 0)) { // UserId
+            return $request;
+        }
+        return null;
+    }
+
+    public function validateDemote(Request $request): ?Request
+    {
+        if (isset($request->getGet()[2]) &&  ($request->getGet()[2] > 0)) { // UserId
+            return $request;
+        }
+        return null;
+    }
+
     ////////// Error ///////
 
     public function validateShow404(Request $request): ?Request
