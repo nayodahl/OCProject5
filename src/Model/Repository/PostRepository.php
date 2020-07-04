@@ -108,4 +108,18 @@ class PostRepository extends Database
 
         return $result->execute();
     }
+
+    // Add new Post
+    public function addPost(string $title, string $chapo, int $authorId, string $content): ?int
+    {
+        $conn = $this->dbConnect();
+        $result = $conn->prepare('INSERT INTO post(title, chapo, content, post.user_id) VALUES (:title, :chapo, :content, :authorId)');
+        $result->bindValue(':title', $title, PDO::PARAM_STR);
+        $result->bindValue(':chapo', $chapo, PDO::PARAM_STR);
+        $result->bindValue(':content', $content, PDO::PARAM_STR);
+        $result->bindValue(':authorId', $authorId, PDO::PARAM_INT);
+        $result->execute();
+
+        return (int)($conn->lastInsertId());
+    }
 }

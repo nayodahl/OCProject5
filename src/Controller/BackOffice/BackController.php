@@ -96,6 +96,26 @@ class BackController
         $this->renderer->render('backoffice/AddPost.twig', ['adminUsers' => $adminUsers]);
     }
 
+    public function addPost(Request $request): void
+    {
+        $title = $request->getPost()['title'];
+        $chapo = $request->getPost()['chapo'];
+        $authorId = ((int)$request->getPost()['author']);
+        $content = $request->getPost()['content'];
+        
+        $newPostId = $this->postManager->createPost($title, $chapo, $authorId, $content);
+                
+        if (isset($newPostId) && ($newPostId > 0)) {
+            echo "Article publié.";
+            header("location: ../post/$newPostId");
+            exit();
+        }
+
+        echo "Impossible de publier l'article <br>";
+        header("location: ../../admin/newpost");
+        exit();
+    }
+
     public function showCommentsManager(Request $request): void
     {
         $commentPage=((int)$request->getGet()[2]);

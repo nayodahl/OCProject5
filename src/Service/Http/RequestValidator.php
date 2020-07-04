@@ -206,6 +206,29 @@ class RequestValidator
         return null;
     }
 
+    public function validateAddPost(Request $request): ?Request
+    {
+        if (($request->getGet()) !== null) {
+
+            // sanitize input
+            $request->setPost([
+                'title' => $this->formValidator->sanitizeString($request->getPost()['title']),
+                'chapo' => $this->formValidator->sanitizeString($request->getPost()['chapo']),
+                'content' => $this->formValidator->sanitizeTextArea($request->getPost()['content']),
+                'author' => $request->getPost()['author'],
+            ]);
+            if (isset($request->getPost()['title']) && isset($request->getPost()['chapo']) && isset($request->getPost()['content']) && isset($request->getPost()['author'])) {
+                return $request;
+            }
+            /* temporaire, message à envoyer vers session
+            if isset($request->getPost()['title']) && isset($request->getPost()['chapo']) && isset($request->getPost()['content']) {
+                exit avec message 'tous les champs ne sont pas remplis ou corrects' dans session
+            }
+            */
+        };
+        return null;
+    }
+
     public function validateShowCommentsManager(Request $request): ?Request
     {
         if (!isset($request->getGet()[2])) { // comment page number

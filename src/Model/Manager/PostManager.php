@@ -81,4 +81,9 @@ class PostManager
     {
         return $this->postRepo->updatePost($postId, $title, $chapo, $authorId, $content);
     }
+
+    public function createPost(string $title, string $chapo, int $authorId, string $content): ?int
+    {
+        return $this->postRepo->addPost($title, $chapo, $authorId, $content);
+    }
 }
