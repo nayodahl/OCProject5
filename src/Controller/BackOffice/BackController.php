@@ -90,6 +90,22 @@ class BackController
         exit();
     }
 
+    public function delete(Request $request): void
+    {
+        $postId=((int)$request->getGet()[2]);      
+        $req = $this->postManager->deletePost($postId);
+        
+        if ($req === true) {
+            echo "Article supprimé.";
+            header("location: ../../admin/posts");
+            exit();
+        }
+
+        echo "Impossible de supprimer l'article <br>";
+        header("location: ../../admin/post/$postId");
+        exit();
+    }
+
     public function showAddPost(): void
     {
         $adminUsers = $this->userManager->getAdminUsers();

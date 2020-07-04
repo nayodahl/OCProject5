@@ -86,4 +86,9 @@ class PostManager
     {
         return $this->postRepo->addPost($title, $chapo, $authorId, $content);
     }
+
+    public function deletePost(int $postId): bool
+    {
+        return $this->postRepo->deleteOnePost($postId);
+    }
 }

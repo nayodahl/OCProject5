@@ -122,4 +122,13 @@ class PostRepository extends Database
 
         return (int)($conn->lastInsertId());
     }
+
+    // Delete a Post
+    public function deleteOnePost(int $postId): bool
+    {
+        $result = $this->dbConnect()->prepare('DELETE FROM post WHERE post.id = :postId');
+        $result->bindValue(':postId', $postId, PDO::PARAM_INT);
+
+        return $result->execute();
+    }
 }
