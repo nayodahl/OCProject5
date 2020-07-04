@@ -7,7 +7,7 @@
             <div class="col-lg-8 col-md-10 mx-auto"> 
                 <h2 class="section-heading">Modifier l'article : </h2>
                 <hr>                               
-                <form method="post" action="admin/posts" name="sentMessage" id="PostForm" class="needs-validation" novalidate>
+                <form method="post" action="admin/post/{{ postId }}" name="sentMessage" id="PostForm" class="needs-validation" novalidate>
                     <div class="control-group">
                         <div class="form-group controls">
                             <label>Titre :</label>
@@ -26,13 +26,11 @@
                     </div>
                     <div class="control-group">
                         <div class="form-group controls">
-                            <label>Auteur :</label>
-                            <select name="author" type="text" class="form-control" value="{{ post.authorLogin }}" id="author" required data-validation-required-message="Sélectionnez un auteur.">
-                               <option>{{ post.authorLogin }}</option>
-                               <option>Auteur2</option>
-                               <option>Auteur3</option>
-                               <option>Auteur4</option>
-                               <option>Auteur5</option> 
+                            <label for="author">Auteur :</label>
+                            <select id="author" name="author" type="text" class="form-control" form="PostForm" required data-validation-required-message="Sélectionnez un auteur.">
+                                {% for adminUser in adminUsers %}
+                                    <option value="{{ adminUser.userId }}">{{ adminUser.login }}</option>
+                                {% endfor %}
                             </select>
                             <div class="invalid-feedback">Sélectionnez un auteur.</div>
                             <p class="help-block text-danger"></p>
@@ -41,7 +39,7 @@
                     <div class="control-group">
                         <div class="form-group  controls">
                             <label>Contenu : </label>
-                            <textarea name="content" rows="30" class="form-control" id="content" maxlength="4000" required data-validation-required-message="Tapez le contenu de l'article ici.">{{ post.content }}</textarea>
+                            <textarea type="text" name="content" rows="30" class="form-control" id="content" maxlength="4000" required data-validation-required-message="Tapez le contenu de l'article ici.">{{ post.content }}</textarea>
                             <div class="invalid-feedback">Tapez un contenu d'article valide.</div>
                             <p class="help-block text-danger"></p>
                         </div>
@@ -50,7 +48,7 @@
                     <div id="success"></div>
                     <div class="form-group">
                         <ul class="pagination justify-content-center">
-                            <li class="page-item"><a class="page-link" href="#">Supprimer l'article</a></li>
+                            <li class="page-item"><a class="page-link" href="admin/delete/{{ post.postId }}">Supprimer l'article</a></li>
                             <li class="page-item"><a class="page-link" href="admin/posts">Annuler</a></li>
                             <li class="page-item"><button type="submit" class="btn btn-primary" id="sendMessageButton">Enregistrer les modifications</button></li>
                         </ul>

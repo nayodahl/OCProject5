@@ -92,4 +92,24 @@ class PostController
             'totalPages' => $totalPages
             ]);
     }
+
+    // Add comment in DB
+    public function addComment(Request $request): void
+    {
+        $postId=(int)$request->getGet()[1];
+        $authorId = 8;  //temporary, will need the id from session and checks if loggued
+        $comment = $request->getPost()['comment'];
+        
+        $req = $this->commentManager->addCommentToPost($postId, $authorId, $comment);
+
+        if ($req === true) {
+            echo "Votre commentaire va être soumis à validation.";
+            header("location: ../post/$postId#comments");
+            exit();
+        }
+
+        echo "Impossible d'ajouter le commentaire <br>";
+        header("location: ../post/$postId#comments");
+        exit();
+    }
 }

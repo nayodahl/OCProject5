@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : sam. 13 juin 2020 à 16:21
+-- Généré le : ven. 03 juil. 2020 à 12:15
 -- Version du serveur :  10.4.11-MariaDB
 -- Version de PHP : 7.4.5
 
@@ -30,9 +30,9 @@ SET time_zone = "+00:00";
 CREATE TABLE `comment` (
   `id` int(11) UNSIGNED NOT NULL,
   `content` longtext NOT NULL,
-  `approved` tinyint(1) NOT NULL,
-  `created` datetime NOT NULL,
-  `last_update` datetime NOT NULL,
+  `approved` tinyint(1) NOT NULL DEFAULT 0,
+  `created` datetime NOT NULL DEFAULT current_timestamp(),
+  `last_update` datetime NOT NULL DEFAULT current_timestamp(),
   `post_id` int(11) UNSIGNED NOT NULL,
   `user_id` int(11) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16;
@@ -72,8 +72,8 @@ CREATE TABLE `post` (
   `title` varchar(100) NOT NULL,
   `chapo` varchar(200) NOT NULL,
   `content` longtext NOT NULL,
-  `created` datetime NOT NULL,
-  `last_update` datetime NOT NULL,
+  `created` datetime NOT NULL DEFAULT current_timestamp(),
+  `last_update` datetime NOT NULL DEFAULT current_timestamp(),
   `user_id` int(11) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16;
 
@@ -100,10 +100,10 @@ CREATE TABLE `user` (
   `login` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `type` enum('admin','member','superadmin') NOT NULL,
+  `type` enum('admin','member','superadmin') NOT NULL DEFAULT 'member',
   `token` varchar(100) DEFAULT NULL,
-  `created` datetime NOT NULL,
-  `last_update` datetime NOT NULL
+  `created` datetime NOT NULL DEFAULT current_timestamp(),
+  `last_update` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf16;
 
 --
@@ -153,7 +153,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT pour la table `post`

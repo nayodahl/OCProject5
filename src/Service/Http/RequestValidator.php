@@ -128,7 +128,25 @@ class RequestValidator
         return null;
     }
 
+    public function validateAddComment(Request $request): ?Request
+    {
+        if ($request->getPost() && isset($request->getGet()[1]) && ($request->getGet()[1] > 0)) {
+            // sanitize input
+            $request->setPost([
+                'comment' => $this->formValidator->sanitizeTextArea($request->getPost()['comment']),
+            ]);
 
+            return $request;
+        };
+
+        /* temporaire, message à envoyer vers session
+
+                exit avec message 'tous les champs ne sont pas remplis ou corrects' dans session
+                ou vous n'êtes pas loggé
+            }
+        */
+        return null;
+    }
 
 
     ///////// Back //////////////
@@ -149,7 +167,7 @@ class RequestValidator
         return null;
     }
 
-    public function validateEditPost(Request $request): ?Request
+    public function validateShowEditPost(Request $request): ?Request
     {
         if (isset($request->getGet()[2]) && ($request->getGet()[2] > 0)) {
             return $request;
@@ -157,10 +175,64 @@ class RequestValidator
         return null;
     }
 
-    public function validateAddPost(Request $request): ?Request
+    public function validateModifyPost(Request $request): ?Request
+    {
+        if (isset($request->getGet()[2]) && ($request->getGet()[2] > 0)) {
+
+            // sanitize input
+            $request->setPost([
+                'title' => $this->formValidator->sanitizeString($request->getPost()['title']),
+                'chapo' => $this->formValidator->sanitizeString($request->getPost()['chapo']),
+                'content' => $this->formValidator->sanitizeTextArea($request->getPost()['content']),
+                'author' => $request->getPost()['author'],
+            ]);
+            if (isset($request->getPost()['title']) && isset($request->getPost()['chapo']) && isset($request->getPost()['content']) && isset($request->getPost()['author'])) {
+                return $request;
+            }
+            /* temporaire, message à envoyer vers session
+            if isset($request->getPost()['title']) && isset($request->getPost()['chapo']) && isset($request->getPost()['content']) {
+                exit avec message 'tous les champs ne sont pas remplis ou corrects' dans session
+            }
+            */
+        };
+        return null;
+    }
+
+    public function validateDelete(Request $request): ?Request
+    {
+        if (isset($request->getGet()[2]) && ($request->getGet()[2] > 0)) {
+            return $request;
+        };
+        return null;
+    }
+
+    public function validateShowAddPost(Request $request): ?Request
     {
         if (!isset($request->getGet()[2])) {
             return $request;
+        };
+        return null;
+    }
+
+    public function validateAddPost(Request $request): ?Request
+    {
+        if (($request->getGet()) !== null) {
+
+            // sanitize input
+            $request->setPost([
+                'title' => $this->formValidator->sanitizeString($request->getPost()['title']),
+                'chapo' => $this->formValidator->sanitizeString($request->getPost()['chapo']),
+                'content' => $this->formValidator->sanitizeTextArea($request->getPost()['content']),
+                'author' => $request->getPost()['author'],
+            ]);
+            if (isset($request->getPost()['title']) && isset($request->getPost()['chapo']) && isset($request->getPost()['content']) && isset($request->getPost()['author'])) {
+                return $request;
+            }
+            /* temporaire, message à envoyer vers session
+            if isset($request->getPost()['title']) && isset($request->getPost()['chapo']) && isset($request->getPost()['content']) {
+                exit avec message 'tous les champs ne sont pas remplis ou corrects' dans session
+            }
+            */
         };
         return null;
     }
@@ -181,6 +253,22 @@ class RequestValidator
         return null;
     }
 
+    public function validateApprove(Request $request): ?Request
+    {
+        if (isset($request->getGet()[2]) && ($request->getGet()[2] > 0)) { // commentId
+            return $request;
+        };
+        return null;
+    }
+
+    public function validateRefuse(Request $request): ?Request
+    {
+        if (isset($request->getGet()[2]) && ($request->getGet()[2] > 0)) { // commentId
+            return $request;
+        };
+        return null;
+    }
+
     public function validateShowUsersManager(Request $request): ?Request
     {
         if (!isset($request->getGet()[2])) { // user manager page
@@ -192,6 +280,22 @@ class RequestValidator
             return $request;
         };
         if (($request->getGet()[2] > 0)) {
+            return $request;
+        }
+        return null;
+    }
+
+    public function validatePromote(Request $request): ?Request
+    {
+        if (isset($request->getGet()[2]) &&  ($request->getGet()[2] > 0)) { // UserId
+            return $request;
+        }
+        return null;
+    }
+
+    public function validateDemote(Request $request): ?Request
+    {
+        if (isset($request->getGet()[2]) &&  ($request->getGet()[2] > 0)) { // UserId
             return $request;
         }
         return null;

@@ -56,4 +56,19 @@ class CommentManager
 
         return [$offset, $limit, $totalCommentPages, $commentPage];
     }
+
+    public function addCommentToPost(int $postId, int $authorId, string $comment): bool
+    {
+        return $this->commentRepo->insertCommentToPost($postId, $authorId, $comment);
+    }
+
+    public function approveComment(int $commentId): bool
+    {
+        return $this->commentRepo->setCommentToApproved($commentId);
+    }
+
+    public function refuseComment(int $commentId): bool
+    {
+        return $this->commentRepo->deleteComment($commentId);
+    }
 }

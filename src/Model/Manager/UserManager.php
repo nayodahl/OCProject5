@@ -38,11 +38,19 @@ class UserManager
 
         return [$offset, $limit, $totalUsersPages, $userPage];
     }
-    
-    /*
-    public function getSingleUser(int $userId): ?User
+
+    public function getAdminUsers(): array
     {
-        return $this->userRepo->getUser($userId);
+        return $this->userRepo->getAllAdminUsers();
     }
-    */
+
+    public function promoteUser(int $userId): bool
+    {
+        return $this->userRepo->updateUserType($userId, 'admin');
+    }
+
+    public function demoteUser(int $userId): bool
+    {
+        return $this->userRepo->updateUserType($userId, 'member');
+    }
 }

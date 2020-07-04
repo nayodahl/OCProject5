@@ -55,21 +55,81 @@ class BackController
             ]);
     }
     
-    public function EditPost(Request $request): void
+    public function showEditPost(Request $request): void
     {
         $postId=((int)$request->getGet()[2]);
         $post = $this->postManager->getSinglePost($postId);
+        $adminUsers = $this->userManager->getAdminUsers();
 
         // twig rendering with some parameters
         $this->renderer->render('backoffice/EditPost.twig', [
             'post' => $post,
             'postId' => $postId,
+            'adminUsers' => $adminUsers
             ]);
     }
 
-    public function AddPost(Request $request): void
+    public function modifyPost(Request $request): void
     {
-        $this->renderer->render('backoffice/AddPost.twig');
+        $postId=((int)$request->getGet()[2]);
+        $title = $request->getPost()['title'];
+        $chapo = $request->getPost()['chapo'];
+        $authorId = ((int)$request->getPost()['author']);
+        $content = $request->getPost()['content'];
+        
+        $req = $this->postManager->modifyPostContent($postId, $title, $chapo, $authorId, $content);
+        
+        if ($req === true) {
+            echo "Article modifié.";
+            header("location: ../../admin/post/$postId");
+            exit();
+        }
+
+        echo "Impossible de modifier l'article <br>";
+        header("location: ../../admin/post/$postId");
+        exit();
+    }
+
+    public function delete(Request $request): void
+    {
+        $postId=((int)$request->getGet()[2]);
+        $req = $this->postManager->deletePost($postId);
+        
+        if ($req === true) {
+            echo "Article supprimé.";
+            header("location: ../../admin/posts");
+            exit();
+        }
+
+        echo "Impossible de supprimer l'article <br>";
+        header("location: ../../admin/post/$postId");
+        exit();
+    }
+
+    public function showAddPost(): void
+    {
+        $adminUsers = $this->userManager->getAdminUsers();
+        $this->renderer->render('backoffice/AddPost.twig', ['adminUsers' => $adminUsers]);
+    }
+
+    public function addPost(Request $request): void
+    {
+        $title = $request->getPost()['title'];
+        $chapo = $request->getPost()['chapo'];
+        $authorId = ((int)$request->getPost()['author']);
+        $content = $request->getPost()['content'];
+        
+        $newPostId = $this->postManager->createPost($title, $chapo, $authorId, $content);
+                
+        if (isset($newPostId) && ($newPostId > 0)) {
+            echo "Article publié.";
+            header("location: ../post/$newPostId");
+            exit();
+        }
+
+        echo "Impossible de publier l'article <br>";
+        header("location: ../../admin/newpost");
+        exit();
     }
 
     public function showCommentsManager(Request $request): void
@@ -93,6 +153,38 @@ class BackController
             ]);
     }
 
+    public function approve(Request $request): void
+    {
+        $commentId=((int)$request->getGet()[2]);
+        $req = $this->commentManager->approveComment($commentId);
+
+        if ($req === true) {
+            echo "Commentaire approuvé.";
+            header("location: ../../admin/comments");
+            exit();
+        }
+
+        echo "Impossible d'approuver le commentaire <br>";
+        header("location: ../../admin/comments");
+        exit();
+    }
+
+    public function refuse(Request $request): void
+    {
+        $commentId=((int)$request->getGet()[2]);
+        $req = $this->commentManager->refuseComment($commentId);
+
+        if ($req === true) {
+            echo "Commentaire supprimé.";
+            header("location: ../../admin/comments");
+            exit();
+        }
+
+        echo "Impossible de supprimer le commentaire <br>";
+        header("location: ../../admin/comments");
+        exit();
+    }
+
     public function showUsersManager(Request $request): void
     {
         $userPage=((int)$request->getGet()[2]);
@@ -112,5 +204,37 @@ class BackController
             'currentPage' => $userPage,
             'totalPages' => $totalUserPages
             ]);
+    }
+
+    public function promote(Request $request): void
+    {
+        $userId=((int)$request->getGet()[2]);
+        $req = $this->userManager->promoteUser($userId);
+
+        if ($req === true) {
+            echo "Droits admin donnés à l'utilisateur.";
+            header("location: ../../admin/members");
+            exit();
+        }
+
+        echo "Impossible de donner les droits admin à l'utilisateur <br>";
+        header("location: ../../admin/members");
+        exit();
+    }
+
+    public function demote(Request $request): void
+    {
+        $userId=((int)$request->getGet()[2]);
+        $req = $this->userManager->demoteUser($userId);
+
+        if ($req === true) {
+            echo "Droits admin retirés à l'utilisateur.";
+            header("location: ../../admin/members");
+            exit();
+        }
+
+        echo "Impossible de retirer les droits admin à l'utilisateur <br>";
+        header("location: ../../admin/members");
+        exit();
     }
 }

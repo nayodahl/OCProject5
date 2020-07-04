@@ -42,7 +42,7 @@ class AccountController
     }
 
     // Contact Form
-    public function contactForm(Request $request): void
+    public function contactForm(): void
     {
         /*
         Traitement du message, envoi du mail
@@ -54,7 +54,7 @@ class AccountController
     }
 
     // Signin Form
-    public function signinForm(Request $request): void
+    public function signinForm(): void
     {
         /*
         Temporaire !!
