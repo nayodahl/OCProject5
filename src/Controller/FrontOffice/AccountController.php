@@ -32,13 +32,21 @@ class AccountController
     // Render Login Page
     public function showLoginPage(): void
     {
-        $this->renderer->render('frontoffice/LoginPage.twig');
-    }
+        $this->renderer->render('frontoffice/LoginPage.twig',[
+            'session' => $_SESSION 
+        ]);
+        unset($_SESSION['success']);
+        unset($_SESSION['error']);
+    } 
 
     // Render Signin Page
     public function showSigninPage(): void
     {
-        $this->renderer->render('frontoffice/SigninPage.twig');
+        $this->renderer->render('frontoffice/SigninPage.twig',[
+            'session' => $_SESSION 
+        ]);
+        unset($_SESSION['success']);
+        unset($_SESSION['error']);
     }
 
     // Contact Form
@@ -46,10 +54,21 @@ class AccountController
     {
         /*
         Traitement du message, envoi du mail
-        Temporaire, message à mettre dans session
         */
-        echo "Votre message a bien été envoyé. <br>";
+        $_SESSION['success']="Votre message a bien été envoyé";
         header('location: ');
+        exit();
+    }
+
+    // Login Form
+    public function loginForm(): void
+    {
+        /*
+        Temporaire !!
+        Traitement de la connexion
+        */
+        $_SESSION['success']="Connexion réussie.";
+        header('location: login#login');
         exit();
     }
 
@@ -62,8 +81,8 @@ class AccountController
         - create user with status =  not activated
         - send mail with token
         */
-        echo "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription. <br>";
-        header('location: login');
+        $_SESSION['success']="Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription.";
+        header('location: signin');
         exit();
     }
 }

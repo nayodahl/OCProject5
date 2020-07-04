@@ -3,6 +3,7 @@
 declare(strict_types=1);
 require_once '../vendor/autoload.php';
 
+session_start();
 use App\Service\Router;
 
 $whoops = new \Whoops\Run;
@@ -17,6 +18,7 @@ $router->register('GET', null, 'postController', 'home');
 $router->register('GET', 'posts', 'postController', 'showPostsPage');
 $router->register('GET', 'post', 'postController', 'showSinglePost');
 $router->register('GET', 'login', 'accountController', 'showLoginPage');
+$router->register('POST', 'login', 'accountController', 'loginForm');
 $router->register('GET', 'signin', 'accountController', 'showSigninPage');
 $router->register('POST', null, 'accountController', 'contactForm');
 $router->register('POST', 'signin', 'accountController', 'signinForm');

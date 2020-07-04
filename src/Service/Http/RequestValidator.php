@@ -88,11 +88,38 @@ class RequestValidator
             if (isset($request->getPost()['lastname']) && isset($request->getPost()['firstname']) && isset($request->getPost()['email']) && isset($request->getPost()['message']) && $this->formValidator->isEmail($request->getPost()['email'])) {
                 return $request;
             }
-            /* temporaire, message à envoyer vers session
+
             if (!isset($lastname) || !isset($firstname) || !isset($email) || !isset($message) || !$this->formValidator->isEmail($email)) {
-                exit avec message 'tous les champs ne sont pas remplis ou corrects' dans session
+                $_SESSION['error']="tous les champs ne sont pas remplis ou corrects";
+                header('location: ');
+                exit();
             }
-            */
+        };
+        return null;
+    }
+
+    public function validateLoginForm(Request $request): ?Request
+    {
+        if (!isset($request->getGet()[2])) {
+            // sanitize input
+            $request->setPost([
+                'login' => $this->formValidator->sanitizeString($request->getPost()['login']),
+                'password' => $request->getPost()['password'] // temporaire, need a hash + salt function
+            ]);
+
+            //validate password
+            /*
+                needs a password verify function /
+            */                
+            //validate input
+            if (isset($request->getPost()['login']) && isset($request->getPost()['password'])) {
+                return $request;
+            }
+            if (!isset($login) || !isset($password)) {
+                $_SESSION['error']="tous les champs ne sont pas remplis ou corrects";
+                header('location: login#login');
+                exit();
+            }
         };
         return null;
     }
@@ -119,11 +146,11 @@ class RequestValidator
             if (isset($request->getPost()['login']) && isset($request->getPost()['password']) && isset($request->getPost()['email']) && $this->formValidator->isEmail($request->getPost()['email'])) {
                 return $request;
             }
-            /* temporaire, message à envoyer vers session
-            if (!isset($login) || !isset($password) || !isset($email) || !isset($message) || !$this->formValidator->isEmail($email)) {
-                exit avec message 'tous les champs ne sont pas remplis ou corrects' dans session
+            if (!isset($login) || !isset($password) || !isset($email) || !$this->formValidator->isEmail($email)) {
+                $_SESSION['error']="tous les champs ne sont pas remplis ou corrects";
+                header('location: signin#signin');
+                exit();
             }
-            */
         };
         return null;
     }

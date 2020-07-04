@@ -33,7 +33,12 @@ class PostController
     public function home(): void
     {
         $listPosts = $this->postManager->getHomepagePosts();
-        $this->renderer->render('frontoffice/HomePage.twig', ['listposts' => $listPosts]);
+        $this->renderer->render('frontoffice/HomePage.twig', [
+            'listposts' => $listPosts,
+            'session' => $_SESSION
+            ]);
+        unset($_SESSION['success']);
+        unset($_SESSION['error']);
     }
     
     // Render the single Post view
