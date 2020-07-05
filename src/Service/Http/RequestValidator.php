@@ -89,7 +89,7 @@ class RequestValidator
                 return $request;
             }
 
-            if (!isset($lastname) || !isset($firstname) || !isset($email) || !isset($message) || !$this->formValidator->isEmail($email)) {
+            if (!isset($request->getPost()['lastname']) || !isset($request->getPost()['firstname']) || !isset($request->getPost()['email']) || !isset($request->getPost()['message']) || !$this->formValidator->isEmail($request->getPost()['email'])) {
                 $this->session->setSession(['error' => "tous les champs ne sont pas remplis ou corrects."]);
                 header('location: ');
                 exit();
@@ -115,7 +115,7 @@ class RequestValidator
             if (isset($request->getPost()['login']) && isset($request->getPost()['password'])) {
                 return $request;
             }
-            if (!isset($login) || !isset($password)) {
+            if (!isset($request->getPost()['login']) || !isset($request->getPost()['password'])) {
                 $this->session->setSession(['error' => "tous les champs ne sont pas remplis ou corrects."]);
                 header('location: login#login');
                 exit();
@@ -167,7 +167,7 @@ class RequestValidator
         };
         if (!$request->getPost() || !isset($request->getGet()[1]) || ($request->getGet()[1] <= 0)) {
             $this->session->setSession(['error' => "le champ n'est pas correctement rempli."]);
-            header('location: ../post/$postId#comments');
+            header('location: ../posts');
             exit();
         }
 
@@ -217,6 +217,7 @@ class RequestValidator
             }
             if (!isset($request->getPost()['title']) || !isset($request->getPost()['chapo']) || !isset($request->getPost()['content']) || !isset($request->getPost()['author'])) {
                 $this->session->setSession(['error' => "Tous les champs ne sont pas remplis ou corrects."]);
+                $postId = $request->getGet()[2];
                 header("location: ../../admin/post/$postId#modify");
                 exit();
             }
