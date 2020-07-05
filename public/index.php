@@ -3,7 +3,6 @@
 declare(strict_types=1);
 require_once '../vendor/autoload.php';
 
-session_start();
 use App\Service\Router;
 
 $whoops = new \Whoops\Run;

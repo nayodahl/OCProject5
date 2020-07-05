@@ -7,19 +7,16 @@ class Request
 {
     private $get;
     private $post;
-    
+      
     public function __construct()
     {
-        $this->get = null;
-        $this->post = null;
+        $this->get = $this->post = null;
+        
         if (isset($_GET['url'])) {
             $this->get = $_GET;
             $this->get = explode('/', $this->get['url']);
         }
-
-        if (isset($_POST)) {
-            $this->post = $_POST;
-        }
+        if (isset($_POST)) {$this->post = $_POST;}
     }
 
     public function getGet(): ?array

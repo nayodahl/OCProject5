@@ -11,6 +11,7 @@ use \App\Model\Manager\CommentManager;
 //use \App\Model\Repository\UserRepository;
 //use \App\Model\Manager\UserManager;
 use \App\Service\Http\Request;
+use \App\Service\Http\Session;
 
 class AccountController
 {
@@ -19,6 +20,7 @@ class AccountController
     private $postManager;
     private $commentRepo;
     private $commentManager;
+    private $session;
 
     public function __construct()
     {
@@ -27,26 +29,29 @@ class AccountController
         $this->postManager = new PostManager($this->postRepo);
         $this->commentRepo = new CommentRepository();
         $this->commentManager = new CommentManager($this->commentRepo);
+        if (session_status() == PHP_SESSION_NONE) {
+            $this->session = new Session();            
+        }
     }
 
     // Render Login Page
     public function showLoginPage(): void
     {
         $this->renderer->render('frontoffice/LoginPage.twig',[
-            'session' => $_SESSION 
+            'session' => $this->session->getSession() 
         ]);
-        unset($_SESSION['success']);
-        unset($_SESSION['error']);
+        $this->session->remove('success');
+        $this->session->remove('error');
     } 
 
     // Render Signin Page
     public function showSigninPage(): void
     {
         $this->renderer->render('frontoffice/SigninPage.twig',[
-            'session' => $_SESSION 
+            'session' => $this->session->getSession()
         ]);
-        unset($_SESSION['success']);
-        unset($_SESSION['error']);
+        $this->session->remove('success');
+        $this->session->remove('error');
     }
 
     // Contact Form
@@ -55,7 +60,7 @@ class AccountController
         /*
         Traitement du message, envoi du mail
         */
-        $_SESSION['success']="Votre message a bien été envoyé";
+        $this->session->setSession(['success' => "Votre message a bien été envoyé"]);
         header('location: ');
         exit();
     }
@@ -67,7 +72,7 @@ class AccountController
         Temporaire !!
         Traitement de la connexion
         */
-        $_SESSION['success']="Connexion réussie.";
+        $this->session->setSession(['success' => "Connexion réussie."]); 
         header('location: login#login');
         exit();
     }
@@ -81,7 +86,7 @@ class AccountController
         - create user with status =  not activated
         - send mail with token
         */
-        $_SESSION['success']="Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription.";
+        $this->session->setSession(['success' => "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription."]);
         header('location: signin');
         exit();
     }

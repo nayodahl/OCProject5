@@ -19,7 +19,6 @@ class Router
     private $routes;
     private $request;
     private $requestValidator;
-
     
     public function __construct()
     {
@@ -99,7 +98,6 @@ class Router
                 }
             }
         }
-
         // if no route, then 404
         $this->errorController->show404();
     }
