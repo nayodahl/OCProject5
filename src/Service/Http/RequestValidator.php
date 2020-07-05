@@ -90,7 +90,7 @@ class RequestValidator
             }
 
             if (!isset($lastname) || !isset($firstname) || !isset($email) || !isset($message) || !$this->formValidator->isEmail($email)) {
-                $_SESSION['error']="tous les champs ne sont pas remplis ou corrects";
+                $this->session->setSession(['error' => "tous les champs ne sont pas remplis ou corrects."]);
                 header('location: ');
                 exit();
             }
@@ -110,13 +110,13 @@ class RequestValidator
             //validate password
             /*
                 needs a password verify function /
-            */                
+            */
             //validate input
             if (isset($request->getPost()['login']) && isset($request->getPost()['password'])) {
                 return $request;
             }
             if (!isset($login) || !isset($password)) {
-                $_SESSION['error']="tous les champs ne sont pas remplis ou corrects";
+                $this->session->setSession(['error' => "tous les champs ne sont pas remplis ou corrects."]);
                 header('location: login#login');
                 exit();
             }
@@ -146,8 +146,8 @@ class RequestValidator
             if (isset($request->getPost()['login']) && isset($request->getPost()['password']) && isset($request->getPost()['email']) && $this->formValidator->isEmail($request->getPost()['email'])) {
                 return $request;
             }
-            if (!isset($login) || !isset($password) || !isset($email) || !$this->formValidator->isEmail($email)) {
-                $_SESSION['error']="tous les champs ne sont pas remplis ou corrects";
+            if (!isset($request->getPost()['login']) || !isset($request->getPost()['password']) || !isset($request->getPost()['email']) || !$this->formValidator->isEmail($request->getPost()['email'])) {
+                $this->session->setSession(['error' => "tous les champs ne sont pas remplis ou corrects."]);
                 header('location: signin#signin');
                 exit();
             }
@@ -165,13 +165,12 @@ class RequestValidator
 
             return $request;
         };
+        if (!$request->getPost() || !isset($request->getGet()[1]) || ($request->getGet()[1] <= 0)) {
+            $this->session->setSession(['error' => "le champ n'est pas correctement rempli."]);
+            header('location: ../post/$postId#comments');
+            exit();
+        }
 
-        /* temporaire, message à envoyer vers session
-
-                exit avec message 'tous les champs ne sont pas remplis ou corrects' dans session
-                ou vous n'êtes pas loggé
-            }
-        */
         return null;
     }
 
@@ -216,11 +215,11 @@ class RequestValidator
             if (isset($request->getPost()['title']) && isset($request->getPost()['chapo']) && isset($request->getPost()['content']) && isset($request->getPost()['author'])) {
                 return $request;
             }
-            /* temporaire, message à envoyer vers session
-            if isset($request->getPost()['title']) && isset($request->getPost()['chapo']) && isset($request->getPost()['content']) {
-                exit avec message 'tous les champs ne sont pas remplis ou corrects' dans session
+            if (!isset($request->getPost()['title']) || !isset($request->getPost()['chapo']) || !isset($request->getPost()['content']) || !isset($request->getPost()['author'])) {
+                $this->session->setSession(['error' => "Tous les champs ne sont pas remplis ou corrects."]);
+                header("location: ../../admin/post/$postId#modify");
+                exit();
             }
-            */
         };
         return null;
     }
@@ -255,11 +254,11 @@ class RequestValidator
             if (isset($request->getPost()['title']) && isset($request->getPost()['chapo']) && isset($request->getPost()['content']) && isset($request->getPost()['author'])) {
                 return $request;
             }
-            /* temporaire, message à envoyer vers session
-            if isset($request->getPost()['title']) && isset($request->getPost()['chapo']) && isset($request->getPost()['content']) {
-                exit avec message 'tous les champs ne sont pas remplis ou corrects' dans session
+            if (!isset($request->getPost()['title']) || !isset($request->getPost()['chapo']) || !isset($request->getPost()['content']) || !isset($request->getPost()['author'])) {
+                $this->session->setSession(['error' => "Tous les champs ne sont pas remplis ou corrects."]);
+                header("location: ../../admin/newpost#add");
+                exit();
             }
-            */
         };
         return null;
     }

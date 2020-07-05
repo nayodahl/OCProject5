@@ -5,7 +5,19 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto"> 
-                <h2 class="section-heading">Modifier l'article : </h2>
+                <h2 class="section-heading" id="modify">Modifier l'article : </h2>
+                {% if session.success %}
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{ session.success }}
+                    </div>    
+                {% endif %}
+                {% if session.error %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{ session.error }}
+                    </div>    
+                {% endif %} 
                 <hr>                               
                 <form method="post" action="admin/post/{{ postId }}" name="sentMessage" id="PostForm" class="needs-validation" novalidate>
                     <div class="control-group">

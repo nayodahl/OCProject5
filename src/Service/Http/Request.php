@@ -16,7 +16,9 @@ class Request
             $this->get = $_GET;
             $this->get = explode('/', $this->get['url']);
         }
-        if (isset($_POST)) {$this->post = $_POST;}
+        if (isset($_POST)) {
+            $this->post = $_POST;
+        }
     }
 
     public function getGet(): ?array

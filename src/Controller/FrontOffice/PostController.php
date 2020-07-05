@@ -11,6 +11,7 @@ use \App\Model\Manager\CommentManager;
 //use \App\Model\Repository\UserRepository;
 //use \App\Model\Manager\UserManager;
 use \App\Service\Http\Request;
+use \App\Service\Http\Session;
 
 class PostController
 {
@@ -19,6 +20,7 @@ class PostController
     private $postManager;
     private $commentRepo;
     private $commentManager;
+    private $session;
 
     public function __construct()
     {
@@ -27,6 +29,7 @@ class PostController
         $this->postManager = new PostManager($this->postRepo);
         $this->commentRepo = new CommentRepository();
         $this->commentManager = new CommentManager($this->commentRepo);
+        $this->session = new Session();
     }
 
     // Render homepage, by getting the last 4 most recent posts
@@ -35,10 +38,10 @@ class PostController
         $listPosts = $this->postManager->getHomepagePosts();
         $this->renderer->render('frontoffice/HomePage.twig', [
             'listposts' => $listPosts,
-            'session' => $_SESSION
+            'session' => $this->session->getSession()
             ]);
-        unset($_SESSION['success']);
-        unset($_SESSION['error']);
+        $this->session->remove('success');
+        $this->session->remove('error');
     }
     
     // Render the single Post view
@@ -72,8 +75,11 @@ class PostController
             'currentPage' => $commentPage,
             'totalPages' => $totalCommentPages,
             'prevId' => $prevId,
-            'nextId' => $nextId
+            'nextId' => $nextId,
+            'session' => $this->session->getSession()
             ]);
+        $this->session->remove('success');
+        $this->session->remove('error');
     }
 
     // Render Posts Page
@@ -108,12 +114,12 @@ class PostController
         $req = $this->commentManager->addCommentToPost($postId, $authorId, $comment);
 
         if ($req === true) {
-            echo "Votre commentaire va être soumis à validation.";
+            $this->session->setSession(['success' => "Votre commentaire est enregistré et en attente de validation."]);
             header("location: ../post/$postId#comments");
             exit();
         }
 
-        echo "Impossible d'ajouter le commentaire <br>";
+        $this->session->setSession(['error' => "Impossible d'ajouter le commentaire."]);
         header("location: ../post/$postId#comments");
         exit();
     }

@@ -11,6 +11,7 @@ use \App\Model\Manager\CommentManager;
 use \App\Model\Repository\UserRepository;
 use \App\Model\Manager\UserManager;
 use \App\Service\Http\Request;
+use \App\Service\Http\Session;
 
 class BackController
 {
@@ -21,6 +22,7 @@ class BackController
     private $commentManager;
     private $userManager;
     private $userRepo;
+    private $session;
 
     public function __construct()
     {
@@ -31,6 +33,7 @@ class BackController
         $this->commentManager = new CommentManager($this->commentRepo);
         $this->userRepo = new UserRepository();
         $this->userManager = new UserManager($this->userRepo);
+        $this->session = new Session();
     }
 
     // Render Posts Manager page (default)
@@ -51,8 +54,11 @@ class BackController
         $this->renderer->render('backoffice/PostsManager.twig', [
             'listposts' => $listPosts,
             'currentPage' => $currentPage,
-            'totalPages' => $totalPages
+            'totalPages' => $totalPages,
+            'session' => $this->session->getSession()
             ]);
+        $this->session->remove('success');
+        $this->session->remove('error');
     }
     
     public function showEditPost(Request $request): void
@@ -65,8 +71,11 @@ class BackController
         $this->renderer->render('backoffice/EditPost.twig', [
             'post' => $post,
             'postId' => $postId,
-            'adminUsers' => $adminUsers
+            'adminUsers' => $adminUsers,
+            'session' => $this->session->getSession()
             ]);
+        $this->session->remove('success');
+        $this->session->remove('error');
     }
 
     public function modifyPost(Request $request): void
@@ -80,13 +89,12 @@ class BackController
         $req = $this->postManager->modifyPostContent($postId, $title, $chapo, $authorId, $content);
         
         if ($req === true) {
-            echo "Article modifié.";
-            header("location: ../../admin/post/$postId");
+            $this->session->setSession(['success' => "Article modifié."]);
+            header("location: ../../admin/post/$postId#modify");
             exit();
         }
-
-        echo "Impossible de modifier l'article <br>";
-        header("location: ../../admin/post/$postId");
+        $this->session->setSession(['error' => "Impossible de modifier l'article."]);
+        header("location: ../../admin/post/$postId#modify");
         exit();
     }
 
@@ -96,12 +104,11 @@ class BackController
         $req = $this->postManager->deletePost($postId);
         
         if ($req === true) {
-            echo "Article supprimé.";
+            $this->session->setSession(['success' => "Article supprimé."]);
             header("location: ../../admin/posts");
             exit();
         }
-
-        echo "Impossible de supprimer l'article <br>";
+        $this->session->setSession(['error' => "Impossible de supprimer l'article."]);
         header("location: ../../admin/post/$postId");
         exit();
     }
@@ -109,7 +116,12 @@ class BackController
     public function showAddPost(): void
     {
         $adminUsers = $this->userManager->getAdminUsers();
-        $this->renderer->render('backoffice/AddPost.twig', ['adminUsers' => $adminUsers]);
+        $this->renderer->render('backoffice/AddPost.twig', [
+            'adminUsers' => $adminUsers,
+            'session' => $this->session->getSession()
+            ]);
+        $this->session->remove('success');
+        $this->session->remove('error');
     }
 
     public function addPost(Request $request): void
@@ -122,13 +134,12 @@ class BackController
         $newPostId = $this->postManager->createPost($title, $chapo, $authorId, $content);
                 
         if (isset($newPostId) && ($newPostId > 0)) {
-            echo "Article publié.";
-            header("location: ../post/$newPostId");
+            $this->session->setSession(['success' => "Article publié."]);
+            header("location: ../admin/post/$newPostId");
             exit();
         }
-
-        echo "Impossible de publier l'article <br>";
-        header("location: ../../admin/newpost");
+        $this->session->setSession(['error' => "Impossible de publier l'article."]);
+        header("location: ../admin/newpost#add");
         exit();
     }
 
@@ -150,7 +161,10 @@ class BackController
             'listcomments' => $listComments,
             'currentPage' => $commentPage,
             'totalPages' => $totalCommentPages,
+            'session' => $this->session->getSession()
             ]);
+        $this->session->remove('success');
+        $this->session->remove('error');
     }
 
     public function approve(Request $request): void
@@ -159,12 +173,11 @@ class BackController
         $req = $this->commentManager->approveComment($commentId);
 
         if ($req === true) {
-            echo "Commentaire approuvé.";
+            $this->session->setSession(['success' => "Commentaire approuvé."]);
             header("location: ../../admin/comments");
             exit();
         }
-
-        echo "Impossible d'approuver le commentaire <br>";
+        $this->session->setSession(['error' => "Impossible d'approuver le commentaire."]);
         header("location: ../../admin/comments");
         exit();
     }
@@ -175,12 +188,11 @@ class BackController
         $req = $this->commentManager->refuseComment($commentId);
 
         if ($req === true) {
-            echo "Commentaire supprimé.";
+            $this->session->setSession(['success' => "Commentaire supprimé."]);
             header("location: ../../admin/comments");
             exit();
         }
-
-        echo "Impossible de supprimer le commentaire <br>";
+        $this->session->setSession(['error' => "Impossible de supprimer le commentaire."]);
         header("location: ../../admin/comments");
         exit();
     }
@@ -202,8 +214,11 @@ class BackController
         $this->renderer->render('backoffice/UsersManager.twig', [
             'listUsers' => $listUsers,
             'currentPage' => $userPage,
-            'totalPages' => $totalUserPages
+            'totalPages' => $totalUserPages,
+            'session' => $this->session->getSession()
             ]);
+        $this->session->remove('success');
+        $this->session->remove('error');
     }
 
     public function promote(Request $request): void
@@ -212,12 +227,11 @@ class BackController
         $req = $this->userManager->promoteUser($userId);
 
         if ($req === true) {
-            echo "Droits admin donnés à l'utilisateur.";
+            $this->session->setSession(['success' => "Droits admin donnés à l'utilisateur."]);
             header("location: ../../admin/members");
             exit();
         }
-
-        echo "Impossible de donner les droits admin à l'utilisateur <br>";
+        $this->session->setSession(['error' => "Impossible de donner les droits admin à l'utilisateur."]);
         header("location: ../../admin/members");
         exit();
     }
@@ -228,12 +242,11 @@ class BackController
         $req = $this->userManager->demoteUser($userId);
 
         if ($req === true) {
-            echo "Droits admin retirés à l'utilisateur.";
+            $this->session->setSession(['success' => "Droits admin retirés à l'utilisateur."]);
             header("location: ../../admin/members");
             exit();
         }
-
-        echo "Impossible de retirer les droits admin à l'utilisateur <br>";
+        $this->session->setSession(['error' => "Impossible de retirer les droits admin à l'utilisateur."]);
         header("location: ../../admin/members");
         exit();
     }

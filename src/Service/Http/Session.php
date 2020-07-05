@@ -9,9 +9,13 @@ class Session
     
     public function __construct()
     {
-        session_start();
-        $this->session = null;   
-        if (isset($_SESSION)) {$this->session = $_SESSION;}
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $this->session = null;
+        if (isset($_SESSION)) {
+            $this->session = $_SESSION;
+        }
     }
 
     public function getSession(): ?array
@@ -30,7 +34,7 @@ class Session
     public function remove(string $session): self
     {
         unset($this->session[$session]);
-        unset($_SESSION[$session]); 
+        unset($_SESSION[$session]);
 
         return $this;
     }

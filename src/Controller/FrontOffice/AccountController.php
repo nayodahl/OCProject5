@@ -29,25 +29,23 @@ class AccountController
         $this->postManager = new PostManager($this->postRepo);
         $this->commentRepo = new CommentRepository();
         $this->commentManager = new CommentManager($this->commentRepo);
-        if (session_status() == PHP_SESSION_NONE) {
-            $this->session = new Session();            
-        }
+        $this->session = new Session();
     }
 
     // Render Login Page
     public function showLoginPage(): void
     {
-        $this->renderer->render('frontoffice/LoginPage.twig',[
-            'session' => $this->session->getSession() 
+        $this->renderer->render('frontoffice/LoginPage.twig', [
+            'session' => $this->session->getSession()
         ]);
         $this->session->remove('success');
         $this->session->remove('error');
-    } 
+    }
 
     // Render Signin Page
     public function showSigninPage(): void
     {
-        $this->renderer->render('frontoffice/SigninPage.twig',[
+        $this->renderer->render('frontoffice/SigninPage.twig', [
             'session' => $this->session->getSession()
         ]);
         $this->session->remove('success');
@@ -72,7 +70,7 @@ class AccountController
         Temporaire !!
         Traitement de la connexion
         */
-        $this->session->setSession(['success' => "Connexion réussie."]); 
+        $this->session->setSession(['success' => "Connexion réussie."]);
         header('location: login#login');
         exit();
     }
