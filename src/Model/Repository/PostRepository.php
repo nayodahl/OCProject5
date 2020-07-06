@@ -37,7 +37,7 @@ class PostRepository extends Database
         $result->bindValue(':postsNumberLimit', $postsNumberLimit, PDO::PARAM_INT);
         $result->execute();
 
-        return $result->fetchAll(PDO::FETCH_CLASS, '\App\Model\Entity\Post');
+        return $result->fetchAll(PDO::FETCH_CLASS, Post::class);
     }
 
     // get last Posts, sorted by most recent, with limit and offset as parameters
@@ -54,7 +54,7 @@ class PostRepository extends Database
         $result->bindValue(':postsNumberLimit', $postsNumberLimit, PDO::PARAM_INT);
         $result->execute();
         
-        return $result->fetchAll(PDO::FETCH_CLASS, '\App\Model\Entity\Post');
+        return $result->fetchAll(PDO::FETCH_CLASS, Post::class);
     }
 
     // get total number of Posts

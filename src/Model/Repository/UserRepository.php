@@ -30,7 +30,7 @@ class UserRepository extends Database
         $result->bindValue(':usersNumberLimit', $limit, PDO::PARAM_INT);
         $result->execute();
          
-        return $result->fetchAll(PDO::FETCH_CLASS, '\App\Model\Entity\User');
+        return $result->fetchAll(PDO::FETCH_CLASS, User::class);
     }
 
     // get Users that have at least admin profile (so including the superadmin), sorted by alphabetical order,
@@ -45,7 +45,7 @@ class UserRepository extends Database
         );
         $result->execute();
          
-        return $result->fetchAll(PDO::FETCH_CLASS, '\App\Model\Entity\User');
+        return $result->fetchAll(PDO::FETCH_CLASS, User::class);
     }
 
     // give or remove admin rights to one User, so updating its "type" attribute
@@ -69,7 +69,7 @@ class UserRepository extends Database
         );
         $result->bindValue(':userlogin', $login, PDO::PARAM_STR);
         $result->execute();
-        $user = $result->fetchObject('\App\Model\Entity\User');
+        $user = $result->fetchObject(User::class);
         if ($user === false) {
             return null;
         }

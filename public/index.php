@@ -14,8 +14,8 @@ $router = new Router();
 // Routes
 //  Front
 $router->register('GET', null, 'postController', 'home');
-$router->register('GET', 'posts', 'postController', 'showPostsPage');
-$router->register('GET', 'post', 'postController', 'showSinglePost');
+$router->register('GET', 'posts', 'postController', 'showPostsPage'); //  /posts
+$router->register('GET', 'post', 'postController', 'showSinglePost');//   /post/:id
 $router->register('GET', 'login', 'accountController', 'showLoginPage');
 $router->register('POST', 'login', 'accountController', 'loginForm');
 $router->register('GET', 'signin', 'accountController', 'showSigninPage');

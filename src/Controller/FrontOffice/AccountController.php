@@ -54,6 +54,8 @@ class AccountController
         ]);
         $this->session->remove('success');
         $this->session->remove('error');
+
+        // $objet->settoto1()->settoto2()->settoto(); //
     }
 
     // Contact Form

@@ -28,7 +28,7 @@ class CommentRepository extends Database
         $result->bindValue(':approved', $approved, PDO::PARAM_INT);
         $result->execute();
 
-        return $result->fetchAll(PDO::FETCH_CLASS, '\App\Model\Entity\Comment');
+        return $result->fetchAll(PDO::FETCH_CLASS, Comment::class);
     }
 
     // get not approved Comments, sorted by least recent, with limit and offset as parameters
@@ -36,9 +36,10 @@ class CommentRepository extends Database
     public function getAllNotApprovedComments(int $offset, int $commentsNumberLimit): array
     {
         $result = $this->dbConnect()->prepare(
-            'SELECT comment.id AS commentId, comment.content, DATE_FORMAT(comment.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(comment.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate, comment.post_id AS postId, comment.user_id AS authorId, user.login AS authorLogin 
+            'SELECT comment.id AS commentId, comment.content, DATE_FORMAT(comment.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(comment.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate, comment.post_id AS postId, comment.user_id AS authorId, user.login AS authorLogin, post.title AS postTitle 
             FROM comment 
             INNER JOIN user ON comment.user_id = user.id
+            INNER JOIN post ON comment.post_id = post.id
             WHERE comment.approved= 0
             ORDER BY comment.created ASC LIMIT :offset, :commentsNumberLimit'
         );
@@ -46,7 +47,7 @@ class CommentRepository extends Database
         $result->bindValue(':commentsNumberLimit', $commentsNumberLimit, PDO::PARAM_INT);
         $result->execute();
 
-        return $result->fetchAll(PDO::FETCH_CLASS, '\App\Model\Entity\Comment');
+        return $result->fetchAll(PDO::FETCH_CLASS, Comment::class);
     }
 
     // get total number of Comments
