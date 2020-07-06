@@ -8,8 +8,8 @@ use \App\Model\Repository\PostRepository;
 use \App\Model\Manager\PostManager;
 use \App\Model\Repository\CommentRepository;
 use \App\Model\Manager\CommentManager;
-//use \App\Model\Repository\UserRepository;
-//use \App\Model\Manager\UserManager;
+use \App\Model\Repository\UserRepository;
+use \App\Model\Manager\UserManager;
 use \App\Service\Http\Request;
 use \App\Service\Http\Session;
 
@@ -20,6 +20,8 @@ class AccountController
     private $postManager;
     private $commentRepo;
     private $commentManager;
+    private $userRepo;
+    private $userManager;
     private $session;
 
     public function __construct()
@@ -29,6 +31,8 @@ class AccountController
         $this->postManager = new PostManager($this->postRepo);
         $this->commentRepo = new CommentRepository();
         $this->commentManager = new CommentManager($this->commentRepo);
+        $this->userRepo = new UserRepository();
+        $this->userManager = new UserManager($this->userRepo);
         $this->session = new Session();
     }
 
@@ -58,19 +62,27 @@ class AccountController
         /*
         Traitement du message, envoi du mail
         */
-        $this->session->setSession(['success' => "Votre message a bien été envoyé"]);
+        $this->session->setSession(['info' => "Votre message a bien été envoyé"]);
         header('location: ');
         exit();
     }
 
     // Login Form
-    public function loginForm(): void
+    public function loginForm(Request $request): void
     {
-        /*
-        Temporaire !!
-        Traitement de la connexion
-        */
-        $this->session->setSession(['success' => "Connexion réussie."]);
+        $login = $request->getPost()['login'];
+        $password = $request->getPost()['password'];
+        $user = $this->userManager->login($login, $password);
+        
+        if ($user) {
+            $this->session->setSession([
+                'auth' => $user->getUserId(),
+                'success' => "Connexion réussie."
+            ]);
+            header('location: ../');
+            exit();
+        }
+        $this->session->setSession(['error' => "Identifiant ou mot de passe incorrect."]);
         header('location: login#login');
         exit();
     }

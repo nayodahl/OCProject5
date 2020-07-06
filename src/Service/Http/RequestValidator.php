@@ -104,13 +104,9 @@ class RequestValidator
             // sanitize input
             $request->setPost([
                 'login' => $this->formValidator->sanitizeString($request->getPost()['login']),
-                'password' => $request->getPost()['password'] // temporaire, need a hash + salt function
+                'password' => $request->getPost()['password']
             ]);
 
-            //validate password
-            /*
-                needs a password verify function /
-            */
             //validate input
             if (isset($request->getPost()['login']) && isset($request->getPost()['password'])) {
                 return $request;

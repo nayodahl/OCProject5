@@ -58,4 +58,25 @@ class UserRepository extends Database
 
         return $result->execute();
     }
+
+    // check if password is correct for a given User
+    // Return a User is true, else null
+    public function checkLogin(string $login, string $password): ?User
+    {
+        $result = $this->dbConnect()->prepare(
+            'SELECT id AS userId, user.login, user.password, user.email, user.type, user.token, DATE_FORMAT(user.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(user.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate
+            from user WHERE user.login = :userlogin'
+        );
+        $result->bindValue(':userlogin', $login, PDO::PARAM_STR);
+        $result->execute();
+        $user = $result->fetchObject('\App\Model\Entity\User');
+        if ($user === false) {
+            return null;
+        }
+        if (password_verify($password, $user->getPassword())) {
+            return $user;
+        }
+
+        return null;
+    }
 }

@@ -53,4 +53,9 @@ class UserManager
     {
         return $this->userRepo->updateUserType($userId, 'member');
     }
+
+    public function login(string $login, string $password): ?User
+    {
+        return $this->userRepo->checkLogin($login, $password);
+    }
 }

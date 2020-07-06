@@ -8,8 +8,6 @@ use \App\Model\Repository\PostRepository;
 use \App\Model\Manager\PostManager;
 use \App\Model\Repository\CommentRepository;
 use \App\Model\Manager\CommentManager;
-//use \App\Model\Repository\UserRepository;
-//use \App\Model\Manager\UserManager;
 use \App\Service\Http\Request;
 use \App\Service\Http\Session;
 
@@ -42,6 +40,7 @@ class PostController
             ]);
         $this->session->remove('success');
         $this->session->remove('error');
+        $this->session->remove('info');
     }
     
     // Render the single Post view
