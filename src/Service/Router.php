@@ -19,6 +19,19 @@ class Router
     private $routes;
     private $request;
     private $requestValidator;
+    protected $basePath = '/OCProjet5/public/';
+
+        /**
+     * @var array Array of default match types (regex helpers)
+     */
+    protected $matchTypes = [
+        'i'  => '[0-9]++',
+        'a'  => '[0-9A-Za-z]++',
+        'h'  => '[0-9A-Fa-f]++',
+        '*'  => '.+?',
+        '**' => '.++',
+        ''   => '[^/\.]++'
+    ];
     
     public function __construct()
     {
@@ -32,73 +45,115 @@ class Router
     }
 
     // register all routes
-    public function register(string $method, ?string $action, string $controller, string $actionController): void
+    public function register(string $method, ?string $route, string $controller, string $action): void
     {
-        $route = [
-            'method' => $method,
-            'action' => $action,
-            'controller' => $controller,
-            'ac' => $actionController,
-        ];
-        $this->routes[] = $route;
+        $this->routes[] = [$method, $route, $controller, $action];
+        return;
+    }
+
+    public function match($requestUrl = null, $requestMethod = null)
+    {
+
+        $params = [];
+
+        // set Request Url if it isn't passed as parameter
+        if ($requestUrl === null) {
+            $requestUrl = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
+        }
+
+        // strip base path from request url
+        $requestUrl = substr($requestUrl, strlen($this->basePath));
+
+        // Strip query string (?a=b) from Request Url
+        if (($strpos = strpos($requestUrl, '?')) !== false) {
+            $requestUrl = substr($requestUrl, 0, $strpos);
+        }
+
+        $lastRequestUrlChar = $requestUrl[strlen($requestUrl)-1];
+
+        // set Request Method if it isn't passed as a parameter
+        if ($requestMethod === null) {
+            $requestMethod = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
+        }
+
+        foreach ($this->routes as $handler) {
+            list($methods, $route, $controller, $action) = $handler;
+
+            $method_match = (stripos($methods, $requestMethod) !== false);
+
+            // Method did not match, continue to next route.
+            if (!$method_match) {
+                continue;
+            }
+ 
+            if (($position = strpos($route, '[')) === false) {
+                // No params in url, do string comparison
+                $match = strcmp($requestUrl, $route) === 0;
+            } else {
+                // Compare longest non-param string with url before moving on to regex
+				// Check if last character before param is a slash, because it could be optional if param is optional too (see https://github.com/dannyvankooten/AltoRouter/issues/241)
+                if (strncmp($requestUrl, $route, $position) !== 0 && ($lastRequestUrlChar === '/' || $route[$position-1] !== '/')) {
+                    continue;
+                }
+
+                $regex = $this->compileRoute($route);
+                $match = preg_match($regex, $requestUrl, $params) === 1;
+            }
+
+            if ($match) {
+
+                return [
+                    'controller' => $controller,
+                    'action' => $action
+                ];
+            }
+        }
+
+        return false;
     }
     
     // Routing entry request
-    public function routerRequest(): void
+    public function routerRequest($controller, $action): void
     {
-        $method='GET';
-        $controller = $action = null;
+        $cname = "\App\Controller\\" . $controller;
+        $this->{$controller}->{$action}($this->request);          
+    }
 
-        if ($this->request->getPost()) {
-            $method='POST';
-        };
-        if ($this->request->getGet()) {
-            $controller = $this->request->getGet()[0];
-            $action = $this->request->getGet()[1] ?? null;
-        };
-  
-        // if controller is not defined, we set it to default values
-        if (!(isset($controller)) && ($method === 'GET')) {
-            $controller = "postController";
-        };
-        if (!(isset($controller)) && ($method === 'POST')) {
-            $controller = "accountController";
-        };
+        /**
+     * Compile the regex for a given route (EXPENSIVE)
+     * @param $route
+     * @return string
+     */
+    protected function compileRoute($route)
+    {
+        if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
+            $matchTypes = $this->matchTypes;
+            foreach ($matches as $match) {
+                list($block, $pre, $type, $param, $optional) = $match;
 
-        // just aliases
-        if ($controller === "admin") {
-            $controller = "backController";
-        };
-        if ($controller === "account") {
-            $controller = "accountController";
-        };
-        if ($controller === "error") {
-            $controller = "errorController";
-        };
-
-        // if we dont want admin section but we have parameters in url, then we switches parameters and set controller to postcontroller
-        if (($controller !== "backController") && ($controller !== "postController") && ($controller !== "accountController") && ($controller !== "errorController")) {
-            $action = $controller;
-            $controller = "postController";
-        };
-       
-        // checking all registred routes, if one matches we call the controller with its method and pass it $get and/or $post as parameters
-        foreach ($this->routes as $route) {
-            if ($route['method'] === $method && $route['action'] === $action && $route['controller'] === $controller) {
-                if ($controller === "backController") {
-                    $isAdmin = true; // temporary, it will be a method that check if user has admin rights
-                    if (!$isAdmin) {
-                        exit();
-                    };
+                if (isset($matchTypes[$type])) {
+                    $type = $matchTypes[$type];
                 }
-                $validationPath = 'validate'.ucwords($route['ac']);
-                if ($this->requestValidator->{$validationPath}($this->request)) {
-                    $this->{$route['controller']}->{$route['ac']}($this->request);
-                    exit();
+                if ($pre === '.') {
+                    $pre = '\.';
                 }
+
+                $optional = $optional !== '' ? '?' : null;
+
+                //Older versions of PCRE require the 'P' in (?P<named>)
+                $pattern = '(?:'
+                        . ($pre !== '' ? $pre : null)
+                        . '('
+                        . ($param !== '' ? "?P<$param>" : null)
+                        . $type
+                        . ')'
+                        . $optional
+                        . ')'
+                        . $optional;
+
+                $route = str_replace($block, $pattern, $route);
             }
         }
-        // if no route, then 404
-        $this->errorController->show404();
+        return "`^$route$`u";
     }
 }
