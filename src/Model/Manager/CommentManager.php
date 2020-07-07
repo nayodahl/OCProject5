@@ -54,7 +54,7 @@ class CommentManager
         };
         $offset = ($commentPage - 1) * $limit; // offset, to determine the number of the first Post to display
 
-        return [$offset, $limit, $totalCommentPages, $commentPage];
+        return ['offset' => $offset, 'limit' => $limit, 'totalCommentPages' => $totalCommentPages, 'commentPage' => $commentPage];
     }
 
     public function addCommentToPost(int $postId, int $authorId, string $comment): bool

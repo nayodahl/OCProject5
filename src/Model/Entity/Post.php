@@ -14,7 +14,7 @@ class Post
     private $authorId;
     private $authorLogin;
 
-    public function __construct($data = [])
+    public function __construct(array $data = [])
     {
         if (!empty($data)) {
             $this->hydrate($data);

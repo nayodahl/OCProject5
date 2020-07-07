@@ -13,7 +13,7 @@ class Comment
     private $authorId;
     private $authorLogin;
 
-    public function __construct($data = [])
+    public function __construct(array $data = [])
     {
         if (!empty($data)) {
             $this->hydrate($data);
@@ -37,7 +37,7 @@ class Comment
         return (int)$this->commentId;
     }
 
-    public function setCommentId($commentId): self
+    public function setCommentId(int $commentId): self
     {
         $this->commentId = $commentId;
         return $this;
@@ -81,7 +81,7 @@ class Comment
         return (int)$this->postId;
     }
 
-    public function setPostId($postId): self
+    public function setPostId(int $postId): self
     {
         $this->postId = $postId;
         return $this;

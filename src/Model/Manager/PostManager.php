@@ -31,7 +31,8 @@ class PostManager
         if ($offset < 0) {
             $offset = 0;
         };
-        return [$offset, $limit, $totalCommentPages, $commentPage];
+        
+        return ['offset' => $offset, 'limit' => $limit, 'totalCommentPages' => $totalCommentPages, 'commentPage' => $commentPage];
     }
 
     // get next Post id, based on their creation date, else null
@@ -68,7 +69,7 @@ class PostManager
         };
         $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
 
-        return [$offset, $limit, $totalPages, $currentPage];
+        return ['offset' => $offset, 'limit' => $limit, 'totalPages' => $totalPages, 'currentPage' => $currentPage];
     }
 
     public function getNumberOfPosts(): int

@@ -43,10 +43,10 @@ class BackController
 
         $totalItems = $this->postManager->getNumberOfPosts(); // total number of Posts
         $pagerArray = $this->postManager->getPostsPagePager($currentPage, $totalItems);
-        $offset = $pagerArray[0];
-        $limit = $pagerArray[1];
-        $totalPages = $pagerArray[2];
-        $currentPage = $pagerArray[3];
+        $offset = $pagerArray['offset'];
+        $limit = $pagerArray['limit'];
+        $totalPages = $pagerArray['totalPages'];
+        $currentPage = $pagerArray['currentPage'];
         
         // getting the Posts from DB
         $listPosts = $this->postManager->getPostsPage($offset, $limit);
@@ -149,10 +149,10 @@ class BackController
        
         $totalComments = $this->commentManager->getNumberofNotApprovedComments(); // total number of Comments
         $pagerArray = $this->commentManager->getCommentsManagerPager($commentPage, $totalComments);
-        $offset = $pagerArray[0];
-        $limit = $pagerArray[1];
-        $totalCommentPages = $pagerArray[2];
-        $commentPage = $pagerArray[3];
+        $offset = $pagerArray['offset'];
+        $limit = $pagerArray['limit'];
+        $totalCommentPages = $pagerArray['totalCommentPages'];
+        $commentPage = $pagerArray['commentPage'];
         
         $listComments = $this->commentManager->getNotApprovedComments((int)$offset, $limit);
 
@@ -203,10 +203,10 @@ class BackController
 
         $totalUsers = $this->userManager->getNumberOfUsers();
         $pagerArray = $this->userManager->getUsersManagerPager($userPage, $totalUsers);
-        $offset = $pagerArray[0];
-        $limit = $pagerArray[1];
-        $totalUserPages = $pagerArray[2];
-        $userPage = $pagerArray[3];
+        $offset = $pagerArray['offset'];
+        $limit = $pagerArray['limit'];
+        $totalUserPages = $pagerArray['totalUsersPages'];
+        $userPage = $pagerArray['userPage'];
         
         // getting the Members from DB
         $listUsers = $this->userManager->getUsersPage((int)$offset, $limit);

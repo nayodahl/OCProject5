@@ -39,7 +39,7 @@ class UserManager
         };
         $offset = ($userPage - 1) * $limit; // offset, to determine the number of the first User to display
 
-        return [$offset, $limit, $totalUsersPages, $userPage];
+        return ['offset' => $offset, 'limit' => $limit, 'totalUsersPages' => $totalUsersPages, 'userPage' => $userPage];
     }
 
     public function getAdminUsers(): array

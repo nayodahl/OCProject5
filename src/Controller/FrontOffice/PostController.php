@@ -59,10 +59,10 @@ class PostController
         $totalComments = $this->commentManager->getNumberOfApprovedCommentsFromPost($postId); // total number of Comments
         $pagerArray = $this->postManager->getSinglePostPager($commentPage, $totalComments);
         
-        $offset = $pagerArray[0];
-        $limit = $pagerArray[1];
-        $totalCommentPages =  $pagerArray[2];
-        $commentPage= $pagerArray[3];
+        $offset = $pagerArray['offset'];
+        $limit = $pagerArray['limit'];
+        $totalCommentPages =  $pagerArray['totalCommentPages'];
+        $commentPage= $pagerArray['commentPage'];
 
         $listComments = $this->commentManager->getApprovedComments($postId, (int)$offset, $limit);
 
@@ -88,10 +88,10 @@ class PostController
        
         $totalItems = $this->postManager->getNumberOfPosts(); // total number of Posts
         $pagerArray = $this->postManager->getPostsPagePager($currentPage, $totalItems);
-        $offset = $pagerArray[0];
-        $limit = $pagerArray[1];
-        $totalPages = $pagerArray[2];
-        $currentPage = $pagerArray[3];
+        $offset = $pagerArray['offset'];
+        $limit = $pagerArray['limit'];
+        $totalPages = $pagerArray['totalPages'];
+        $currentPage = $pagerArray['currentPage'];
 
         // getting the Posts from DB
         $listPosts = $this->postManager->getPostsPage((int)$offset, $limit);

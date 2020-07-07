@@ -8,7 +8,7 @@ use \PDO;
 
 class Database
 {
-    protected function dbConnect()
+    protected function dbConnect(): PDO
     {
         return new PDO('mysql:host=localhost;dbname=blog;charset=utf8', 'blog', 'blog', [
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

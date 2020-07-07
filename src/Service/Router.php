@@ -47,6 +47,8 @@ class Router
     public function routerRequest(): void
     {
         $method='GET';
+        $controller = $action = null;
+
         if ($this->request->getPost()) {
             $method='POST';
         };
@@ -54,9 +56,7 @@ class Router
             $controller = $this->request->getGet()[0];
             $action = $this->request->getGet()[1] ?? null;
         };
-        if (!$this->request->getGet()) {
-            $controller = $action = null;
-        };
+  
         // if controller is not defined, we set it to default values
         if (!(isset($controller)) && ($method === 'GET')) {
             $controller = "postController";
