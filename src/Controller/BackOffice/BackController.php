@@ -246,7 +246,7 @@ class BackController
             header("location: ../../admin/members");
             exit();
         }
-        $this->session->setSession(['error' => "Impossible de retirer les droits admin à l'utilisateur."]);
+        $this->session->setSession(['error' => "Impossible de retirer les droits admin à l'utilisateur. Veuillez vérifier s'il est encore l'auteur d'un ou plusieurs article(s)."]);
         header("location: ../../admin/members");
         exit();
     }

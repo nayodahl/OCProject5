@@ -5,14 +5,17 @@ namespace App\Model\Manager;
 
 use \App\Model\Entity\User;
 use \App\Model\Repository\UserRepository;
+use \App\Service\Http\Session;
 
 class UserManager
 {
     private $userRepo;
+    private $session;
 
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepo = $userRepository;
+        $this->session = new Session();
     }
 
     public function getUsersPage(int $offset, int $limit): array
@@ -51,6 +54,11 @@ class UserManager
 
     public function demoteUser(int $userId): bool
     {
+        // if user is still the author of Post then we forbid the demote
+        if ($this->userRepo->userHasPosts($userId))
+        {
+            return false;
+        }
         return $this->userRepo->updateUserType($userId, 'member');
     }
 

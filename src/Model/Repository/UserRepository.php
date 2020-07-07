@@ -79,4 +79,15 @@ class UserRepository extends Database
 
         return null;
     }
+
+    // check if User is author of at least one Post
+    // Return true if he has, else false
+    public function userHasPosts(int $userId): bool
+    {
+        $result = $this->dbConnect()->prepare('SELECT EXISTS (SELECT 1 from post WHERE post.user_id = :userId)');
+        $result->bindValue(':userId', $userId, PDO::PARAM_INT);
+        $result->execute();
+        
+        return boolval(current($result->fetch()));
+    }
 }
