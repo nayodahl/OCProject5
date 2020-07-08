@@ -114,12 +114,12 @@ class PostController
 
         if ($req === true) {
             $this->session->setSession(['success' => "Votre commentaire est enregistré et en attente de validation."]);
-            header("location: ../post/$postId#comments");
+            header("location: ../post/$postId/1#comments");
             exit();
         }
 
         $this->session->setSession(['error' => "Impossible d'ajouter le commentaire."]);
-        header("location: ../post/$postId#comments");
+        header("location: ../post/$postId/1#comments");
         exit();
     }
 }

@@ -19,6 +19,12 @@ class Request
         if (isset($_POST)) {
             $this->post = $_POST;
         }
+        
+        /* Strip query string (?a=b) from Request Url
+        if (($strpos = strpos($requestUrl, '?')) !== false) {
+            $requestUrl = substr($requestUrl, 0, $strpos);
+        }
+        */
     }
 
     public function getGet(): ?array

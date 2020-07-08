@@ -105,7 +105,7 @@ class BackController
         
         if ($req === true) {
             $this->session->setSession(['success' => "Article supprimé."]);
-            header("location: ../../admin/posts");
+            header("location: ../../admin/posts/1");
             exit();
         }
         $this->session->setSession(['error' => "Impossible de supprimer l'article."]);
@@ -174,11 +174,11 @@ class BackController
 
         if ($req === true) {
             $this->session->setSession(['success' => "Commentaire approuvé."]);
-            header("location: ../../admin/comments");
+            header("location: ../../admin/comments/1");
             exit();
         }
         $this->session->setSession(['error' => "Impossible d'approuver le commentaire."]);
-        header("location: ../../admin/comments");
+        header("location: ../../admin/comments/1");
         exit();
     }
 
@@ -189,11 +189,11 @@ class BackController
 
         if ($req === true) {
             $this->session->setSession(['success' => "Commentaire supprimé."]);
-            header("location: ../../admin/comments");
+            header("location: ../../admin/comments/1");
             exit();
         }
         $this->session->setSession(['error' => "Impossible de supprimer le commentaire."]);
-        header("location: ../../admin/comments");
+        header("location: ../../admin/comments/1");
         exit();
     }
 
@@ -228,11 +228,11 @@ class BackController
 
         if ($req === true) {
             $this->session->setSession(['success' => "Droits admin donnés à l'utilisateur."]);
-            header("location: ../../admin/members");
+            header("location: ../../admin/members/1");
             exit();
         }
         $this->session->setSession(['error' => "Impossible de donner les droits admin à l'utilisateur."]);
-        header("location: ../../admin/members");
+        header("location: ../../admin/members/1");
         exit();
     }
 
@@ -243,11 +243,11 @@ class BackController
 
         if ($req === true) {
             $this->session->setSession(['success' => "Droits admin retirés à l'utilisateur."]);
-            header("location: ../../admin/members");
+            header("location: ../../admin/members/1");
             exit();
         }
         $this->session->setSession(['error' => "Impossible de retirer les droits admin à l'utilisateur. Veuillez vérifier s'il est encore l'auteur d'un ou plusieurs article(s)."]);
-        header("location: ../../admin/members");
+        header("location: ../../admin/members/1");
         exit();
     }
 }
