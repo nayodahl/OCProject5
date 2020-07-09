@@ -141,7 +141,7 @@ class BackController
         
         if ($title === null || $chapo === null || $authorId === null || $content === null) {
             $this->session->setSession(['error' => "Tous les champs ne sont pas remplis ou corrects."]);
-            header("location: ../../admin/post/$postId#modify");
+            header("location: ../admin/newpost#add");
             exit();
         }
         
