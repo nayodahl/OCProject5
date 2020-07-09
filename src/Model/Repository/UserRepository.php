@@ -9,6 +9,21 @@ use \PDO;
 
 class UserRepository extends Database
 {
+    //get User from its id
+    //return User
+    public function getUser(int $userId): User
+    {
+        $result = $this->dbConnect()->prepare(
+            'SELECT user.id AS userId, user.login, user.password, user.email, user.type, user.activated, user.token, DATE_FORMAT(user.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(user.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate 
+            FROM user
+            WHERE user.id = :userId'
+        );
+        $result->bindValue(':userId', $userId, PDO::PARAM_INT);
+        $result->execute();
+
+        return $result->fetchObject(User::class);
+    }
+    
     // get total number of Posts
     // return an int
     public function countUsers()
@@ -113,5 +128,14 @@ class UserRepository extends Database
         $result->execute();
 
         return (int)($conn->lastInsertId());
-    }    
+    }
+
+    public function insertToken(string $token, int $newUserId): bool
+    {
+        $result = $this->dbConnect()->prepare('UPDATE user SET token = :token, last_update=NOW() WHERE user.id = :userId');
+        $result->bindValue(':token', $token, PDO::PARAM_STR);
+        $result->bindValue(':userId', $newUserId, PDO::PARAM_INT);
+
+        return $result->execute();
+    }
 }

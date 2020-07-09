@@ -73,14 +73,15 @@ class UserManager
         - check if user exists (must be unique), needs repo
         - hash password
         - create user with status =  not activated
+        - generate token and insert in User
         - send mail with token
         if creation is successful, return the id of the new User, else null
     */
     public function signin(string $login, string $password, string $email): ?int
     {
-        // Regex for username 
+        // Regex for username
         $regex = '/^[a-z0-9_-]{3,15}$/';
-        if (preg_match($regex, $login) === 0){
+        if (preg_match($regex, $login) === 0) {
             $this->session->setSession(['error' => "Le login ne respecte pas les règles de complexité : entre 3 et 16 caractères alphanumériques."]);
             header('location: signin#signin');
             exit();
@@ -88,14 +89,14 @@ class UserManager
 
         // Regex for password, exemple here https://ihateregex.io/expr/password
         $regex = '/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/';
-        if (preg_match($regex, $password) === 0){
+        if (preg_match($regex, $password) === 0) {
             $this->session->setSession(['error' => "Le mot de passe ne respecte pas les règles de complexité : minimum 8 caractères, au moins une majuscule, au moins une minuscule, au moins un chiffre et au moins un caractère spécial."]);
             header('location: signin#signin');
             exit();
         }
 
         // check if user already exists
-        if (($this->userRepo->userExists($login)) === true){
+        if (($this->userRepo->userExists($login)) === true) {
             $this->session->setSession(['error' => "Ce login est déjà utilisé"]);
             header('location: signin#signin');
             exit();
@@ -105,7 +106,44 @@ class UserManager
 
         // create new user with not activated status
         $newUserId = $this->userRepo->addUser($login, $passwordHash, $email);
-                
-        return 1;
+
+        // generate token (length 128) and insert in User
+        $token = bin2hex(random_bytes(64));
+        if ($this->userRepo->insertToken($token, $newUserId) === false) {
+            $this->session->setSession(['error' => "Impossible de générer le token"]);
+            header('location: signin#signin');
+            exit();
+        }
+
+        //send mail with token
+        $user = $this->userRepo->getUser($newUserId);
+        $from = "anthony.fachaux@gmail.com";
+        $to = "anthony.fachaux@gmail.com";     // temporaire, $user->getEmail();
+        $subject = "Validation de votre inscription au Dev Blog d'Anthony Fachaux";
+        $message = "Bonjour à toi et Bienvenue ! veuillez cliquer sur ce lien pour valider définitivement votre inscription au Dev Blog d&#39;Anthony Fachaux";
+        $message = '<html>
+                        <head>
+                            <title>Calendrier des anniversaires pour Août</title>
+                        </head>
+                        <body>
+                            <h2>Bonjour à toi et Bienvenue ! </h2>
+                            <p>
+                                Cliques sur ce <a href="localhost/OCProject5/public/account/activate/' . $token .'">lien</a> pour valider définitivement ton inscription au Dev Blog d&#39;Anthony Fachaux !
+                            </p>
+                        </body>
+                    </html>';
+        $headers = 'From: anthony.fachaux@gmail.com' . "\r\n" .
+       'X-Mailer: PHP/' . phpversion();
+        "\r\n" .
+       'MIME-Version: 1.0' . "\r\n" .
+       'Content-type: text/html; charset=iso-8859-1';
+     
+        if (mail($to, $subject, $message, $headers) === false) {
+            $this->session->setSession(['error' => "Erreur lors de l'envoi du mail de confirmation"]);
+            header('location: signin#signin');
+            exit();
+        };
+        
+        return $newUserId; // à modifier, pas idéal
     }
 }

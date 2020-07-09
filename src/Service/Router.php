@@ -16,7 +16,7 @@ class Router
     private $backController;
     private $errorController;
     private $routes;
-    private $request;    
+    private $request;
     
     public function __construct()
     {
