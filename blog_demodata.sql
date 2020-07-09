@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 06 juil. 2020 à 11:34
+-- Généré le : jeu. 09 juil. 2020 à 18:55
 -- Version du serveur :  10.4.11-MariaDB
 -- Version de PHP : 7.4.5
 
@@ -87,7 +87,7 @@ INSERT INTO `post` (`id`, `title`, `chapo`, `content`, `created`, `last_update`,
 (3, 'Comment contrôler Spotify depuis Visual Studio Code ?', 'Un plugin pour Visual Studio Code permet de le faire', 'La semaine dernière, j’ai mis en ligne un article sur différents clients Spotify et suite à cela, le très sympathique Ludorg m’a parlé de VSCode Spotify. Merci !!!\r\n\r\nCe plugin pour Visual Studio Code permet aux utilisateurs de l’éditeur de code de Microsoft, de piloter leur Spotify directement depuis leur environnement de dev sans se poser plus de questions.\r\n\r\nCette extension permet de voir le titre de la chanson en cours dans la barre de statut de VSCode, de contrôler Spotify via cette même barre, via des raccourcis clavier ou des commandes à taper.\r\n\r\nIl vous faudra bien sûr un compte premium et vous devrez être connecté au net pour que cela fonctionne. Mais c’est dispo pour Windows et macOS.\r\n\r\nÀ découvrir ici.', '2020-06-08 17:34:02', '2020-06-08 17:34:02', 7),
 (4, 'Comment surveiller la disponibilité des services que vous utilisez ?', 'Ce que je vous propose aujourd’hui est un outil pour les développeurs qui souhaitent surveiller la disponibilité de services tiers', 'Combien de fois je me suis lancé sans réfléchir dans du debugging alors que le truc qui ne fonctionnait pas était le service tiers que j’utilisais.\r\n\r\nDepuis j’ai un peu plus d’arrogance expérience et quand quelque chose casse, je regarde d’abord chez les autres avant de regarder chez moi ;-).\r\n\r\nCe que je vous propose aujourd’hui est un outil pour les développeurs sous Mac qui souhaitent surveiller la disponibilité de services tiers qu’ils utilisent dans leur vie quotidienne.\r\n\r\nStts est gratuit et se loge dans la barre de notification et vous notifiera dès qu’un des services suivants passera à l’orange.\r\n\r\n\r\nLa liste des services est assez conséquente, et c’est à vous d’activer ceux sur lesquels vous voulez avoir un oeil.\r\n\r\n\r\nAmazon Web Services (AWS)\r\nAtlassian\r\nAtlassian Statuspage\r\nAptible\r\nAuth0\r\nAuthorize.Net\r\nBeanstalk\r\nBitBucket\r\nBraintree\r\nCircleCI\r\nCloud66\r\nCloudflare\r\nCloudinary\r\nCocoaPods\r\nCodacy\r\nCode Climate\r\nCodecov\r\nContentful\r\nCoveralls\r\nDigitalOcean\r\nDiscord\r\nDocker\r\nDropbox\r\nDwolla\r\nEngine Yard\r\nEvernote\r\nFabric\r\nFigma\r\nFilestack\r\nFirebase\r\nGandi.net\r\nGitHub\r\nGoogle Cloud Platform\r\nHeroku\r\nHipChat\r\nImgix\r\nIntercom\r\nKeenIO\r\nLob\r\nLoggly\r\nMailChimp\r\nMapbox\r\nMedia Temple\r\nMixpanel\r\nNetlify\r\nNew Relic\r\nNPM\r\nPacket\r\nPagerDuty\r\nPapertrail\r\nPingdom\r\nPivotal Tracker\r\nPubNub\r\nPusher\r\nQuandl\r\nQuay\r\nReddit\r\nRollbar\r\nRubyGems\r\nSauce Labs\r\nSegment\r\nSendGrid\r\nSentry\r\nSlack\r\nSmartyStreets\r\nSnyk\r\nSquarespace\r\nStream\r\nTravisCI\r\nTrello\r\nTwilio\r\nTypeform\r\nUnsplash\r\nVimeo\r\nWaffle.io\r\nWeTransfer\r\nZapier\r\nZwift\r\nComme vous pouvez le voir, il y a le choix. Et comme Stts est un projet libre, vous pouvez toujours y contribuer si vous souhaitez y rajouter des services qu’il ne surveille pas encore.\r\n\r\nSource', '2020-06-08 17:35:57', '2020-07-03 23:54:03', 8),
 (5, 'Un IDE dans votre navigateur pour développer du code 8bit', 'Si vous n’avez pas connu la belle époque, celle où les gens créaient leurs logiciels 8bit en assembleur à destination de machines comme l’Atari 2600, j’ai ce qu’il vous faut', 'Êtes-vous développeur ?\r\n\r\nSi vous n’avez pas connu la belle époque, celle où les gens créaient leurs logiciels 8bit en assembleur à destination de machines comme l’Atari 2600, le VIC Dual, le Midway 8080, le Galaxian, l’Atari Vector, le Williams, ou encore l’Apple ][+, ou si vous avez envie de vous y remettre, j’ai ce qu’il vous faut.\r\n\r\nIl s’agit de 8bit Workshop, un IDE en ligne qui va vous permettre de coder directement depuis votre navigateur en assembleur 6502 (ou en C) et d’en observer directement le résultat dans l’émulateur JS qui se trouve à droite de l’écran.\r\n\r\n\r\nPour configurer l’IDE en fonction de la machine de destination, ça se passe dans le menu en haut à droit.\r\n\r\n\r\nC’est magique ! Cela vous permettra de vous essayer à de « nouvelles » anciennes choses, mais aussi pourquoi pas développer de nouveaux outils pour ces anciennes machines ? À vous de voir. D’ailleurs, pour vous inspirer, de nombreux exemples sont accessibles.\r\n\r\nAmusez-vous bien ! =&amp;amp;amp;amp;amp;gt; 8bit Workshop', '2020-06-08 17:37:42', '2020-07-03 23:40:24', 1),
-(6, 'FreeFileSync, outil open source pour aider à synchroniser vos fichiers', 'Si votre boite à outil web a encore un peu de place, voici un logiciel à y ajouter : FreeFileSync', 'Si votre boite à outil web a encore un peu de place, voici un logiciel à y ajouter : FreeFileSync. Comme son nom l’indique assez bien il vous permet de synchroniser et comparer des dossiers entre eux, gratuitement. Il est disponible pour Windows (7 et plus), Linux ou macOS (10.8 et plus).\r\n\r\nFFS est assez léger à l’utilisation puisqu’il ne va pas copier chaque fois l’entièreté d’un dossier, mais plutôt comparer s’il y a eu des différences depuis son dernier passage et mettre à jour les fichiers si c’est le cas. Le soft vous propose également de créer de programmer des sauvegardes régulières.\r\n\r\nParmi ses autres options intéressantes : l’exclusion de certains types de fichiers, le support FTP/FTPS pour les sauvegardes sur un serveur, la synchronisation avec Google Drive, le batch de travaux, synchroniser les mobiles via le protocole MTP, accéder aux fichiers en ligne avec SFTP … et surtout aucune limite au nombre de fichiers à synchroniser. Et bien plus.\r\n\r\nUne fois installé et ouvert vous allez simplement faire glisser (ou sélectionner via le bouton « Parcourir ») le dossier de départ dans la première zone principale (1) puis faire de même avec le dossier dans lequel placer la copie (2).\r\n\r\nInterface FreeFileSync\r\nVous devrez ensuite « Comparer » les 2 dossiers (3). Sur la gauche vous aurez donc la liste des fichiers composant votre dossier de base et sur la droite la liste de tous les fichiers avec des différences (si vous effectuez la manip pour la 1re fois, la liste de droite sera vide puisqu’il n’y a rien à comparer).\r\n\r\nAttention, par défaut, la synchro se fait dans les 2 sens ! Si un fichier du dossier de départ a diminué de poids, il pourrait être remplacé par celui du dossier de destination par mégarde. Pour éviter cet éventuel souci, il suffit de cliquer sur la roulette (4) et choisir la variante qui vous convient (miroir, mise à jour, 2 sens …). C’est sur cette page que vous pouvez en profiter pour lui dire quoi faire des fichiers remplacés, les envoyer à la corbeille ou conserver les différentes versions.\r\n\r\nReste ensuite à démarrer la synchro (5) et le tour est joué !\r\n\r\nJe vous pose leur tuto vidéo pour le cas ou vous voulez créer une tâche automatisée\r\n\r\n\r\nTéléchargez FreeFileSync sur cette page.\r\n\r\nEt si vous effectuez un don sur leur site vous aurez droit à une version avec quelques bonus : copie de fichiers en parallèle, mise à jour automatique, recevoir des notifications par email …', '2020-06-11 11:58:39', '2020-07-05 14:54:07', 8);
+(6, 'FreeFileSync, outil open source pour aider à synchroniser vos fichiers', 'Si votre boite à outil web a encore un peu de place, voici un logiciel à y ajouter : FreeFileSync', 'Si votre boite à outil web a encore un peu de place, voici un logiciel à y ajouter : FreeFileSync. Comme son nom l’indique assez bien il vous permet de synchroniser et comparer des dossiers entre eux, gratuitement. Il est disponible pour Windows (7 et plus), Linux ou macOS (10.8 et plus).\r\n\r\nFFS est assez léger à l’utilisation puisqu’il ne va pas copier chaque fois l’entièreté d’un dossier, mais plutôt comparer s’il y a eu des différences depuis son dernier passage et mettre à jour les fichiers si c’est le cas. Le soft vous propose également de créer de programmer des sauvegardes régulières.\r\n\r\nParmi ses autres options intéressantes : l’exclusion de certains types de fichiers, le support FTP/FTPS pour les sauvegardes sur un serveur, la synchronisation avec Google Drive, le batch de travaux, synchroniser les mobiles via le protocole MTP, accéder aux fichiers en ligne avec SFTP … et surtout aucune limite au nombre de fichiers à synchroniser. Et bien plus.\r\n\r\nUne fois installé et ouvert vous allez simplement faire glisser (ou sélectionner via le bouton « Parcourir ») le dossier de départ dans la première zone principale (1) puis faire de même avec le dossier dans lequel placer la copie (2).\r\n\r\nInterface FreeFileSync\r\nVous devrez ensuite « Comparer » les 2 dossiers (3). Sur la gauche vous aurez donc la liste des fichiers composant votre dossier de base et sur la droite la liste de tous les fichiers avec des différences (si vous effectuez la manip pour la 1re fois, la liste de droite sera vide puisqu’il n’y a rien à comparer).\r\n\r\nAttention, par défaut, la synchro se fait dans les 2 sens ! Si un fichier du dossier de départ a diminué de poids, il pourrait être remplacé par celui du dossier de destination par mégarde. Pour éviter cet éventuel souci, il suffit de cliquer sur la roulette (4) et choisir la variante qui vous convient (miroir, mise à jour, 2 sens …). C’est sur cette page que vous pouvez en profiter pour lui dire quoi faire des fichiers remplacés, les envoyer à la corbeille ou conserver les différentes versions.\r\n\r\nReste ensuite à démarrer la synchro (5) et le tour est joué !\r\n\r\nJe vous pose leur tuto vidéo pour le cas ou vous voulez créer une tâche automatisée\r\n\r\n\r\nTéléchargez FreeFileSync sur cette page.\r\n\r\nEt si vous effectuez un don sur leur site vous aurez droit à une version avec quelques bonus : copie de fichiers en parallèle, mise à jour automatique, recevoir des notifications par email …', '2020-06-11 11:58:39', '2020-07-09 14:37:23', 8);
 
 -- --------------------------------------------------------
 
@@ -101,6 +101,7 @@ CREATE TABLE `user` (
   `password` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `type` enum('admin','member','superadmin') NOT NULL DEFAULT 'member',
+  `activated` tinyint(1) NOT NULL DEFAULT 0,
   `token` varchar(100) DEFAULT NULL,
   `created` datetime NOT NULL DEFAULT current_timestamp(),
   `last_update` datetime NOT NULL DEFAULT current_timestamp()
@@ -110,15 +111,15 @@ CREATE TABLE `user` (
 -- Déchargement des données de la table `user`
 --
 
-INSERT INTO `user` (`id`, `login`, `password`, `email`, `type`, `token`, `created`, `last_update`) VALUES
-(1, 'SandyV', '$2y$10$4v5hqrFYa/.LuRisrAjsPOTsMr3c9pIWKr.jtrHt1yjuvwmeLH7fm', 'sandy.vilain@yahoo.fr', 'member', NULL, '2020-06-08 17:08:32', '2020-06-08 17:12:11'),
-(2, 'DavidC', '$2y$10$4v5hqrFYa/.LuRisrAjsPOTsMr3c9pIWKr.jtrHt1yjuvwmeLH7fm', 'david.chollet@yahoo.fr', 'member', NULL, '2020-06-08 17:11:44', '2020-06-08 17:11:44'),
-(3, 'CoralieM', '$2y$10$4v5hqrFYa/.LuRisrAjsPOTsMr3c9pIWKr.jtrHt1yjuvwmeLH7fm', 'coralie.masset@yahoo.fr', 'member', NULL, '2020-06-08 17:13:50', '2020-06-08 17:13:50'),
-(4, 'Emelinedu37', '$2y$10$4v5hqrFYa/.LuRisrAjsPOTsMr3c9pIWKr.jtrHt1yjuvwmeLH7fm', 'emeline.camara@gmail.com', 'member', NULL, '2020-06-08 17:16:29', '2020-06-08 17:16:29'),
-(5, 'AntoineD', '$2y$10$4v5hqrFYa/.LuRisrAjsPOTsMr3c9pIWKr.jtrHt1yjuvwmeLH7fm', 'adelporte@gmail.com', 'member', NULL, '2020-06-08 17:15:21', '2020-07-05 15:23:20'),
-(6, 'fannyb', '$2y$10$4v5hqrFYa/.LuRisrAjsPOTsMr3c9pIWKr.jtrHt1yjuvwmeLH7fm', 'fanny.boudin@yahoo.fr', 'admin', NULL, '2020-06-08 17:17:47', '2020-06-08 17:17:47'),
-(7, 'aurelm', '$2y$10$4v5hqrFYa/.LuRisrAjsPOTsMr3c9pIWKr.jtrHt1yjuvwmeLH7fm', 'aurel.mouton@laposte.net', 'admin', NULL, '2020-06-08 17:18:38', '2020-06-08 17:18:38'),
-(8, 'anthonyf', '$2y$10$4v5hqrFYa/.LuRisrAjsPOTsMr3c9pIWKr.jtrHt1yjuvwmeLH7fm', 'anthony.f@test.com', 'superadmin', NULL, '2020-06-08 17:20:13', '2020-06-08 17:20:13');
+INSERT INTO `user` (`id`, `login`, `password`, `email`, `type`, `activated`, `token`, `created`, `last_update`) VALUES
+(1, 'SandyV', '$2y$10$4v5hqrFYa/.LuRisrAjsPOTsMr3c9pIWKr.jtrHt1yjuvwmeLH7fm', 'sandy.vilain@yahoo.fr', 'member', 1, NULL, '2020-06-08 17:08:32', '2020-06-08 17:12:11'),
+(2, 'DavidC', '$2y$10$4v5hqrFYa/.LuRisrAjsPOTsMr3c9pIWKr.jtrHt1yjuvwmeLH7fm', 'david.chollet@yahoo.fr', 'member', 1, NULL, '2020-06-08 17:11:44', '2020-07-09 18:54:46'),
+(3, 'CoralieM', '$2y$10$4v5hqrFYa/.LuRisrAjsPOTsMr3c9pIWKr.jtrHt1yjuvwmeLH7fm', 'coralie.masset@yahoo.fr', 'member', 1, NULL, '2020-06-08 17:13:50', '2020-07-09 18:54:46'),
+(4, 'Emelinedu37', '$2y$10$4v5hqrFYa/.LuRisrAjsPOTsMr3c9pIWKr.jtrHt1yjuvwmeLH7fm', 'emeline.camara@gmail.com', 'member', 1, NULL, '2020-06-08 17:16:29', '2020-07-09 18:54:46'),
+(5, 'AntoineD', '$2y$10$4v5hqrFYa/.LuRisrAjsPOTsMr3c9pIWKr.jtrHt1yjuvwmeLH7fm', 'adelporte@gmail.com', 'member', 1, NULL, '2020-06-08 17:15:21', '2020-07-09 18:54:46'),
+(6, 'fannyb', '$2y$10$4v5hqrFYa/.LuRisrAjsPOTsMr3c9pIWKr.jtrHt1yjuvwmeLH7fm', 'fanny.boudin@yahoo.fr', 'admin', 1, NULL, '2020-06-08 17:17:47', '2020-07-09 18:54:46'),
+(7, 'aurelm', '$2y$10$4v5hqrFYa/.LuRisrAjsPOTsMr3c9pIWKr.jtrHt1yjuvwmeLH7fm', 'aurel.mouton@laposte.net', 'admin', 1, NULL, '2020-06-08 17:18:38', '2020-07-09 18:54:46'),
+(8, 'anthonyf', '$2y$10$4v5hqrFYa/.LuRisrAjsPOTsMr3c9pIWKr.jtrHt1yjuvwmeLH7fm', 'anthony.f@test.com', 'superadmin', 1, NULL, '2020-06-08 17:20:13', '2020-07-09 18:54:46');
 
 --
 -- Index pour les tables déchargées
@@ -153,19 +154,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT pour la table `post`
 --
 ALTER TABLE `post`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Contraintes pour les tables déchargées

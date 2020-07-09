@@ -90,4 +90,28 @@ class UserRepository extends Database
         
         return boolval(current($result->fetch()));
     }
+
+    // check if login already exists in Users
+    // Return true it exists, else false
+    public function userExists(string $login): bool
+    {
+        $result = $this->dbConnect()->prepare('SELECT EXISTS (SELECT 1 from user WHERE user.login = :userlogin)');
+        $result->bindValue(':userlogin', $login, PDO::PARAM_STR);
+        $result->execute();
+        
+        return boolval(current($result->fetch()));
+    }
+
+    // Create new User
+    public function addUser(string $login, string $passwordHash, string $email): ?int
+    {
+        $conn = $this->dbConnect();
+        $result = $conn->prepare('INSERT INTO user(user.login, user.password, user.email) VALUES (:userLogin, :userPassword, :userEmail)');
+        $result->bindValue(':userLogin', $login, PDO::PARAM_STR);
+        $result->bindValue(':userPassword', $passwordHash, PDO::PARAM_STR);
+        $result->bindValue(':userEmail', $email, PDO::PARAM_STR);
+        $result->execute();
+
+        return (int)($conn->lastInsertId());
+    }    
 }

@@ -123,18 +123,17 @@ class AccountController
             header('location: signin#signin');
             exit();
         }
-        
-        /*
-        Temporaire !!
-        Traitement de l'inscription:
-        - check user complexity and length, needs regex
-        - check password complexity and length, needs regex
-        - check if user exists (must be unique), needs repo
-        - create user with status =  not activated
-        - send mail with token
-        */
-        $this->session->setSession(['success' => "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription."]);
-        header('location: login#login');
+
+        $newUserId = $this->userManager->signin($login, $password, $email);
+
+        if (isset($newUserId) && $newUserId > 0) {
+            $this->session->setSession(['success' => "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription."]);
+            header("location: login#login");
+            exit();
+        }
+
+        $this->session->setSession(['error' => "Erreur inconnue, inscription impossible"]);
+        header('location: signin#signin');
         exit();
     }
 }

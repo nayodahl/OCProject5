@@ -65,4 +65,47 @@ class UserManager
     {
         return $this->userRepo->checkLogin($login, $password);
     }
+
+    
+    /* signin processing
+        - check user complexity and length, uses regex
+        - check password complexity and length, uses regex
+        - check if user exists (must be unique), needs repo
+        - hash password
+        - create user with status =  not activated
+        - send mail with token
+        if creation is successful, return the id of the new User, else null
+    */
+    public function signin(string $login, string $password, string $email): ?int
+    {
+        // Regex for username 
+        $regex = '/^[a-z0-9_-]{3,15}$/';
+        if (preg_match($regex, $login) === 0){
+            $this->session->setSession(['error' => "Le login ne respecte pas les règles de complexité : entre 3 et 16 caractères alphanumériques."]);
+            header('location: signin#signin');
+            exit();
+        }
+
+        // Regex for password, exemple here https://ihateregex.io/expr/password
+        $regex = '/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/';
+        if (preg_match($regex, $password) === 0){
+            $this->session->setSession(['error' => "Le mot de passe ne respecte pas les règles de complexité : minimum 8 caractères, au moins une majuscule, au moins une minuscule, au moins un chiffre et au moins un caractère spécial."]);
+            header('location: signin#signin');
+            exit();
+        }
+
+        // check if user already exists
+        if (($this->userRepo->userExists($login)) === true){
+            $this->session->setSession(['error' => "Ce login est déjà utilisé"]);
+            header('location: signin#signin');
+            exit();
+        }
+        // hash password
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+        // create new user with not activated status
+        $newUserId = $this->userRepo->addUser($login, $passwordHash, $email);
+                
+        return 1;
+    }
 }
