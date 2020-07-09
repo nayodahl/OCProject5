@@ -55,8 +55,7 @@ class UserManager
     public function demoteUser(int $userId): bool
     {
         // if user is still the author of Post then we forbid the demote
-        if ($this->userRepo->userHasPosts($userId))
-        {
+        if ($this->userRepo->userHasPosts($userId)) {
             return false;
         }
         return $this->userRepo->updateUserType($userId, 'member');

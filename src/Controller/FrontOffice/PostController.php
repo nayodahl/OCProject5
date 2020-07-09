@@ -46,8 +46,8 @@ class PostController
     // Render the single Post view
     public function showSinglePost(Request $request): void
     {
-        $postId=((int)$request->getGet()[1]);
-        $commentPage=((int)$request->getGet()[2]);
+        $postId=$request->getPostId();
+        $commentPage=$request->getCommentPage();
 
         $post = $this->postManager->getSinglePost($postId);
         if ($post->getPostId() === 0) {
@@ -84,7 +84,7 @@ class PostController
     // Render Posts Page
     public function showPostsPage(Request $request): void
     {
-        $currentPage=((int)$request->getGet()[1]);
+        $currentPage=$request->getPostsPage();
        
         $totalItems = $this->postManager->getNumberOfPosts(); // total number of Posts
         $pagerArray = $this->postManager->getPostsPagePager($currentPage, $totalItems);
@@ -106,9 +106,15 @@ class PostController
     // Add comment in DB
     public function addComment(Request $request): void
     {
-        $postId=(int)$request->getGet()[1];
+        $postId=$request->getPostId();
         $authorId = 8;  //temporary, will need the id from session and checks if loggued
-        $comment = $request->getPost()['comment'];
+        $comment = $request->getCommentFormData();
+
+        if ($comment === null) {
+            $this->session->setSession(['error' => "Une erreur est survenue, Impossible d'ajouter un commentaire vide ou trop long."]);
+            header("location: ../post/$postId/1#comments");
+            exit();
+        }
         
         $req = $this->commentManager->addCommentToPost($postId, $authorId, $comment);
 

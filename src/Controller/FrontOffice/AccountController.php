@@ -59,8 +59,20 @@ class AccountController
     }
 
     // Contact Form
-    public function contactForm(): void
+    public function contactForm(Request $request): void
     {
+        $formData = $request->getContactFormData();
+        $lastname = $formData['lastname'];
+        $firstname = $formData['firstname'];
+        $email = $formData['email'];
+        $message = $formData['message'];
+        $isEmail = $formData['isEmail'];
+
+        if ($lastname === null || $firstname === null || $email === null || $message === null || $isEmail === false) {
+            $this->session->setSession(['error' => "tous les champs ne sont pas remplis ou corrects."]);
+            header('location: ');
+            exit();
+        }
         /*
         Traitement du message, envoi du mail
         */
@@ -72,8 +84,16 @@ class AccountController
     // Login Form
     public function loginForm(Request $request): void
     {
-        $login = $request->getPost()['login'];
-        $password = $request->getPost()['password'];
+        $formData = $request->getLoginFormData();
+        $login = $formData['login'];
+        $password = $formData['password'];
+        
+        if ($login === null || $password === null) {
+            $this->session->setSession(['error' => "Identifiant ou mot de passe vide ou pas de la bonne longueur (entre 3 et 16 caractères alphanumériques pour le login, 8 caractères minimum pour le mot de passe)."]);
+            header('location: login#login');
+            exit();
+        }
+        
         $user = $this->userManager->login($login, $password);
         
         if ($user) {
@@ -90,16 +110,31 @@ class AccountController
     }
 
     // Signin Form
-    public function signinForm(): void
+    public function signinForm(Request $request): void
     {
+        $formData = $request->getSigninFormData();
+        $login = $formData['login'];
+        $password = $formData['password'];
+        $email = $formData['email'];
+        $isEmail = $formData['isEmail'];
+        
+        if ($login === null || $password === null || $email === null || $isEmail === false) {
+            $this->session->setSession(['error' => "tous les champs ne sont pas remplis ou corrects (entre 3 et 16 caractères alphanumériques pour le login, 8 caractères minimum pour le mot de passe)."]);
+            header('location: signin#signin');
+            exit();
+        }
+        
         /*
         Temporaire !!
         Traitement de l'inscription:
+        - check user complexity and length, needs regex
+        - check password complexity and length, needs regex
+        - check if user exists (must be unique), needs repo
         - create user with status =  not activated
         - send mail with token
         */
         $this->session->setSession(['success' => "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription."]);
-        header('location: signin');
+        header('location: login#login');
         exit();
     }
 }

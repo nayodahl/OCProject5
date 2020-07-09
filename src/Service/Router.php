@@ -16,8 +16,7 @@ class Router
     private $backController;
     private $errorController;
     private $routes;
-    private $request;
-    
+    private $request;    
     
     public function __construct()
     {
@@ -44,18 +43,19 @@ class Router
     {
         // set Request Url
         $requestUrl = "/";
-        if ($this->request->getGet()){
+        if ($this->request->getGet()) {
             $requestUrl = "/" . implode('/', $this->request->getGet());
         }
         
-        // set Request Method        
+        // set Request Method
         $requestMethod='GET';
-        if ($this->request->getPost()) {$requestMethod='POST';};    
+        if ($this->request->getPost()) {
+            $requestMethod='POST';
+        };
 
-        $lastRequestUrlChar = $requestUrl[strlen($requestUrl)-1];       
+        $lastRequestUrlChar = $requestUrl[strlen($requestUrl)-1];
         
         foreach ($this->routes as $route) {
-            
             $method_match = (stripos($route['method'], $requestMethod) !== false);
 
             // Method did not match, continue to next route.
@@ -68,7 +68,7 @@ class Router
                 $match = strcmp($requestUrl, $route['route']) === 0;
             } else {
                 // Compare longest non-param string with url before moving on to regex
-				// Check if last character before param is a slash, because it could be optional if param is optional too
+                // Check if last character before param is a slash, because it could be optional if param is optional too
                 if (strncmp($requestUrl, $route['route'], $position) !== 0 && ($lastRequestUrlChar === '/' || $route['route'][$position-1] !== '/')) {
                     continue;
                 }
@@ -79,7 +79,6 @@ class Router
             }
 
             if ($match) {
-
                 return [
                     'controller' => $route['controller'],
                     'action' => $route['action']
@@ -91,13 +90,21 @@ class Router
     }
     
     // Routing entry request, and calling the needed controller on demand
-    public function routerRequest($controller, $action): void 
+    public function routerRequest($controller, $action): void
     {
-        if ($controller === "backController"){ $this->backController = new BackController(); };
-        if ($controller === "accountController"){ $this->accountController = new AccountController(); };
-        if ($controller === "postController"){ $this->postController = new PostController(); };
-        if ($controller === "errorController"){ $this->errorController = new ErrorController(); };
+        if ($controller === "backController") {
+            $this->backController = new BackController();
+        };
+        if ($controller === "accountController") {
+            $this->accountController = new AccountController();
+        };
+        if ($controller === "postController") {
+            $this->postController = new PostController();
+        };
+        if ($controller === "errorController") {
+            $this->errorController = new ErrorController();
+        };
         
-        $this->{$controller}->{$action}($this->request);          
+        $this->{$controller}->{$action}($this->request);
     }
 }

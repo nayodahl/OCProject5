@@ -39,7 +39,7 @@ class BackController
     // Render Posts Manager page (default)
     public function showPostsManager(Request $request): void
     {
-        $currentPage=((int)$request->getGet()[2]);
+        $currentPage=$request->getPostsManagerPage();
 
         $totalItems = $this->postManager->getNumberOfPosts(); // total number of Posts
         $pagerArray = $this->postManager->getPostsPagePager($currentPage, $totalItems);
@@ -63,7 +63,7 @@ class BackController
     
     public function showEditPost(Request $request): void
     {
-        $postId=((int)$request->getGet()[2]);
+        $postId=$request->getEditPostId();
         $post = $this->postManager->getSinglePost($postId);
         $adminUsers = $this->userManager->getAdminUsers();
 
@@ -80,11 +80,18 @@ class BackController
 
     public function modifyPost(Request $request): void
     {
-        $postId=((int)$request->getGet()[2]);
-        $title = $request->getPost()['title'];
-        $chapo = $request->getPost()['chapo'];
-        $authorId = ((int)$request->getPost()['author']);
-        $content = $request->getPost()['content'];
+        $postId=$request->getEditPostId();
+        $formData = $request->getPostFormData();
+        $title = $formData['title'];
+        $chapo = $formData['chapo'];
+        $authorId = $formData['author'];
+        $content = $formData['content'];
+        
+        if ($title === null || $chapo === null || $authorId === null || $content === null) {
+            $this->session->setSession(['error' => "Tous les champs ne sont pas remplis ou corrects."]);
+            header("location: ../../admin/post/$postId#modify");
+            exit();
+        }
         
         $req = $this->postManager->modifyPostContent($postId, $title, $chapo, $authorId, $content);
         
@@ -100,7 +107,7 @@ class BackController
 
     public function delete(Request $request): void
     {
-        $postId=((int)$request->getGet()[2]);
+        $postId=$request->getEditPostId();
         $req = $this->postManager->deletePost($postId);
         
         if ($req === true) {
@@ -126,10 +133,17 @@ class BackController
 
     public function addPost(Request $request): void
     {
-        $title = $request->getPost()['title'];
-        $chapo = $request->getPost()['chapo'];
-        $authorId = ((int)$request->getPost()['author']);
-        $content = $request->getPost()['content'];
+        $formData = $request->getPostFormData();
+        $title = $formData['title'];
+        $chapo = $formData['chapo'];
+        $authorId = $formData['author'];
+        $content = $formData['content'];
+        
+        if ($title === null || $chapo === null || $authorId === null || $content === null) {
+            $this->session->setSession(['error' => "Tous les champs ne sont pas remplis ou corrects."]);
+            header("location: ../../admin/post/$postId#modify");
+            exit();
+        }
         
         $newPostId = $this->postManager->createPost($title, $chapo, $authorId, $content);
                 
@@ -145,7 +159,7 @@ class BackController
 
     public function showCommentsManager(Request $request): void
     {
-        $commentPage=((int)$request->getGet()[2]);
+        $commentPage=$request->getCommentManagerPage();
        
         $totalComments = $this->commentManager->getNumberofNotApprovedComments(); // total number of Comments
         $pagerArray = $this->commentManager->getCommentsManagerPager($commentPage, $totalComments);
@@ -169,7 +183,7 @@ class BackController
 
     public function approve(Request $request): void
     {
-        $commentId=((int)$request->getGet()[2]);
+        $commentId=$request->getCommentId();
         $req = $this->commentManager->approveComment($commentId);
 
         if ($req === true) {
@@ -184,7 +198,7 @@ class BackController
 
     public function refuse(Request $request): void
     {
-        $commentId=((int)$request->getGet()[2]);
+        $commentId=$request->getCommentId();
         $req = $this->commentManager->refuseComment($commentId);
 
         if ($req === true) {
@@ -199,7 +213,7 @@ class BackController
 
     public function showUsersManager(Request $request): void
     {
-        $userPage=((int)$request->getGet()[2]);
+        $userPage=$request->getUserManagerPage();
 
         $totalUsers = $this->userManager->getNumberOfUsers();
         $pagerArray = $this->userManager->getUsersManagerPager($userPage, $totalUsers);
@@ -223,7 +237,7 @@ class BackController
 
     public function promote(Request $request): void
     {
-        $userId=((int)$request->getGet()[2]);
+        $userId=$request->getUserId();
         $req = $this->userManager->promoteUser($userId);
 
         if ($req === true) {
@@ -238,7 +252,7 @@ class BackController
 
     public function demote(Request $request): void
     {
-        $userId=((int)$request->getGet()[2]);
+        $userId=$request->getUserId();
         $req = $this->userManager->demoteUser($userId);
 
         if ($req === true) {
