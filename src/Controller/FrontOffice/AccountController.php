@@ -136,4 +136,14 @@ class AccountController
         header('location: signin#signin');
         exit();
     }
+
+    //activate user
+    public function activate(Request $request): void
+    {
+        // TO DO
+        
+        $this->session->setSession(['success' => "Votre inscription est définitivement validée, vous pouvez vous connecter"]);
+        header('location: ../login#login');
+        exit();
+    }
 }

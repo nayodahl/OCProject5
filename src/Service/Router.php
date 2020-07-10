@@ -72,10 +72,19 @@ class Router
                 if (strncmp($requestUrl, $route['route'], $position) !== 0 && ($lastRequestUrlChar === '/' || $route['route'][$position-1] !== '/')) {
                     continue;
                 }
+                
+                // when request param in route is an int, we set this regex
+                if (preg_match('/[0-9]/', $route['route']) === 1) {
+                    $regex1 = substr($route['route'], 0, strpos($route['route'], '[')) . '[0-9]/?[0-9]?';
+                    $regex2 = "`^$regex1$`u";
+                    $match = preg_match($regex2, $requestUrl) === 1;
+                }
 
-                $regex1 = substr($route['route'], 0, strpos($route['route'], '[')) . '[0-9]/?[0-9]?';
-                $regex2 = "`^$regex1$`u";
-                $match = preg_match($regex2, $requestUrl) === 1;
+                // only case when param is a token and not an int, then we change the regex
+                if (preg_match('/token/', $route['route']) === 1) {
+                    $regex="#^/account/activate/[0-9a-zA-Z]{128}$#";
+                    $match = preg_match($regex, $requestUrl) === 1;
+                }
             }
 
             if ($match) {

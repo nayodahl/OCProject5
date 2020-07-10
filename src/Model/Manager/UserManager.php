@@ -117,26 +117,25 @@ class UserManager
 
         //send mail with token
         $user = $this->userRepo->getUser($newUserId);
-        $from = "anthony.fachaux@gmail.com";
-        $to = "anthony.fachaux@gmail.com";     // temporaire, $user->getEmail();
+        $to = $user->getEmail();
         $subject = "Validation de votre inscription au Dev Blog d'Anthony Fachaux";
-        $message = "Bonjour à toi et Bienvenue ! veuillez cliquer sur ce lien pour valider définitivement votre inscription au Dev Blog d&#39;Anthony Fachaux";
         $message = '<html>
                         <head>
-                            <title>Calendrier des anniversaires pour Août</title>
+                            <title>CValidation de votre inscription au Dev Blog d&#39;Anthony Fachaux</title>
                         </head>
                         <body>
                             <h2>Bonjour à toi et Bienvenue ! </h2>
                             <p>
-                                Cliques sur ce <a href="localhost/OCProject5/public/account/activate/' . $token .'">lien</a> pour valider définitivement ton inscription au Dev Blog d&#39;Anthony Fachaux !
+                                Cliques sur ce <a href="' . $_SERVER['HTTP_HOST'] .'&#47;account&#47;activate&#47;' . $token .'">lien</a> pour valider définitivement ton inscription au Dev Blog d&#39;Anthony Fachaux !
                             </p>
                         </body>
                     </html>';
-        $headers = 'From: anthony.fachaux@gmail.com' . "\r\n" .
-       'X-Mailer: PHP/' . phpversion();
-        "\r\n" .
-       'MIME-Version: 1.0' . "\r\n" .
-       'Content-type: text/html; charset=iso-8859-1';
+        $headers = array(
+            'From' => 'contact@blog.nayo.cloud',
+            'X-Mailer' => 'PHP/' . phpversion(),
+            'MIME-Version' => '1.0',
+            'Content-type' => 'text/html; charset=utf-8'
+        );
      
         if (mail($to, $subject, $message, $headers) === false) {
             $this->session->setSession(['error' => "Erreur lors de l'envoi du mail de confirmation"]);
