@@ -66,8 +66,17 @@ class UserManager
         return $this->userRepo->checkLogin($login, $password);
     }
 
+    public function activateUser(string $token): bool
+    {
+        if ($this->userRepo->searchToken($token) === true) {
+            return $this->userRepo->activateOneUser($token);
+        }
+
+        return false;
+    }
+
     
-    /* signin processing
+    /* signin process
         - check user complexity and length, uses regex
         - check password complexity and length, uses regex
         - check if user exists (must be unique), needs repo

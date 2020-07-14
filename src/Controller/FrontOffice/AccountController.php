@@ -140,10 +140,16 @@ class AccountController
     //activate user
     public function activate(Request $request): void
     {
-        // TO DO
-        
-        $this->session->setSession(['success' => "Votre inscription est définitivement validée, vous pouvez vous connecter"]);
-        header('location: ../login#login');
+        $req = $this->userManager->activateUser($request->getToken());
+
+        if ($req === true) {
+            $this->session->setSession(['success' => "Votre inscription est définitivement validée, vous pouvez vous connecter."]);
+            header('location: ../login#login');
+            exit();
+        }
+       
+        $this->session->setSession(['error' => "Impossible de confirmer votre compte, erreur de token"]);
+        header('location: ../signin#signin');
         exit();
     }
 }

@@ -74,6 +74,11 @@ class Request
         return (int)$this->get[2];
     }
 
+    public function getToken(): string
+    {
+        return $this->get[2];
+    }
+
     public function getCommentFormData(): ?string
     {
         if ($this->post != null) {

@@ -138,4 +138,21 @@ class UserRepository extends Database
 
         return $result->execute();
     }
+
+    public function searchToken(string $token): bool
+    {
+        $result = $this->dbConnect()->prepare('SELECT EXISTS (SELECT 1 from user WHERE user.token = :token)');
+        $result->bindValue(':token', $token, PDO::PARAM_STR);
+        $result->execute();
+        
+        return boolval(current($result->fetch()));
+    }
+
+    public function activateOneUser(string $token): bool
+    {
+        $result = $this->dbConnect()->prepare('UPDATE user SET token = NULL, activated = 1, last_update=NOW() WHERE user.token = :token');
+        $result->bindValue(':token', $token, PDO::PARAM_STR);
+
+        return $result->execute();
+    }
 }
