@@ -77,41 +77,39 @@ class UserManager
 
     
     /* signin process
+        - check if user exists (must be unique), needs repo
         - check user complexity and length, uses regex
         - check password complexity and length, uses regex
-        - check if user exists (must be unique), needs repo
         - hash password
         - create user with status =  not activated
         - generate token and insert in User
         - send mail with token
-        if creation is successful, return the id of the new User, else null
+        if creation is successful, return true
     */
-    public function signin(string $login, string $password, string $email): ?int
+    public function signin(string $login, string $password, string $email): ?array
     {
+        // check if user already exists
+        if (($this->userRepo->userExists($login)) === true) {
+            $this->session->setSession(['error' => "Ce login est déjà utilisé"]);
+            return null;
+        }
+        
         // Regex for username
         $regex = '/^[a-z0-9_-]{3,15}$/';
         if (preg_match($regex, $login) === 0) {
             $this->session->setSession(['error' => "Le login ne respecte pas les règles de complexité : entre 3 et 16 caractères alphanumériques."]);
-            header('location: signin#signin');
-            exit();
+            return null;
         }
 
         // Regex for password, exemple here https://ihateregex.io/expr/password
         $regex = '/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/';
         if (preg_match($regex, $password) === 0) {
             $this->session->setSession(['error' => "Le mot de passe ne respecte pas les règles de complexité : minimum 8 caractères, au moins une majuscule, au moins une minuscule, au moins un chiffre et au moins un caractère spécial."]);
-            header('location: signin#signin');
-            exit();
+            return null;
         }
 
-        // check if user already exists
-        if (($this->userRepo->userExists($login)) === true) {
-            $this->session->setSession(['error' => "Ce login est déjà utilisé"]);
-            header('location: signin#signin');
-            exit();
-        }
-        // hash password
-        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+        // hash password, using random salt generation
+        $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 
         // create new user with not activated status
         $newUserId = $this->userRepo->addUser($login, $passwordHash, $email);
@@ -120,38 +118,11 @@ class UserManager
         $token = bin2hex(random_bytes(64));
         if ($this->userRepo->insertToken($token, $newUserId) === false) {
             $this->session->setSession(['error' => "Impossible de générer le token"]);
-            header('location: signin#signin');
-            exit();
+            return null;
         }
-
-        //send mail with token
         $user = $this->userRepo->getUser($newUserId);
-        $to = $user->getEmail();
-        $subject = "Validation de votre inscription au Dev Blog d'Anthony Fachaux";
-        $message = '<html>
-                        <head>
-                            <title>CValidation de votre inscription au Dev Blog d&#39;Anthony Fachaux</title>
-                        </head>
-                        <body>
-                            <h2>Bonjour à toi et Bienvenue ! </h2>
-                            <p>
-                                Cliques sur ce <a href="' . $_SERVER['HTTP_HOST'] .'&#47;account&#47;activate&#47;' . $token .'">lien</a> pour valider définitivement ton inscription au Dev Blog d&#39;Anthony Fachaux !
-                            </p>
-                        </body>
-                    </html>';
-        $headers = array(
-            'From' => 'contact@blog.nayo.cloud',
-            'X-Mailer' => 'PHP/' . phpversion(),
-            'MIME-Version' => '1.0',
-            'Content-type' => 'text/html; charset=utf-8'
-        );
-     
-        if (mail($to, $subject, $message, $headers) === false) {
-            $this->session->setSession(['error' => "Erreur lors de l'envoi du mail de confirmation"]);
-            header('location: signin#signin');
-            exit();
-        };
-        
-        return $newUserId; // à modifier, pas idéal
+        $dest = $user->getEmail();
+
+        return [ 'dest' => $dest, 'token' => $token];
     }
 }

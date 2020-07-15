@@ -124,15 +124,35 @@ class AccountController
             exit();
         }
 
-        $newUserId = $this->userManager->signin($login, $password, $email);
+        $req = $this->userManager->signin($login, $password, $email);
+        if ($req !== null) {
+            $dest = $req['dest'];
+            $token = $req['token'];
+            $server = $_SERVER['HTTP_HOST'];
+            
+            // rendering html content of mail with twig
+            $subject = $this->renderer->renderMail('signinMail.twig', 'subject');
+            $message = $this->renderer->renderMail('signinMail.twig', 'message', [ 'token' => $token, 'server' => $server ]);
 
-        if (isset($newUserId) && $newUserId > 0) {
+            $headers = array(
+                'From' => 'contact@blog.nayo.cloud',
+                'X-Mailer' => 'PHP/' . phpversion(),
+                'MIME-Version' => '1.0',
+                'Content-type' => 'text/html; charset=utf-8'
+            );
+            
+            // send mail
+            if (mail($dest, $subject, $message, $headers) === false) {
+                $this->session->setSession(['error' => "Erreur lors de l'envoi du mail de confirmation"]);
+                header('location: signin#signin');
+                exit();
+            };
+
             $this->session->setSession(['success' => "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription."]);
-            header("location: login#login");
+            header('location: login#login');
             exit();
         }
 
-        $this->session->setSession(['error' => "Erreur inconnue, inscription impossible"]);
         header('location: signin#signin');
         exit();
     }

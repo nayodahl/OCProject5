@@ -1,0 +1,77 @@
+{% block subject %}
+Validation de votre inscription au Dev Blog d'Anthony Fachaux
+{% endblock %}
+
+{% block message %}
+<!DOCTYPE html>
+<html lang="fr">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Anthony Fachaux">
+    <base href="http://localhost/OCProject5/public/" />
+
+    <title>Validation de votre inscription au Dev Blog d&#39;Anthony Fachaux</title>
+
+    <!-- Custom fonts for this template -->
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>     
+      <div class="container">
+          <div class="row">
+              <div class="col-lg-8 col-md-10 mx-auto">                
+                  <div class="post-preview">
+                      <h2>Bonjour à toi et Bienvenue ! </h2>
+                      <p>
+                          Cliques sur ce <a href="' . {{ server }} .'&#47;account&#47;activate&#47;' . {{ token }} .'">lien</a> pour valider définitivement ton inscription au Dev Blog d&#39;Anthony Fachaux !
+                      </p>
+                  </div>                
+              </div>
+          </div>
+      </div>        
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <ul class="list-inline text-center">
+              <li class="list-inline-item">
+                <a href="https://twitter.com/anthonyfachaux">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="https://www.linkedin.com/in/anthony-fachaux-61838616b/">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="https://github.com/nayodahl/OCProject5">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+            </ul>
+            <p class="copyright text-muted">Copyright &copy; Anthony Fachaux 2020 - site réalisé pour <a href="https://openclassrooms.com/">OpenClassrooms</a> - thème <a href="https://startbootstrap.com/previews/clean-blog/">boostrap</a></p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>
+{% endblock %}
