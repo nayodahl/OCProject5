@@ -9,6 +9,7 @@ class Request
 {
     private $get;
     private $post;
+    private $formValidator;
       
     public function __construct()
     {
@@ -21,6 +22,8 @@ class Request
         if (isset($_POST)) {
             $this->post = $_POST;
         }
+
+        $this->formValidator = new FormValidator();
         
         /* Strip query string (?a=b) from Request Url
         if (($strpos = strpos($requestUrl, '?')) !== false) {
@@ -81,36 +84,34 @@ class Request
 
     public function getCommentFormData(): ?string
     {
-        if ($this->post != null) {
-            $this->post = ['comment' => FormValidator::sanitizeTextArea($this->post['comment'])];
+        if ($this->post !== null) {
+            $this->post = ['comment' => $this->formValidator->sanitizeTextArea($this->post['comment'])];
             return $this->post['comment'];
         }
-        return null;
     }
 
     public function getLoginFormData(): ?array
     {
-        if ($this->post != null) {
+        if ($this->post !== null) {
             $this->post = [
-                'login' => FormValidator::sanitizeLogin($this->post['login']),
-                'password' => FormValidator::sanitizePassword($this->post['password'])
+                'login' => $this->formValidator->sanitizeLogin($this->post['login']),
+                'password' => $this->formValidator->sanitizePassword($this->post['password'])
         ];
             return [
                 'login' => $this->post['login'],
                 'password' => $this->post['password']
             ];
         }
-        return null;
     }
 
     public function getSigninFormData(): ?array
     {
-        if ($this->post != null) {
+        if ($this->post !== null) {
             $this->post = [
-                'login' => FormValidator::sanitizeLogin($this->post['login']),
-                'password' => FormValidator::sanitizePassword($this->post['password']),
-                'email' => FormValidator::sanitizeEmail($this->post['email']),
-                'isEmail' => FormValidator::isEmail($this->post['email'])
+                'login' => $this->formValidator->sanitizeLogin($this->post['login']),
+                'password' => $this->formValidator->sanitizePassword($this->post['password']),
+                'email' => $this->formValidator->sanitizeEmail($this->post['email']),
+                'isEmail' => $this->formValidator->isEmail($this->post['email'])
         ];
             return [
                 'login' => $this->post['login'],
@@ -119,18 +120,17 @@ class Request
                 'isEmail' => $this->post['isEmail']
             ];
         }
-        return null;
     }
 
 
     public function getPostFormData(): ?array
     {
-        if ($this->post != null) {
+        if ($this->post !== null) {
             $this->post = [
-                'title' => FormValidator::sanitizeString($this->post['title']),
-                'chapo' => FormValidator::sanitizeString($this->post['chapo']),
-                'author' => FormValidator::sanitizeInteger((int)$this->post['author']),
-                'content' => FormValidator::sanitizeTextArea($this->post['content'])
+                'title' => $this->formValidator->sanitizeString($this->post['title']),
+                'chapo' => $this->formValidator->sanitizeString($this->post['chapo']),
+                'author' => $this->formValidator->sanitizeInteger((int)$this->post['author']),
+                'content' => $this->formValidator->sanitizeTextArea($this->post['content'])
                 
             ];
             return [
@@ -140,18 +140,17 @@ class Request
                 'content' => $this->post['content']
             ];
         }
-        return null;
     }
 
     public function getContactFormData(): ?array
     {
-        if ($this->post != null) {
+        if ($this->post !== null) {
             $this->post = [
-                'lastname' => FormValidator::sanitizeString($this->post['lastname']),
-                'firstname' => FormValidator::sanitizeString($this->post['firstname']),
-                'email' => FormValidator::sanitizeEmail($this->post['email']),
-                'message' => FormValidator::sanitizeTextArea($this->post['message']),
-                'isEmail' => FormValidator::isEmail($this->post['email'])
+                'lastname' => $this->formValidator->sanitizeString($this->post['lastname']),
+                'firstname' => $this->formValidator->sanitizeString($this->post['firstname']),
+                'email' => $this->formValidator->sanitizeEmail($this->post['email']),
+                'message' => $this->formValidator->sanitizeTextArea($this->post['message']),
+                'isEmail' => $this->formValidator->isEmail($this->post['email'])
             ];
         }
         return [
@@ -161,8 +160,6 @@ class Request
             'message' => $this->post['message'],
             'isEmail' => $this->post['isEmail']
         ];
-        
-        return null;
     }
 
     //// getters and setters

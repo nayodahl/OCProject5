@@ -59,7 +59,7 @@ class PostRepository extends Database
 
     // get total number of Posts
     // return an int
-    public function countPosts()
+    public function countPosts(): int
     {
         return (int)current($this->dbConnect()->query("SELECT COUNT(id) from post")->fetch());
     }

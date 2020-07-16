@@ -128,18 +128,18 @@ class AccountController
         if ($req !== null) {
             $dest = $req['dest'];
             $token = $req['token'];
-            $server = $_SERVER['HTTP_HOST'];
+            $server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'www.blog.nayo.cloud';
             
             // rendering html content of mail with twig
-            $subject = $this->renderer->renderMail('signinMail.twig', 'subject');
-            $message = $this->renderer->renderMail('signinMail.twig', 'message', [ 'token' => $token, 'server' => $server ]);
+            $subject = $this->renderer->renderMail('frontoffice/signinMail.twig', 'subject');
+            $message = $this->renderer->renderMail('frontoffice/signinMail.twig', 'message', [ 'token' => $token, 'server' => $server ]);
 
-            $headers = array(
+            $headers = [
                 'From' => 'contact@blog.nayo.cloud',
                 'X-Mailer' => 'PHP/' . phpversion(),
                 'MIME-Version' => '1.0',
                 'Content-type' => 'text/html; charset=utf-8'
-            );
+            ];
             
             // send mail
             if (mail($dest, $subject, $message, $headers) === false) {

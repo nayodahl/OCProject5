@@ -34,8 +34,6 @@ class Router
             'action' => $action
         ];
         $this->routes[] = $route;
-
-        return;
     }
 
     // check if a route matches the requestUrl, using regex
@@ -53,17 +51,18 @@ class Router
             $requestMethod='POST';
         };
 
-        $lastRequestUrlChar = $requestUrl[strlen($requestUrl)-1];
+        $lastRequestUrlChar = $requestUrl[mb_strlen($requestUrl)-1];
         
         foreach ($this->routes as $route) {
-            $method_match = (stripos($route['method'], $requestMethod) !== false);
+            $match = $methodMatch = false;
+            $methodMatch = (mb_stripos($route['method'], $requestMethod) !== false);
 
             // Method did not match, continue to next route.
-            if (!$method_match) {
+            if (!$methodMatch) {
                 continue;
             }
  
-            if (($position = strpos($route['route'], '[')) === false) {
+            if (($position = mb_strpos($route['route'], '[')) === false) {
                 // No params in url, do string comparison
                 $match = strcmp($requestUrl, $route['route']) === 0;
             } else {
@@ -75,7 +74,7 @@ class Router
                 
                 // when request param in route is an int, we set this regex
                 if (preg_match('/[0-9]/', $route['route']) === 1) {
-                    $regex1 = substr($route['route'], 0, strpos($route['route'], '[')) . '[0-9]/?[0-9]?';
+                    $regex1 = mb_substr($route['route'], 0, mb_strpos($route['route'], '[')) . '[0-9]/?[0-9]?';
                     $regex2 = "`^$regex1$`u";
                     $match = preg_match($regex2, $requestUrl) === 1;
                 }
