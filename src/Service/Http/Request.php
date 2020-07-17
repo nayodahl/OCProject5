@@ -3,20 +3,18 @@ declare(strict_types=1);
 
 namespace App\Service\Http;
 
-use App\Service\FormValidator;
-
 class Request
 {
     public const MIN_LOGIN_LENGTH = 3;
     public const MAX_LOGIN_LENGTH = 16;
     public const MIN_PASSWORD_LENGTH = 8;
+    public const MIN_STRING_LENGTH = 1;
     public const MAX_STRING_LENGTH = 500;
     public const MIN_TEXTAREA_LENGTH = 1;
     public const MAX_TEXTAREA_LENGTH = 50000;
     
     private $get;
     private $post;
-    private $formValidator;
       
     public function __construct()
     {
@@ -29,8 +27,6 @@ class Request
         if (isset($_POST)) {
             $this->post = $_POST;
         }
-
-        $this->formValidator = new FormValidator();
     }
 
     public function getPostId(): int
@@ -126,10 +122,10 @@ class Request
     {
         if ($this->post !== null) {
             $this->post = [
-                'title' => $this->formValidator->sanitizeString($this->post['title']),
-                'chapo' => $this->formValidator->sanitizeString($this->post['chapo']),
-                'author' => $this->formValidator->sanitizeInteger((int)$this->post['author']),
-                'content' => $this->formValidator->sanitizeTextArea($this->post['content'])
+                'title' => $this->sanitizeString($this->post['title']),
+                'chapo' => $this->sanitizeString($this->post['chapo']),
+                'author' => $this->sanitizeInteger((int)$this->post['author']),
+                'content' => $this->sanitizeTextArea($this->post['content'])
                 
             ];
             return [
@@ -186,6 +182,14 @@ class Request
         $data = htmlspecialchars($data);
 
         return $data;
+    }
+
+    public function sanitizeInteger(int $value): ?int
+    {
+        if (is_int($value) && !empty($value)) {
+            return $value;
+        }
+        return null;
     }
 
 

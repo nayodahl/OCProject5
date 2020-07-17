@@ -110,8 +110,12 @@ class PostRepository extends Database
         $result->bindValue(':chapo', $chapo, PDO::PARAM_STR);
         $result->bindValue(':authorId', $authorId, PDO::PARAM_INT);
         $result->bindValue(':content', $content, PDO::PARAM_STR);
+        $result->execute();
+        if ($result->rowCount() > 0) {
+            return true;
+        };
 
-        return $result->execute();
+        return false;
     }
 
     // Add new Post
@@ -133,7 +137,11 @@ class PostRepository extends Database
     {
         $result = $this->dbConnect()->prepare('DELETE FROM post WHERE post.id = :postId');
         $result->bindValue(':postId', $postId, PDO::PARAM_INT);
-
-        return $result->execute();
+        $result->execute();
+        if ($result->rowCount() > 0) {
+            return true;
+        };
+        
+        return false;
     }
 }

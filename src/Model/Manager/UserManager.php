@@ -50,16 +50,26 @@ class UserManager
 
     public function promoteUser(int $userId): bool
     {
-        return $this->userRepo->updateUserType($userId, 'admin');
+        if ($this->userRepo->updateUserType($userId, 'admin') === false) {
+            $this->session->setSession(['error' => "Impossible de donner les droits admin à l'utilisateur : identifiant d'utilisateur invalide ou erreur à l'enregistrement"]);
+            return false;
+        }
+        
+        return true;
     }
 
     public function demoteUser(int $userId): bool
     {
         // if user is still the author of Post then we forbid the demote
-        if ($this->userRepo->userHasPosts($userId)) {
+        if ($this->userRepo->userHasPosts($userId) === true) {
+            $this->session->setSession(['error' => "Impossible de retirer les droits admin à l'utilisateur. Veuillez vérifier s'il est encore l'auteur d'un ou plusieurs article(s)."]);
             return false;
         }
-        return $this->userRepo->updateUserType($userId, 'member');
+        if ($this->userRepo->updateUserType($userId, 'member') === false) {
+            $this->session->setSession(['error' => "Impossible de retirer les droits admin à l'utilisateur : identifiant d'utilisateur invalide ou erreur à l'enregistrement"]);
+            return false;
+        }
+        return true;
     }
 
     public function login(string $login, string $password): ?User

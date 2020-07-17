@@ -6,6 +6,7 @@ namespace App\Model\Manager;
 use \App\Model\Entity\Post;
 use \App\Model\Repository\PostRepository;
 use \App\Service\Http\Session;
+use \App\Service\Http\Request;
 
 class PostManager
 {
@@ -36,7 +37,7 @@ class PostManager
         if ($commentPage > $totalCommentPages) {
             $commentPage=$totalCommentPages; //correcting user input
         };
-        $offset = ($commentPage - 1) * $limit; // offset, to determine the number of the first Comment to display
+        $offset = (int)(($commentPage - 1) * $limit); // offset, to determine the number of the first Comment to display
         if ($offset < 0) {
             $offset = 0;
         };
@@ -76,7 +77,7 @@ class PostManager
         if ($currentPage > $totalPages) {
             $currentPage=$totalPages; //correcting user input
         };
-        $offset = ($currentPage - 1) * $limit; // offset, to determine the number of the first Post to display
+        $offset = (int)(($currentPage - 1) * $limit); // offset, to determine the number of the first Post to display
 
         return ['offset' => $offset, 'limit' => $limit, 'totalPages' => $totalPages, 'currentPage' => $currentPage];
     }
@@ -89,16 +90,47 @@ class PostManager
 
     public function modifyPostContent(int $postId, string $title, string $chapo, int $authorId, string $content): bool
     {
-        return $this->postRepo->updatePost($postId, $title, $chapo, $authorId, $content);
+        if (($postId === null) || ($title === '') || (mb_strlen($title) > Request::MAX_STRING_LENGTH) || (mb_strlen($title) < Request::MIN_STRING_LENGTH)
+        || ($chapo == '') || (mb_strlen($chapo) > Request::MAX_STRING_LENGTH) || (mb_strlen($chapo) < Request::MIN_STRING_LENGTH)
+        || ($authorId === null)
+        || ($content == '') || (mb_strlen($content) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($content) < Request::MIN_TEXTAREA_LENGTH)) {
+            $this->session->setSession(['error' => "Champ(s) vide(s) ou trop long(s) ou auteur invalide"]);
+            return false;
+        }
+        
+        if ($this->postRepo->updatePost($postId, $title, $chapo, $authorId, $content) === false) {
+            $this->session->setSession(['error' => "Impossible de modifier l'article : identifiant d'article ou d'auteur invalide ou erreur à l'enregistrement"]);
+            return false;
+        }
+        
+        return $true;
     }
 
     public function createPost(string $title, string $chapo, int $authorId, string $content): ?int
     {
-        return $this->postRepo->addPost($title, $chapo, $authorId, $content);
+        if (($title === '') || (mb_strlen($title) > Request::MAX_STRING_LENGTH) || (mb_strlen($title) < Request::MIN_STRING_LENGTH)
+        || ($chapo == '') || (mb_strlen($chapo) > Request::MAX_STRING_LENGTH) || (mb_strlen($chapo) < Request::MIN_STRING_LENGTH)
+        || ($authorId === null)
+        || ($content == '') || (mb_strlen($content) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($content) < Request::MIN_TEXTAREA_LENGTH)) {
+            $this->session->setSession(['error' => "Champ(s) vide(s) ou trop long(s) ou auteur invalide"]);
+            return null;
+        }
+        
+        $req = $this->postRepo->addPost($title, $chapo, $authorId, $content);
+        if ($req === null) {
+            $this->session->setSession(['error' => "Impossible de publier l'article : auteur invalide ou erreur à l'enregistrement"]);
+            return null;
+        }
+
+        return $req;
     }
 
     public function deletePost(int $postId): bool
     {
-        return $this->postRepo->deleteOnePost($postId);
+        if ($this->postRepo->deleteOnePost($postId) === false) {
+            $this->session->setSession(['error' => "Impossible de supprimer l'article : identifiant d'article invalide ou erreur à la suppression"]);
+            return false;
+        }
+        return true;
     }
 }

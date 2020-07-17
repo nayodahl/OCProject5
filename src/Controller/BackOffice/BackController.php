@@ -65,6 +65,11 @@ class BackController
     {
         $postId=$request->getEditPostId();
         $post = $this->postManager->getSinglePost($postId);
+        if ($post === null) {
+            header('location: ../../admin/posts/1');
+            exit();
+        }
+
         $adminUsers = $this->userManager->getAdminUsers();
 
         // twig rendering with some parameters
@@ -86,13 +91,7 @@ class BackController
         $chapo = $formData['chapo'];
         $authorId = $formData['author'];
         $content = $formData['content'];
-        
-        if ($title === null || $chapo === null || $authorId === null || $content === null) {
-            $this->session->setSession(['error' => "Tous les champs ne sont pas remplis ou corrects."]);
-            header("location: ../../admin/post/$postId#modify");
-            exit();
-        }
-        
+                
         $req = $this->postManager->modifyPostContent($postId, $title, $chapo, $authorId, $content);
         
         if ($req === true) {
@@ -100,7 +99,6 @@ class BackController
             header("location: ../../admin/post/$postId#modify");
             exit();
         }
-        $this->session->setSession(['error' => "Impossible de modifier l'article."]);
         header("location: ../../admin/post/$postId#modify");
         exit();
     }
@@ -108,15 +106,12 @@ class BackController
     public function delete(Request $request): void
     {
         $postId=$request->getEditPostId();
-        $req = $this->postManager->deletePost($postId);
-        
-        if ($req === true) {
+        if ($this->postManager->deletePost($postId) === true) {
             $this->session->setSession(['success' => "Article supprimé."]);
             header("location: ../../admin/posts/1");
             exit();
         }
-        $this->session->setSession(['error' => "Impossible de supprimer l'article."]);
-        header("location: ../../admin/post/$postId");
+        header("location: ../../admin/posts/1");
         exit();
     }
 
@@ -138,13 +133,7 @@ class BackController
         $chapo = $formData['chapo'];
         $authorId = $formData['author'];
         $content = $formData['content'];
-        
-        if ($title === null || $chapo === null || $authorId === null || $content === null) {
-            $this->session->setSession(['error' => "Tous les champs ne sont pas remplis ou corrects."]);
-            header("location: ../admin/newpost#add");
-            exit();
-        }
-        
+                
         $newPostId = $this->postManager->createPost($title, $chapo, $authorId, $content);
                 
         if (isset($newPostId) && ($newPostId > 0)) {
@@ -152,7 +141,6 @@ class BackController
             header("location: ../admin/post/$newPostId");
             exit();
         }
-        $this->session->setSession(['error' => "Impossible de publier l'article."]);
         header("location: ../admin/newpost#add");
         exit();
     }
@@ -168,7 +156,7 @@ class BackController
         $totalCommentPages = $pagerArray['totalCommentPages'];
         $commentPage = $pagerArray['commentPage'];
         
-        $listComments = $this->commentManager->getNotApprovedComments((int)$offset, $limit);
+        $listComments = $this->commentManager->getNotApprovedComments($offset, $limit);
 
         // twig rendering with some parameters
         $this->renderer->render('backoffice/CommentsManager.twig', [
@@ -184,14 +172,11 @@ class BackController
     public function approve(Request $request): void
     {
         $commentId=$request->getCommentId();
-        $req = $this->commentManager->approveComment($commentId);
-
-        if ($req === true) {
+        if ($this->commentManager->approveComment($commentId) === true) {
             $this->session->setSession(['success' => "Commentaire approuvé."]);
             header("location: ../../admin/comments/1");
             exit();
         }
-        $this->session->setSession(['error' => "Impossible d'approuver le commentaire."]);
         header("location: ../../admin/comments/1");
         exit();
     }
@@ -199,14 +184,11 @@ class BackController
     public function refuse(Request $request): void
     {
         $commentId=$request->getCommentId();
-        $req = $this->commentManager->refuseComment($commentId);
-
-        if ($req === true) {
+        if ($this->commentManager->refuseComment($commentId) === true) {
             $this->session->setSession(['success' => "Commentaire supprimé."]);
             header("location: ../../admin/comments/1");
             exit();
         }
-        $this->session->setSession(['error' => "Impossible de supprimer le commentaire."]);
         header("location: ../../admin/comments/1");
         exit();
     }
@@ -238,14 +220,11 @@ class BackController
     public function promote(Request $request): void
     {
         $userId=$request->getUserId();
-        $req = $this->userManager->promoteUser($userId);
-
-        if ($req === true) {
+        if ($this->userManager->promoteUser($userId) === true) {
             $this->session->setSession(['success' => "Droits admin donnés à l'utilisateur."]);
             header("location: ../../admin/members/1");
             exit();
         }
-        $this->session->setSession(['error' => "Impossible de donner les droits admin à l'utilisateur."]);
         header("location: ../../admin/members/1");
         exit();
     }
@@ -253,14 +232,11 @@ class BackController
     public function demote(Request $request): void
     {
         $userId=$request->getUserId();
-        $req = $this->userManager->demoteUser($userId);
-
-        if ($req === true) {
+        if ($this->userManager->demoteUser($userId) === true) {
             $this->session->setSession(['success' => "Droits admin retirés à l'utilisateur."]);
             header("location: ../../admin/members/1");
             exit();
         }
-        $this->session->setSession(['error' => "Impossible de retirer les droits admin à l'utilisateur. Veuillez vérifier s'il est encore l'auteur d'un ou plusieurs article(s)."]);
         header("location: ../../admin/members/1");
         exit();
     }

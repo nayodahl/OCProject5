@@ -70,8 +70,12 @@ class UserRepository extends Database
         $result = $this->dbConnect()->prepare('UPDATE user SET user.type = :userType, last_update=NOW() WHERE user.id = :userId');
         $result->bindValue(':userId', $userId, PDO::PARAM_INT);
         $result->bindValue(':userType', $type, PDO::PARAM_STR);
-
-        return $result->execute();
+        $result->execute();
+        if ($result->rowCount() > 0) {
+            return true;
+        };
+        
+        return false;
     }
 
     // check if password is correct for a given User

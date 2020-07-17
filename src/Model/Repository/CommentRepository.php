@@ -77,8 +77,12 @@ class CommentRepository extends Database
         $result->bindValue(':postId', $postId, PDO::PARAM_INT);
         $result->bindValue(':authorId', $authorId, PDO::PARAM_INT);
         $result->bindValue(':comment', $comment, PDO::PARAM_STR);
-
-        return $result->execute();
+        $result->execute();
+        if ($result->rowCount() > 0) {
+            return true;
+        };
+        
+        return false;
     }
 
     // approve Comment in DB
@@ -86,8 +90,11 @@ class CommentRepository extends Database
     {
         $result = $this->dbConnect()->prepare('UPDATE comment SET approved = 1, last_update=NOW() WHERE id = :commentId');
         $result->bindValue(':commentId', $commentId, PDO::PARAM_INT);
-
-        return $result->execute();
+        $result->execute();
+        if ($result->rowCount() > 0) {
+            return true;
+        };
+        return false;
     }
 
     // refuse Comment in DB
@@ -95,7 +102,10 @@ class CommentRepository extends Database
     {
         $result = $this->dbConnect()->prepare('DELETE FROM comment WHERE id = :commentId');
         $result->bindValue(':commentId', $commentId, PDO::PARAM_INT);
-
-        return $result->execute();
+        $result->execute();
+        if ($result->rowCount() > 0) {
+            return true;
+        };
+        return false;
     }
 }

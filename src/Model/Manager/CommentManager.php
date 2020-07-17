@@ -56,7 +56,7 @@ class CommentManager
         if ($commentPage > $totalCommentPages) {
             $commentPage=$totalCommentPages; //correcting user input
         };
-        $offset = ($commentPage - 1) * $limit; // offset, to determine the number of the first Post to display
+        $offset = (int)(($commentPage - 1) * $limit); // offset, to determine the number of the first Post to display
 
         return ['offset' => $offset, 'limit' => $limit, 'totalCommentPages' => $totalCommentPages, 'commentPage' => $commentPage];
     }
@@ -79,11 +79,21 @@ class CommentManager
 
     public function approveComment(int $commentId): bool
     {
-        return $this->commentRepo->setCommentToApproved($commentId);
+        if ($this->commentRepo->setCommentToApproved($commentId) === false) {
+            $this->session->setSession(['error' => "Impossible d'approuver le commentaire : identifiant de commentaire invalide ou erreur à l'enregistrement"]);
+            return false;
+        }
+        
+        return true;
     }
 
     public function refuseComment(int $commentId): bool
     {
-        return $this->commentRepo->deleteComment($commentId);
+        if ($this->commentRepo->deleteComment($commentId) === false) {
+            $this->session->setSession(['error' => "Impossible de supprimer le commentaire : identifiant de commentaire invalide ou erreur à la suppression"]);
+            return false;
+        }
+        
+        return true;
     }
 }
