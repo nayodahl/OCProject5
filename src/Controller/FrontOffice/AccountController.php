@@ -107,15 +107,9 @@ class AccountController
         $login = $formData['login'];
         $password = $formData['password'];
         
-        if ($login === null || $password === null) {
-            $this->session->setSession(['error' => "Identifiant ou mot de passe vide ou pas de la bonne longueur (entre 3 et 16 caractères alphanumériques pour le login, 8 caractères minimum pour le mot de passe)."]);
-            header('location: login#login');
-            exit();
-        }
-        
         $user = $this->userManager->login($login, $password);
         
-        if ($user) {
+        if ($user !== null) {
             $this->session->setSession([
                 'auth' => $user->getUserId(),
                 'success' => "Connexion réussie."
@@ -123,7 +117,6 @@ class AccountController
             header('location: ../');
             exit();
         }
-        $this->session->setSession(['error' => "Identifiant ou mot de passe incorrect."]);
         header('location: login#login');
         exit();
     }
@@ -135,13 +128,6 @@ class AccountController
         $login = $formData['login'];
         $password = $formData['password'];
         $email = $formData['email'];
-        $isEmail = $formData['isEmail'];
-        
-        if ($login === null || $password === null || $email === null || $isEmail === false) {
-            $this->session->setSession(['error' => "tous les champs ne sont pas remplis ou corrects (entre 3 et 16 caractères alphanumériques pour le login, 8 caractères minimum pour le mot de passe)."]);
-            header('location: signin#signin');
-            exit();
-        }
 
         $req = $this->userManager->signin($login, $password, $email);
         if ($req !== null) {
@@ -161,15 +147,11 @@ class AccountController
             ];
             
             // send mail
-            if (mail($dest, $subject, $message, $headers) === false) {
-                $this->session->setSession(['error' => "Erreur lors de l'envoi du mail de confirmation"]);
-                header('location: signin#signin');
+            if (mail($dest, $subject, $message, $headers) === true) {
+                $this->session->setSession(['success' => "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription."]);
+                header('location: login#login');
                 exit();
             };
-
-            $this->session->setSession(['success' => "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription."]);
-            header('location: login#login');
-            exit();
         }
 
         header('location: signin#signin');

@@ -11,6 +11,7 @@ class Request
     public const MAX_LOGIN_LENGTH = 16;
     public const MIN_PASSWORD_LENGTH = 8;
     public const MAX_STRING_LENGTH = 500;
+    public const MIN_TEXTAREA_LENGTH = 1;
     public const MAX_TEXTAREA_LENGTH = 50000;
     
     private $get;
@@ -30,12 +31,6 @@ class Request
         }
 
         $this->formValidator = new FormValidator();
-        
-        /* Strip query string (?a=b) from Request Url
-        if (($strpos = strpos($requestUrl, '?')) !== false) {
-            $requestUrl = substr($requestUrl, 0, $strpos);
-        }
-        */
     }
 
     public function getPostId(): int
@@ -91,7 +86,8 @@ class Request
     public function getCommentFormData(): ?string
     {
         if ($this->post !== null) {
-            $this->post = ['comment' => $this->formValidator->sanitizeTextArea($this->post['comment'])];
+            $this->post = ['comment' => $this->sanitizeTextArea($this->post['comment'])];
+            
             return $this->post['comment'];
         }
     }
@@ -100,8 +96,8 @@ class Request
     {
         if ($this->post !== null) {
             $this->post = [
-                'login' => $this->formValidator->sanitizeLogin($this->post['login']),
-                'password' => $this->formValidator->sanitizePassword($this->post['password'])
+                'login' => $this->sanitizeLogin($this->post['login']),
+                'password' => $this->post['password']
         ];
             return [
                 'login' => $this->post['login'],
@@ -114,20 +110,17 @@ class Request
     {
         if ($this->post !== null) {
             $this->post = [
-                'login' => $this->formValidator->sanitizeLogin($this->post['login']),
-                'password' => $this->formValidator->sanitizePassword($this->post['password']),
-                'email' => $this->formValidator->sanitizeEmail($this->post['email']),
-                'isEmail' => $this->formValidator->isEmail($this->post['email'])
+                'login' => $this->sanitizeLogin($this->post['login']),
+                'password' => $this->post['password'],
+                'email' => $this->sanitizeEmail($this->post['email'])
         ];
             return [
                 'login' => $this->post['login'],
                 'password' => $this->post['password'],
-                'email' => $this->post['email'],
-                'isEmail' => $this->post['isEmail']
+                'email' => $this->post['email']
             ];
         }
     }
-
 
     public function getPostFormData(): ?array
     {
@@ -165,7 +158,7 @@ class Request
             'message' => $this->post['message']
         ];
     }
-
+    
     // cleanup methods
     
     public function sanitizeString(string $data): string
@@ -185,6 +178,14 @@ class Request
     public function sanitizeEmail(string $data): ?string
     {
         return filter_var($data, FILTER_SANITIZE_EMAIL);
+    }
+
+    public function sanitizeLogin(string $data): string
+    {
+        $data = trim($data);
+        $data = htmlspecialchars($data);
+
+        return $data;
     }
 
 

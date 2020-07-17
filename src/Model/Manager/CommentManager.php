@@ -5,14 +5,18 @@ namespace App\Model\Manager;
 
 use \App\Model\Entity\Comment;
 use \App\Model\Repository\CommentRepository;
+use \App\Service\Http\Request;
+use \App\Service\Http\Session;
 
 class CommentManager
 {
     private $commentRepo;
+    private $session;
 
     public function __construct(CommentRepository $commentRepo)
     {
         $this->commentRepo = $commentRepo;
+        $this->session = new Session();
     }
 
     public function getApprovedComments(int $postId, int $offset, int $commentsNumberLimit): array
@@ -59,7 +63,18 @@ class CommentManager
 
     public function addCommentToPost(int $postId, int $authorId, string $comment): bool
     {
-        return $this->commentRepo->insertCommentToPost($postId, $authorId, $comment);
+        if (($comment === '') || (mb_strlen($comment) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($comment) < Request::MIN_TEXTAREA_LENGTH)) {
+            $this->session->setSession(['error' => "Commentaire vide ou trop long"]);
+            return false;
+        }
+        
+        $req = $this->commentRepo->insertCommentToPost($postId, $authorId, $comment);
+        if ($req === false) {
+            $this->session->setSession(['error' => "Erreur inconnue, impossible d'ajouter le commentaire"]);
+            return false;
+        }
+        
+        return $req;
     }
 
     public function approveComment(int $commentId): bool

@@ -6,6 +6,7 @@ namespace App\Model\Manager;
 use \App\Model\Entity\User;
 use \App\Model\Repository\UserRepository;
 use \App\Service\Http\Session;
+use \App\Service\Http\Request;
 
 class UserManager
 {
@@ -63,7 +64,20 @@ class UserManager
 
     public function login(string $login, string $password): ?User
     {
-        return $this->userRepo->checkLogin($login, $password);
+        // check if input is valid
+        if (($login === '') || (mb_strlen($login) > Request::MAX_LOGIN_LENGTH) || (mb_strlen($login) < Request::MIN_LOGIN_LENGTH)
+            || ($password == '') || (mb_strlen($password) > Request::MAX_STRING_LENGTH) || (mb_strlen($password) < Request::MIN_PASSWORD_LENGTH)) {
+            $this->session->setSession(['error' => "Identifiant ou mot de passe vide ou pas de la bonne longueur (entre 3 et 16 caractères alphanumériques pour le login, 8 caractères minimum pour le mot de passe)."]);
+                
+            return null;
+        }
+        $req = $this->userRepo->checkLogin($login, $password);
+        if ($req === null) {
+            $this->session->setSession(['error' => "Identifiant ou mot de passe incorrect."]);
+
+            return null;
+        }
+        return $req;
     }
 
     public function activateUser(string $token): bool
@@ -75,19 +89,16 @@ class UserManager
         return false;
     }
 
-    
-    /* signin process
-        - check if user exists (must be unique), needs repo
-        - check user complexity and length, uses regex
-        - check password complexity and length, uses regex
-        - hash password
-        - create user with status =  not activated
-        - generate token and insert in User
-        - send mail with token
-        if creation is successful, return true
-    */
     public function signin(string $login, string $password, string $email): ?array
     {
+        // check if input is valid
+        if (($login === '') || (mb_strlen($login) > Request::MAX_LOGIN_LENGTH) || (mb_strlen($login) < Request::MIN_LOGIN_LENGTH)
+        || ($password == '') || (mb_strlen($password) > Request::MAX_STRING_LENGTH) || (mb_strlen($password) < Request::MIN_PASSWORD_LENGTH)
+        || ($email == '') || (mb_strlen($email) > Request::MAX_STRING_LENGTH) || (filter_var($email, FILTER_VALIDATE_EMAIL) === false)) {
+            $this->session->setSession(['error' => "Tous les champs ne sont pas remplis ou corrects (entre 3 et 16 caractères alphanumériques pour le login, 8 caractères minimum pour le mot de passe, avec au moins une majuscule, au moins une minuscule, au moins un chiffre et au moins un caractère spécial)."]);
+            return null;
+        }
+        
         // check if user already exists
         if (($this->userRepo->userExists($login)) === true) {
             $this->session->setSession(['error' => "Ce login est déjà utilisé"]);

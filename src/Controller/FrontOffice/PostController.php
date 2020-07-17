@@ -50,8 +50,8 @@ class PostController
         $commentPage=$request->getCommentPage();
 
         $post = $this->postManager->getSinglePost($postId);
-        if ($post->getPostId() === 0) {
-            header('location: ../error/404');
+        if ($post === null) {
+            header('location: ../../posts/1');
             exit();
         }
         $nextId = $this->postManager->getNextPostId($postId);
@@ -99,8 +99,11 @@ class PostController
         $this->renderer->render('frontoffice/PostsPage.twig', [
             'listposts' => $listPosts,
             'currentPage' => $currentPage,
-            'totalPages' => $totalPages
+            'totalPages' => $totalPages,
+            'session' => $this->session->getSession()
             ]);
+        $this->session->remove('success');
+        $this->session->remove('error');
     }
 
     // Add comment in DB
@@ -110,21 +113,10 @@ class PostController
         $authorId = 8;  //temporary, will need the id from session and checks if loggued
         $comment = $request->getCommentFormData();
 
-        if ($comment === null) {
-            $this->session->setSession(['error' => "Une erreur est survenue, Impossible d'ajouter un commentaire vide ou trop long."]);
-            header("location: ../post/$postId/1#comments");
-            exit();
-        }
-        
-        $req = $this->commentManager->addCommentToPost($postId, $authorId, $comment);
-
-        if ($req === true) {
+        if (($this->commentManager->addCommentToPost($postId, $authorId, $comment)) === true) {
             $this->session->setSession(['success' => "Votre commentaire est enregistré et en attente de validation."]);
-            header("location: ../post/$postId/1#comments");
-            exit();
         }
 
-        $this->session->setSession(['error' => "Impossible d'ajouter le commentaire."]);
         header("location: ../post/$postId/1#comments");
         exit();
     }

@@ -5,19 +5,28 @@ namespace App\Model\Manager;
 
 use \App\Model\Entity\Post;
 use \App\Model\Repository\PostRepository;
+use \App\Service\Http\Session;
 
 class PostManager
 {
     private $postRepo;
+    private $session;
 
     public function __construct(PostRepository $postRepository)
     {
         $this->postRepo = $postRepository;
+        $this->session = new Session();
     }
     
     public function getSinglePost(int $postId): ?Post
     {
-        return $this->postRepo->getPost($postId);
+        $req = $this->postRepo->getPost($postId);
+        if ($req === null) {
+            $this->session->setSession(['error' => "Numéro d'article invalide"]);
+            return null;
+        }
+        
+        return $req;
     }
 
     public function getSinglePostPager(int $commentPage, int $totalComments): array
