@@ -103,7 +103,7 @@ class PostManager
             return false;
         }
         
-        return $true;
+        return true;
     }
 
     public function createPost(string $title, string $chapo, int $authorId, string $content): ?int
