@@ -5,11 +5,11 @@ namespace App\Service;
 
 class FormValidator
 {
-    private const MIN_LOGIN_LENGTH = 3;
-    private const MAX_LOGIN_LENGTH = 16;
-    private const MIN_PASSWORD_LENGTH = 8;
-    private const MAX_STRING_LENGTH = 500;
-    private const MAX_TEXTAREA_LENGTH = 50000;
+    public const MIN_LOGIN_LENGTH = 3;
+    public const MAX_LOGIN_LENGTH = 16;
+    public const MIN_PASSWORD_LENGTH = 8;
+    public const MAX_STRING_LENGTH = 500;
+    public const MAX_TEXTAREA_LENGTH = 50000;
 
     public function sanitizeString(string $data): ?string
     {

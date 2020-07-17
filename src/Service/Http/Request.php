@@ -7,6 +7,12 @@ use App\Service\FormValidator;
 
 class Request
 {
+    public const MIN_LOGIN_LENGTH = 3;
+    public const MAX_LOGIN_LENGTH = 16;
+    public const MIN_PASSWORD_LENGTH = 8;
+    public const MAX_STRING_LENGTH = 500;
+    public const MAX_TEXTAREA_LENGTH = 50000;
+    
     private $get;
     private $post;
     private $formValidator;
@@ -146,21 +152,41 @@ class Request
     {
         if ($this->post !== null) {
             $this->post = [
-                'lastname' => $this->formValidator->sanitizeString($this->post['lastname']),
-                'firstname' => $this->formValidator->sanitizeString($this->post['firstname']),
-                'email' => $this->formValidator->sanitizeEmail($this->post['email']),
-                'message' => $this->formValidator->sanitizeTextArea($this->post['message']),
-                'isEmail' => $this->formValidator->isEmail($this->post['email'])
+                'lastname' => $this->sanitizeString($this->post['lastname']),
+                'firstname' => $this->sanitizeString($this->post['firstname']),
+                'email' => $this->sanitizeEmail($this->post['email']),
+                'message' => $this->sanitizeTextArea($this->post['message'])
             ];
         }
         return [
             'lastname' => $this->post['lastname'],
             'firstname' => $this->post['firstname'],
             'email' => $this->post['email'],
-            'message' => $this->post['message'],
-            'isEmail' => $this->post['isEmail']
+            'message' => $this->post['message']
         ];
     }
+
+    // cleanup methods
+    
+    public function sanitizeString(string $data): string
+    {
+        $data = trim($data);
+        $data = filter_var($data, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+        $data = htmlspecialchars($data);
+
+        return $data;
+    }
+
+    public function sanitizeTextArea(string $data): string
+    {
+        return htmlspecialchars($data);
+    }
+
+    public function sanitizeEmail(string $data): ?string
+    {
+        return filter_var($data, FILTER_SANITIZE_EMAIL);
+    }
+
 
     //// getters and setters
 

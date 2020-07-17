@@ -66,16 +66,35 @@ class AccountController
         $firstname = $formData['firstname'];
         $email = $formData['email'];
         $message = $formData['message'];
-        $isEmail = $formData['isEmail'];
 
-        if ($lastname === null || $firstname === null || $email === null || $message === null || $isEmail === false) {
+        if ($lastname === '' || (mb_strlen($lastname) > Request::MAX_STRING_LENGTH) ||
+            $firstname === '' || (mb_strlen($firstname) > Request::MAX_STRING_LENGTH) ||
+            $email === '' || (mb_strlen($email) > Request::MAX_STRING_LENGTH) || (filter_var($email, FILTER_VALIDATE_EMAIL) === false) ||
+            $message === '' || (mb_strlen($message) > Request::MAX_TEXTAREA_LENGTH)
+            ) {
             $this->session->setSession(['error' => "tous les champs ne sont pas remplis ou corrects."]);
             header('location: ');
             exit();
         }
-        /*
-        Traitement du message, envoi du mail
-        */
+        
+        // rendering html content of mail with twig
+        $subject = $this->renderer->renderMail('frontoffice/contactMail.twig', 'subject');
+        $message = $this->renderer->renderMail('frontoffice/contactMail.twig', 'message', [ 'firstname' => $firstname, 'lastname' => $lastname, 'email' => $email, 'message' => $message ]);
+
+        $headers = [
+            'From' => 'contact@blog.nayo.cloud',
+            'X-Mailer' => 'PHP/' . phpversion(),
+            'MIME-Version' => '1.0',
+            'Content-type' => 'text/html; charset=utf-8'
+        ];
+        
+        // send mail
+        if (mail('contact@blog.nayo.cloud', $subject, $message, $headers) === false) {
+            $this->session->setSession(['error' => "Erreur lors de l'envoi du message"]);
+            header('location: ');
+            exit();
+        };
+
         $this->session->setSession(['info' => "Votre message a bien été envoyé"]);
         header('location: ');
         exit();
