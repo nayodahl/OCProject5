@@ -1,16 +1,22 @@
-{% extends 'LayoutFront.twig' %}
+{% extends 'layoutFront.twig' %}
 
 {% block content %}
     <!-- Main Content -->
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
+                {% if session.error %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{ session.error }}
+                    </div>    
+                {% endif %} 
                 <h2 class="section-heading">Tous les articles</h2>
                 <hr>
 
                 {% for post in listposts %}
                     <div class="post-preview">
-                        <a href="post&#47;{{ post.postId }}">
+                        <a href="post&#47;{{ post.postId }}&#47;1">
                         <h2 class="post-title">
                             {{ post.title }}
                         </h2>
@@ -21,7 +27,7 @@
                         <p class="post-meta">Publié par {{ post.authorLogin }} le {{ post.lastUpdate }}</p>
                     </div>
                     <div class="clearfix">
-                    <a class="btn btn-primary float-right" href="post&#47;{{ post.postId }}">Lire la suite &rarr;</a>
+                    <a class="btn btn-primary float-right" href="post&#47;{{ post.postId }}&#47;1">Lire la suite &rarr;</a>
                 </div>
                     <hr>
                 {% endfor %}

@@ -1,13 +1,26 @@
-{% extends 'LayoutFront.twig' %}
+{% extends 'layoutFront.twig' %}
 
 {% block content %}
     <!-- Contact Form -->
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
-                <h2 class="section-heading" id="login">Inscription</h2>
+                <h2 class="section-heading" id="signin">Inscription</h2>
             </div>
-            <div class="col-lg-6 col-md-4 mx-auto">                
+            
+            <div class="col-lg-6 col-md-4 mx-auto">  
+                {% if session.success %}
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{ session.success }}
+                    </div>    
+                {% endif %}
+                {% if session.error %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{ session.error }}
+                    </div>    
+                {% endif %}              
                 <form method="post" action="account/signin" name="sentSignin" id="signinForm" class="needs-validation" novalidate>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls">

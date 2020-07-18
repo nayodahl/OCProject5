@@ -26,4 +26,12 @@ class View
     {
         echo $this->twig->render($view, $params);
     }
+
+    public function renderMail(string $view, string $block, array $params = []): string
+    {
+        $template = $this->twig->load($view);
+        $rendered = $template->renderBlock($block, $params);
+
+        return $rendered;
+    }
 }

@@ -1,16 +1,22 @@
-{% extends 'LayoutFront.twig' %}
+{% extends 'layoutFront.twig' %}
 
 {% block content %}
     <!-- Main Content -->
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
+                {% if session.success %}
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{ session.success }}
+                    </div>    
+                {% endif %}
                 <h2 class="section-heading">Les derniers articles</h2>
                 <hr>
 
                 {% for post in listposts %}
                     <div class="post-preview">
-                        <a href="post&#47;{{ post.postId }}">
+                        <a href="post&#47;{{ post.postId }}&#47;1">
                         <h2 class="post-title">
                             {{ post.title }}
                         </h2>
@@ -21,8 +27,8 @@
                         <p class="post-meta">Publié par {{ post.authorLogin }} le {{ post.lastUpdate }}</p>
                     </div>
                     <div class="clearfix">
-                    <a class="btn btn-primary float-right" href="post&#47;{{ post.postId }}">Lire la suite &rarr;</a>
-                </div>
+                    <a class="btn btn-primary float-right" href="post&#47;{{ post.postId }}&#47;1">Lire la suite &rarr;</a>
+                    </div>
                     <hr>
                 {% endfor %}
 
@@ -41,9 +47,21 @@
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
                 <h2 class="section-heading" id="contact">Contactez-moi</h2>
+                 {% if session.info %}
+                    <div class="alert alert-info alert-dismissible" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{ session.info }}
+                    </div>    
+                {% endif %}
+                {% if session.error %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{ session.error }}
+                    </div>    
+                {% endif %} 
                 <p>Envoyez-moi un message et je vous répondrai dans les plus brefs délais !</p>
 
-                <form method="post" action="#contactForm" name="sentMessage" id="contactForm" class="needs-validation" novalidate>
+                <form method="post" action="#contact" name="sentMessage" id="contactForm" class="needs-validation" novalidate>
                     <div class="control-group">
                         <div class="form-row">
                             <div class="form-group col-lg-6 floating-label-form-group controls">
@@ -82,7 +100,6 @@
                         <button type="submit" class="btn btn-primary" id="sendMessageButton">Envoyer</button>
                     </div>
                 </form>
-
                 <script>
                     // starter JavaScript for disabling form submissions if there are invalid fields, from bootstrap4 doc
                     (function() {
@@ -103,7 +120,6 @@
                     }, false);
                     })();
                 </script>
-
             </div>
         </div>
     </div>

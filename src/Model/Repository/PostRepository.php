@@ -11,7 +11,7 @@ class PostRepository extends Database
 {
     // get Post with its id
     // Return Post
-    public function getPost(int $postId): Post
+    public function getPost(int $postId): ?Post
     {
         $result = $this->dbConnect()->prepare(
             'SELECT post.id AS postId, post.title, post.chapo, post.content, DATE_FORMAT(post.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(post.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate, post.user_id AS authorId, user.login AS authorLogin 
@@ -21,9 +21,14 @@ class PostRepository extends Database
         );
         $result->bindValue(':postId', $postId, PDO::PARAM_INT);
         $result->execute();
+        $data = $result->fetch();
+        if ($data === false) {
+            return null;
+        }
                 
-        return new Post($result->fetch());
+        return new Post($data);
     }
+    
     // get last X Posts, sorted by most recent
     // return an array of Posts
     public function getMostXRecentPosts(int $postsNumberLimit): array
@@ -37,7 +42,7 @@ class PostRepository extends Database
         $result->bindValue(':postsNumberLimit', $postsNumberLimit, PDO::PARAM_INT);
         $result->execute();
 
-        return $result->fetchAll(PDO::FETCH_CLASS, '\App\Model\Entity\Post');
+        return $result->fetchAll(PDO::FETCH_CLASS, Post::class);
     }
 
     // get last Posts, sorted by most recent, with limit and offset as parameters
@@ -54,12 +59,12 @@ class PostRepository extends Database
         $result->bindValue(':postsNumberLimit', $postsNumberLimit, PDO::PARAM_INT);
         $result->execute();
         
-        return $result->fetchAll(PDO::FETCH_CLASS, '\App\Model\Entity\Post');
+        return $result->fetchAll(PDO::FETCH_CLASS, Post::class);
     }
 
     // get total number of Posts
     // return an int
-    public function countPosts()
+    public function countPosts(): int
     {
         return (int)current($this->dbConnect()->query("SELECT COUNT(id) from post")->fetch());
     }
@@ -105,8 +110,12 @@ class PostRepository extends Database
         $result->bindValue(':chapo', $chapo, PDO::PARAM_STR);
         $result->bindValue(':authorId', $authorId, PDO::PARAM_INT);
         $result->bindValue(':content', $content, PDO::PARAM_STR);
+        $result->execute();
+        if ($result->rowCount() > 0) {
+            return true;
+        };
 
-        return $result->execute();
+        return false;
     }
 
     // Add new Post
@@ -128,7 +137,11 @@ class PostRepository extends Database
     {
         $result = $this->dbConnect()->prepare('DELETE FROM post WHERE post.id = :postId');
         $result->bindValue(':postId', $postId, PDO::PARAM_INT);
-
-        return $result->execute();
+        $result->execute();
+        if ($result->rowCount() > 0) {
+            return true;
+        };
+        
+        return false;
     }
 }

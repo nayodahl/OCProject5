@@ -1,0 +1,33 @@
+{% block subject %}
+Validation de votre inscription au Dev Blog d'Anthony Fachaux
+{% endblock %}
+
+{% block message %}
+<!DOCTYPE html>
+<html lang="fr">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Anthony Fachaux">
+    <title>Validation de votre inscription au Dev Blog d'Anthony Fachaux</title>
+  </head>
+
+  <body>     
+      <div class="container">
+          <div class="row">
+              <div class="col-lg-8 col-md-10 mx-auto">                
+                  <div class="post-preview">
+                      <h3>Bonjour à toi et Bienvenue ! </h3>
+                      <p>
+                          Cliques sur ce <a href="{{ server }}/account/activate/{{ token }}">lien</a> pour valider définitivement ton inscription au Dev Blog d'Anthony Fachaux !
+                      </p>
+                  </div>                
+              </div>
+          </div>
+      </div>        
+    <hr>
+  </body>
+</html>
+{% endblock %}

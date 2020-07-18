@@ -41,14 +41,29 @@
             <a class="nav-link" href="">Accueil</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="posts">Articles</a>
+            <a class="nav-link" href="posts/1">Articles</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#contact">Contact</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="account/login">Se Connecter</a>
-          </li>
+          {% if session.auth %}
+            <li class="nav-item">
+              <a class="nav-link" class="disabled">
+                <i class="fa fa-user fa-fw"></i> {{ user.login }}
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="account/logout">
+                <i class="fa fa-sign-out-alt"></i>
+              </a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="account/login#login">
+                <i class="fa fa-user fa-fw"></i> Se Connecter
+              </a>
+            </li>  
+          {% endif %}
         </ul>
       </div>
     </div>
@@ -110,7 +125,7 @@
               <a  href="pdf/cv.pdf">MON CV</a>
             </li>
             <li class="list-inline-item">
-              <a href="admin&#47;posts">ADMIN</a>
+              <a href="admin&#47;posts&#47;1">ADMIN</a>
             </li>
           </ul>
           <p class="copyright text-muted">Copyright &copy; Anthony Fachaux 2020 - site réalisé pour <a href="https://openclassrooms.com/">OpenClassrooms</a> - thème <a href="https://startbootstrap.com/previews/clean-blog/">boostrap</a></p>

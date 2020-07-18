@@ -5,14 +5,18 @@ namespace App\Model\Manager;
 
 use \App\Model\Entity\Comment;
 use \App\Model\Repository\CommentRepository;
+use \App\Service\Http\Request;
+use \App\Service\Http\Session;
 
 class CommentManager
 {
     private $commentRepo;
+    private $session;
 
     public function __construct(CommentRepository $commentRepo)
     {
         $this->commentRepo = $commentRepo;
+        $this->session = new Session();
     }
 
     public function getApprovedComments(int $postId, int $offset, int $commentsNumberLimit): array
@@ -52,23 +56,44 @@ class CommentManager
         if ($commentPage > $totalCommentPages) {
             $commentPage=$totalCommentPages; //correcting user input
         };
-        $offset = ($commentPage - 1) * $limit; // offset, to determine the number of the first Post to display
+        $offset = (int)(($commentPage - 1) * $limit); // offset, to determine the number of the first Post to display
 
-        return [$offset, $limit, $totalCommentPages, $commentPage];
+        return ['offset' => $offset, 'limit' => $limit, 'totalCommentPages' => $totalCommentPages, 'commentPage' => $commentPage];
     }
 
     public function addCommentToPost(int $postId, int $authorId, string $comment): bool
     {
-        return $this->commentRepo->insertCommentToPost($postId, $authorId, $comment);
+        if (($comment === '') || (mb_strlen($comment) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($comment) < Request::MIN_TEXTAREA_LENGTH)) {
+            $this->session->setSession(['error' => "Commentaire vide ou trop long."]);
+            return false;
+        }
+        
+        $req = $this->commentRepo->insertCommentToPost($postId, $authorId, $comment);
+        if ($req === false) {
+            $this->session->setSession(['error' => "Erreur inconnue, impossible d'ajouter le commentaire."]);
+            return false;
+        }
+        
+        return $req;
     }
 
     public function approveComment(int $commentId): bool
     {
-        return $this->commentRepo->setCommentToApproved($commentId);
+        if ($this->commentRepo->setCommentToApproved($commentId) === false) {
+            $this->session->setSession(['error' => "Impossible d'approuver le commentaire : identifiant de commentaire invalide ou erreur à l'enregistrement."]);
+            return false;
+        }
+        
+        return true;
     }
 
     public function refuseComment(int $commentId): bool
     {
-        return $this->commentRepo->deleteComment($commentId);
+        if ($this->commentRepo->deleteComment($commentId) === false) {
+            $this->session->setSession(['error' => "Impossible de supprimer le commentaire : identifiant de commentaire invalide ou erreur à la suppression."]);
+            return false;
+        }
+        
+        return true;
     }
 }

@@ -10,11 +10,12 @@ class User
     private $password;
     private $email;
     private $type;
+    private $activated;
     private $token;
     private $created;
     private $lastUpdate;
 
-    public function __construct($data = [])
+    public function __construct(array $data = [])
     {
         if (!empty($data)) {
             $this->hydrate($data);
@@ -85,6 +86,17 @@ class User
     public function setType(string $type): self
     {
         $this->type = $type;
+        return $this;
+    }
+
+    public function getActivated(): int
+    {
+        return $this->activated;
+    }
+
+    public function setActivated(int $activated): self
+    {
+        $this->activated = $activated;
         return $this;
     }
 

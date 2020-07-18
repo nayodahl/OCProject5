@@ -8,9 +8,10 @@ use \App\Model\Repository\PostRepository;
 use \App\Model\Manager\PostManager;
 use \App\Model\Repository\CommentRepository;
 use \App\Model\Manager\CommentManager;
-//use \App\Model\Repository\UserRepository;
-//use \App\Model\Manager\UserManager;
 use \App\Service\Http\Request;
+use \App\Service\Http\Session;
+use \App\Service\Auth;
+use \App\Model\Entity\User;
 
 class PostController
 {
@@ -19,6 +20,8 @@ class PostController
     private $postManager;
     private $commentRepo;
     private $commentManager;
+    private $session;
+    private $auth;
 
     public function __construct()
     {
@@ -27,24 +30,31 @@ class PostController
         $this->postManager = new PostManager($this->postRepo);
         $this->commentRepo = new CommentRepository();
         $this->commentManager = new CommentManager($this->commentRepo);
+        $this->session = new Session();
+        $this->auth = new Auth();
     }
 
     // Render homepage, by getting the last 4 most recent posts
     public function home(): void
     {
         $listPosts = $this->postManager->getHomepagePosts();
-        $this->renderer->render('frontoffice/HomePage.twig', ['listposts' => $listPosts]);
+        $this->renderer->render('frontoffice/HomePage.twig', [
+            'listposts' => $listPosts,
+            'session' => $this->session->getSession(),
+            'user' => $this->auth->user()
+            ]);
+        $this->session->remove('success')->remove('error')->remove('info');
     }
     
     // Render the single Post view
     public function showSinglePost(Request $request): void
     {
-        $postId=((int)$request->getGet()[1]);
-        $commentPage=((int)$request->getGet()[2]);
+        $postId=$request->getPostId();
+        $commentPage=$request->getCommentPage();
 
         $post = $this->postManager->getSinglePost($postId);
-        if ($post->getPostId() === 0) {
-            header('location: ../error/404');
+        if ($post === null) {
+            header('location: ../../posts/1');
             exit();
         }
         $nextId = $this->postManager->getNextPostId($postId);
@@ -52,10 +62,10 @@ class PostController
         $totalComments = $this->commentManager->getNumberOfApprovedCommentsFromPost($postId); // total number of Comments
         $pagerArray = $this->postManager->getSinglePostPager($commentPage, $totalComments);
         
-        $offset = $pagerArray[0];
-        $limit = $pagerArray[1];
-        $totalCommentPages =  $pagerArray[2];
-        $commentPage= $pagerArray[3];
+        $offset = $pagerArray['offset'];
+        $limit = $pagerArray['limit'];
+        $totalCommentPages =  $pagerArray['totalCommentPages'];
+        $commentPage= $pagerArray['commentPage'];
 
         $listComments = $this->commentManager->getApprovedComments($postId, (int)$offset, $limit);
 
@@ -67,21 +77,24 @@ class PostController
             'currentPage' => $commentPage,
             'totalPages' => $totalCommentPages,
             'prevId' => $prevId,
-            'nextId' => $nextId
+            'nextId' => $nextId,
+            'session' => $this->session->getSession(),
+            'user' => $this->auth->user()
             ]);
+        $this->session->remove('success')->remove('error');
     }
 
     // Render Posts Page
     public function showPostsPage(Request $request): void
     {
-        $currentPage=((int)$request->getGet()[1]);
+        $currentPage=$request->getPostsPage();
        
         $totalItems = $this->postManager->getNumberOfPosts(); // total number of Posts
         $pagerArray = $this->postManager->getPostsPagePager($currentPage, $totalItems);
-        $offset = $pagerArray[0];
-        $limit = $pagerArray[1];
-        $totalPages = $pagerArray[2];
-        $currentPage = $pagerArray[3];
+        $offset = $pagerArray['offset'];
+        $limit = $pagerArray['limit'];
+        $totalPages = $pagerArray['totalPages'];
+        $currentPage = $pagerArray['currentPage'];
 
         // getting the Posts from DB
         $listPosts = $this->postManager->getPostsPage((int)$offset, $limit);
@@ -89,27 +102,34 @@ class PostController
         $this->renderer->render('frontoffice/PostsPage.twig', [
             'listposts' => $listPosts,
             'currentPage' => $currentPage,
-            'totalPages' => $totalPages
+            'totalPages' => $totalPages,
+            'session' => $this->session->getSession(),
+            'user' => $this->auth->user()
             ]);
+        $this->session->remove('success')->remove('error');
     }
 
     // Add comment in DB
     public function addComment(Request $request): void
     {
-        $postId=(int)$request->getGet()[1];
-        $authorId = 8;  //temporary, will need the id from session and checks if loggued
-        $comment = $request->getPost()['comment'];
-        
-        $req = $this->commentManager->addCommentToPost($postId, $authorId, $comment);
+        // access control, check is user is logged
+        $user = $this->auth->user();
+        $authorId = ($user !== null) ? $user->getUserId() : null;
 
-        if ($req === true) {
-            echo "Votre commentaire va être soumis à validation.";
-            header("location: ../post/$postId#comments");
+        if ($user === null) {
+            $this->session->setSession(['error' => "Vous devez être authentifié pour pouvoir commenter un article."]);
+            header("location: ../account/login#login");
             exit();
         }
+        
+        $postId=$request->getPostId();
+        $comment = $request->getCommentFormData();
 
-        echo "Impossible d'ajouter le commentaire <br>";
-        header("location: ../post/$postId#comments");
+        if (($this->commentManager->addCommentToPost($postId, $authorId, $comment)) === true) {
+            $this->session->setSession(['success' => "Votre commentaire est enregistré et en attente de validation."]);
+        }
+
+        header("location: ../post/$postId/1#comments");
         exit();
     }
 }
