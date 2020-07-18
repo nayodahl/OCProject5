@@ -74,7 +74,7 @@ class Router
                 
                 // when request param in route is an int, we set this regex
                 if (preg_match('/[0-9]/', $route['route']) === 1) {
-                    $regex1 = mb_substr($route['route'], 0, mb_strpos($route['route'], '[')) . '[0-9]/?[0-9]?';
+                    $regex1 = mb_substr($route['route'], 0, mb_strpos($route['route'], '[')) . '[0-9]{1,}/?[0-9]?';
                     $regex2 = "`^$regex1$`u";
                     $match = preg_match($regex2, $requestUrl) === 1;
                 }
