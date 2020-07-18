@@ -51,7 +51,7 @@ class UserManager
     public function promoteUser(int $userId): bool
     {
         if ($this->userRepo->updateUserType($userId, 'admin') === false) {
-            $this->session->setSession(['error' => "Impossible de donner les droits admin à l'utilisateur : identifiant d'utilisateur invalide ou erreur à l'enregistrement"]);
+            $this->session->setSession(['error' => "Impossible de donner les droits admin à l'utilisateur : identifiant d'utilisateur invalide ou erreur à l'enregistrement."]);
             return false;
         }
         
@@ -66,7 +66,7 @@ class UserManager
             return false;
         }
         if ($this->userRepo->updateUserType($userId, 'member') === false) {
-            $this->session->setSession(['error' => "Impossible de retirer les droits admin à l'utilisateur : identifiant d'utilisateur invalide ou erreur à l'enregistrement"]);
+            $this->session->setSession(['error' => "Impossible de retirer les droits admin à l'utilisateur : identifiant d'utilisateur invalide ou erreur à l'enregistrement."]);
             return false;
         }
         return true;
@@ -83,15 +83,11 @@ class UserManager
         }
         $user = $this->userRepo->checkLogin($login, $password);
         if ($user === null) {
-            $this->session->setSession(['error' => "Identifiant ou mot de passe incorrect, ou utilisateur non activé (vérifiez vos mails)"]);
+            $this->session->setSession(['error' => "Identifiant ou mot de passe incorrect, ou utilisateur non activé (vérifiez vos mails)."]);
 
             return null;
         }
-        $this->session->setSession([
-            'auth' => $user->getUserId(),
-            'success' => "Connexion réussie."
-        ]);
-
+        $this->session->setSession(['auth' => $user->getUserId(), 'success' => "Connexion réussie."]);
         return $user;
     }
 

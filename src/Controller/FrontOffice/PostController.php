@@ -43,9 +43,7 @@ class PostController
             'session' => $this->session->getSession(),
             'user' => $this->auth->user()
             ]);
-        $this->session->remove('success');
-        $this->session->remove('error');
-        $this->session->remove('info');
+        $this->session->remove('success')->remove('error')->remove('info');
     }
     
     // Render the single Post view
@@ -83,8 +81,7 @@ class PostController
             'session' => $this->session->getSession(),
             'user' => $this->auth->user()
             ]);
-        $this->session->remove('success');
-        $this->session->remove('error');
+        $this->session->remove('success')->remove('error');
     }
 
     // Render Posts Page
@@ -109,8 +106,7 @@ class PostController
             'session' => $this->session->getSession(),
             'user' => $this->auth->user()
             ]);
-        $this->session->remove('success');
-        $this->session->remove('error');
+        $this->session->remove('success')->remove('error');
     }
 
     // Add comment in DB

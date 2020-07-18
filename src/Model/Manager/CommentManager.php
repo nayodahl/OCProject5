@@ -64,13 +64,13 @@ class CommentManager
     public function addCommentToPost(int $postId, int $authorId, string $comment): bool
     {
         if (($comment === '') || (mb_strlen($comment) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($comment) < Request::MIN_TEXTAREA_LENGTH)) {
-            $this->session->setSession(['error' => "Commentaire vide ou trop long"]);
+            $this->session->setSession(['error' => "Commentaire vide ou trop long."]);
             return false;
         }
         
         $req = $this->commentRepo->insertCommentToPost($postId, $authorId, $comment);
         if ($req === false) {
-            $this->session->setSession(['error' => "Erreur inconnue, impossible d'ajouter le commentaire"]);
+            $this->session->setSession(['error' => "Erreur inconnue, impossible d'ajouter le commentaire."]);
             return false;
         }
         
@@ -80,7 +80,7 @@ class CommentManager
     public function approveComment(int $commentId): bool
     {
         if ($this->commentRepo->setCommentToApproved($commentId) === false) {
-            $this->session->setSession(['error' => "Impossible d'approuver le commentaire : identifiant de commentaire invalide ou erreur à l'enregistrement"]);
+            $this->session->setSession(['error' => "Impossible d'approuver le commentaire : identifiant de commentaire invalide ou erreur à l'enregistrement."]);
             return false;
         }
         
@@ -90,7 +90,7 @@ class CommentManager
     public function refuseComment(int $commentId): bool
     {
         if ($this->commentRepo->deleteComment($commentId) === false) {
-            $this->session->setSession(['error' => "Impossible de supprimer le commentaire : identifiant de commentaire invalide ou erreur à la suppression"]);
+            $this->session->setSession(['error' => "Impossible de supprimer le commentaire : identifiant de commentaire invalide ou erreur à la suppression."]);
             return false;
         }
         

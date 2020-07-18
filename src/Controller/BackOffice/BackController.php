@@ -74,8 +74,7 @@ class BackController
             'session' => $this->session->getSession(),
             'user' => $user
             ]);
-        $this->session->remove('success');
-        $this->session->remove('error');
+        $this->session->remove('success')->remove('error');
     }
     
     public function showEditPost(Request $request): void
@@ -109,8 +108,7 @@ class BackController
             'session' => $this->session->getSession(),
             'user' => $user
             ]);
-        $this->session->remove('success');
-        $this->session->remove('error');
+        $this->session->remove('success')->remove('error');
     }
 
     public function modifyPost(Request $request): void
@@ -189,8 +187,7 @@ class BackController
             'session' => $this->session->getSession(),
             'user' => $user
             ]);
-        $this->session->remove('success');
-        $this->session->remove('error');
+        $this->session->remove('success')->remove('error');
     }
 
     public function addPost(Request $request): void
@@ -257,8 +254,7 @@ class BackController
             'session' => $this->session->getSession(),
             'user' => $user
             ]);
-        $this->session->remove('success');
-        $this->session->remove('error');
+        $this->session->remove('success')->remove('error');
     }
 
     public function approve(Request $request): void
@@ -342,8 +338,7 @@ class BackController
             'session' => $this->session->getSession(),
             'user' => $user
             ]);
-        $this->session->remove('success');
-        $this->session->remove('error');
+        $this->session->remove('success')->remove('error');
     }
 
     public function promote(Request $request): void

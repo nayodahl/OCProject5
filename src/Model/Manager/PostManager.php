@@ -94,12 +94,12 @@ class PostManager
         || ($chapo == '') || (mb_strlen($chapo) > Request::MAX_STRING_LENGTH) || (mb_strlen($chapo) < Request::MIN_STRING_LENGTH)
         || ($authorId === null)
         || ($content == '') || (mb_strlen($content) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($content) < Request::MIN_TEXTAREA_LENGTH)) {
-            $this->session->setSession(['error' => "Champ(s) vide(s) ou trop long(s) ou auteur invalide"]);
+            $this->session->setSession(['error' => "Champ(s) vide(s) ou trop long(s) ou auteur invalide."]);
             return false;
         }
         
         if ($this->postRepo->updatePost($postId, $title, $chapo, $authorId, $content) === false) {
-            $this->session->setSession(['error' => "Impossible de modifier l'article : identifiant d'article ou d'auteur invalide ou erreur à l'enregistrement"]);
+            $this->session->setSession(['error' => "Impossible de modifier l'article : identifiant d'article ou d'auteur invalide ou erreur à l'enregistrement."]);
             return false;
         }
         
@@ -112,13 +112,13 @@ class PostManager
         || ($chapo == '') || (mb_strlen($chapo) > Request::MAX_STRING_LENGTH) || (mb_strlen($chapo) < Request::MIN_STRING_LENGTH)
         || ($authorId === null)
         || ($content == '') || (mb_strlen($content) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($content) < Request::MIN_TEXTAREA_LENGTH)) {
-            $this->session->setSession(['error' => "Champ(s) vide(s) ou trop long(s) ou auteur invalide"]);
+            $this->session->setSession(['error' => "Champ(s) vide(s) ou trop long(s) ou auteur invalide."]);
             return null;
         }
         
         $req = $this->postRepo->addPost($title, $chapo, $authorId, $content);
         if ($req === null) {
-            $this->session->setSession(['error' => "Impossible de publier l'article : auteur invalide ou erreur à l'enregistrement"]);
+            $this->session->setSession(['error' => "Impossible de publier l'article : auteur invalide ou erreur à l'enregistrement."]);
             return null;
         }
 
@@ -128,7 +128,7 @@ class PostManager
     public function deletePost(int $postId): bool
     {
         if ($this->postRepo->deleteOnePost($postId) === false) {
-            $this->session->setSession(['error' => "Impossible de supprimer l'article : identifiant d'article invalide ou erreur à la suppression"]);
+            $this->session->setSession(['error' => "Impossible de supprimer l'article : identifiant d'article invalide ou erreur à la suppression."]);
             return false;
         }
         return true;

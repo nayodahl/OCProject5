@@ -52,8 +52,7 @@ class AccountController
         $this->renderer->render('frontoffice/LoginPage.twig', [
             'session' => $this->session->getSession()
         ]);
-        $this->session->remove('success');
-        $this->session->remove('error');
+        $this->session->remove('success')->remove('error');
     }
 
     // Render Signin Page
@@ -69,10 +68,7 @@ class AccountController
         $this->renderer->render('frontoffice/SigninPage.twig', [
             'session' => $this->session->getSession()
         ]);
-        $this->session->remove('success');
-        $this->session->remove('error');
-
-        // $objet->settoto1()->settoto2()->settoto(); //
+        $this->session->remove('success')->remove('error');
     }
 
     // Contact Form
