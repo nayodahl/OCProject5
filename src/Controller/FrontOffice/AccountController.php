@@ -12,6 +12,7 @@ use \App\Model\Repository\UserRepository;
 use \App\Model\Manager\UserManager;
 use \App\Service\Http\Request;
 use \App\Service\Http\Session;
+use \App\Service\Auth;
 
 class AccountController
 {
@@ -23,6 +24,7 @@ class AccountController
     private $userRepo;
     private $userManager;
     private $session;
+    private $auth;
 
     public function __construct()
     {
@@ -34,11 +36,19 @@ class AccountController
         $this->userRepo = new UserRepository();
         $this->userManager = new UserManager($this->userRepo);
         $this->session = new Session();
+        $this->auth = new Auth();
     }
 
     // Render Login Page
     public function showLoginPage(): void
     {
+        // access control, check is user is not logged
+        if ($this->auth->user() !== null) {
+            $this->session->setSession(['error' => "Vous êtes déjà connecté(e)"]);
+            header('location: ../posts/1');
+            exit();
+        }
+
         $this->renderer->render('frontoffice/LoginPage.twig', [
             'session' => $this->session->getSession()
         ]);
@@ -49,6 +59,13 @@ class AccountController
     // Render Signin Page
     public function showSigninPage(): void
     {
+        // access control, check is user is not logged
+        if ($this->auth->user() !== null) {
+            $this->session->setSession(['error' => "Vous êtes déjà connecté(e) et avez donc un compte"]);
+            header('location: ../posts/1');
+            exit();
+        }
+        
         $this->renderer->render('frontoffice/SigninPage.twig', [
             'session' => $this->session->getSession()
         ]);
@@ -103,6 +120,13 @@ class AccountController
     // Login Form
     public function loginForm(Request $request): void
     {
+        // access control, check is user is not logged
+        if ($this->auth->user() !== null) {
+            $this->session->setSession(['error' => "Vous êtes déjà connecté(e)"]);
+            header('location: ../posts/1');
+            exit();
+        }
+        
         $formData = $request->getLoginFormData();
         $login = $formData['login'];
         $password = $formData['password'];
@@ -110,10 +134,6 @@ class AccountController
         $user = $this->userManager->login($login, $password);
         
         if ($user !== null) {
-            $this->session->setSession([
-                'auth' => $user->getUserId(),
-                'success' => "Connexion réussie."
-            ]);
             header('location: ../');
             exit();
         }
@@ -121,9 +141,24 @@ class AccountController
         exit();
     }
 
+    // Logout
+    public function logout(): void
+    {
+        $this->session->destroy();
+        header('location: ../');
+        exit();
+    }
+
     // Signin Form
     public function signinForm(Request $request): void
     {
+        // access control, check is user is not logged
+        if ($this->auth->user() !== null) {
+            $this->session->setSession(['error' => "Vous êtes déjà connecté(e) et avez donc un compte"]);
+            header('location: ../posts/1');
+            exit();
+        }
+        
         $formData = $request->getSigninFormData();
         $login = $formData['login'];
         $password = $formData['password'];
@@ -161,6 +196,13 @@ class AccountController
     //activate user
     public function activate(Request $request): void
     {
+        // access control, check is user is not logged
+        if ($this->auth->user() !== null) {
+            $this->session->setSession(['error' => "Vous êtes déjà connecté(e) et avez donc un compte"]);
+            header('location: ../posts/1');
+            exit();
+        }
+
         $req = $this->userManager->activateUser($request->getToken());
 
         if ($req === true) {

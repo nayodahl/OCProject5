@@ -19,6 +19,7 @@ $router->register('GET', '/posts/[0-9]', 'postController', 'showPostsPage'); // 
 $router->register('GET', '/post/[0-9]/[0-9]', 'postController', 'showSinglePost');//                /post/$postId/$commentPage
 $router->register('POST', '/addcomment/[0-9]', 'postController', 'addComment');//                   /addcomment/$postId
 $router->register('GET', '/account/login', 'accountController', 'showLoginPage');//                 /account/login
+$router->register('GET', '/account/logout', 'accountController', 'logout');     //                 /account/logout
 $router->register('POST', '/account/login', 'accountController', 'loginForm');//                    /account/login
 $router->register('GET', '/account/signin', 'accountController', 'showSigninPage');//               /account/signin
 $router->register('POST', '/account/signin', 'accountController', 'signinForm');//                  /account/signin

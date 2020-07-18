@@ -10,6 +10,8 @@ use \App\Model\Repository\CommentRepository;
 use \App\Model\Manager\CommentManager;
 use \App\Service\Http\Request;
 use \App\Service\Http\Session;
+use \App\Service\Auth;
+use \App\Model\Entity\User;
 
 class PostController
 {
@@ -19,6 +21,7 @@ class PostController
     private $commentRepo;
     private $commentManager;
     private $session;
+    private $auth;
 
     public function __construct()
     {
@@ -28,6 +31,7 @@ class PostController
         $this->commentRepo = new CommentRepository();
         $this->commentManager = new CommentManager($this->commentRepo);
         $this->session = new Session();
+        $this->auth = new Auth();
     }
 
     // Render homepage, by getting the last 4 most recent posts
@@ -36,7 +40,8 @@ class PostController
         $listPosts = $this->postManager->getHomepagePosts();
         $this->renderer->render('frontoffice/HomePage.twig', [
             'listposts' => $listPosts,
-            'session' => $this->session->getSession()
+            'session' => $this->session->getSession(),
+            'user' => $this->auth->user()
             ]);
         $this->session->remove('success');
         $this->session->remove('error');
@@ -75,7 +80,8 @@ class PostController
             'totalPages' => $totalCommentPages,
             'prevId' => $prevId,
             'nextId' => $nextId,
-            'session' => $this->session->getSession()
+            'session' => $this->session->getSession(),
+            'user' => $this->auth->user()
             ]);
         $this->session->remove('success');
         $this->session->remove('error');
@@ -100,7 +106,8 @@ class PostController
             'listposts' => $listPosts,
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
-            'session' => $this->session->getSession()
+            'session' => $this->session->getSession(),
+            'user' => $this->auth->user()
             ]);
         $this->session->remove('success');
         $this->session->remove('error');
@@ -109,8 +116,17 @@ class PostController
     // Add comment in DB
     public function addComment(Request $request): void
     {
+        // access control, check is user is logged
+        $user = $this->auth->user();
+        $authorId = ($user !== null) ? $user->getUserId() : null;
+
+        if ($user === null) {
+            $this->session->setSession(['error' => "Vous devez être authentifié pour pouvoir commenter un article."]);
+            header("location: ../account/login#login");
+            exit();
+        }
+        
         $postId=$request->getPostId();
-        $authorId = 8;  //temporary, will need the id from session and checks if loggued
         $comment = $request->getCommentFormData();
 
         if (($this->commentManager->addCommentToPost($postId, $authorId, $comment)) === true) {

@@ -10,8 +10,10 @@ use \App\Model\Repository\CommentRepository;
 use \App\Model\Manager\CommentManager;
 use \App\Model\Repository\UserRepository;
 use \App\Model\Manager\UserManager;
+use \App\Model\Entity\User;
 use \App\Service\Http\Request;
 use \App\Service\Http\Session;
+use \App\Service\Auth;
 
 class BackController
 {
@@ -23,6 +25,7 @@ class BackController
     private $userManager;
     private $userRepo;
     private $session;
+    private $auth;
 
     public function __construct()
     {
@@ -34,11 +37,24 @@ class BackController
         $this->userRepo = new UserRepository();
         $this->userManager = new UserManager($this->userRepo);
         $this->session = new Session();
+        $this->auth = new Auth();
     }
 
     // Render Posts Manager page (default)
     public function showPostsManager(Request $request): void
     {
+        // access control, check is user is logged and admin
+        $user = $this->auth->user();
+        $userId = ($user !== null) ? $user->getUserId() : null;
+        if ($userId === null) {
+            header("location: ../../account/login#login");
+            exit();
+        }
+        if ($this->auth->isAdmin($userId) === false) {
+            header("location: ../../posts/1");
+            exit();
+        }
+        
         $currentPage=$request->getPostsManagerPage();
 
         $totalItems = $this->postManager->getNumberOfPosts(); // total number of Posts
@@ -55,7 +71,8 @@ class BackController
             'listposts' => $listPosts,
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
-            'session' => $this->session->getSession()
+            'session' => $this->session->getSession(),
+            'user' => $user
             ]);
         $this->session->remove('success');
         $this->session->remove('error');
@@ -63,6 +80,18 @@ class BackController
     
     public function showEditPost(Request $request): void
     {
+        // access control, check is user is logged and admin
+        $user = $this->auth->user();
+        $userId = ($user !== null) ? $user->getUserId() : null;
+        if ($userId === null) {
+            header("location: ../../account/login#login");
+            exit();
+        }
+        if ($this->auth->isAdmin($userId) === false) {
+            header("location: ../../posts/1");
+            exit();
+        }
+        
         $postId=$request->getEditPostId();
         $post = $this->postManager->getSinglePost($postId);
         if ($post === null) {
@@ -77,7 +106,8 @@ class BackController
             'post' => $post,
             'postId' => $postId,
             'adminUsers' => $adminUsers,
-            'session' => $this->session->getSession()
+            'session' => $this->session->getSession(),
+            'user' => $user
             ]);
         $this->session->remove('success');
         $this->session->remove('error');
@@ -85,6 +115,18 @@ class BackController
 
     public function modifyPost(Request $request): void
     {
+        // access control, check is user is logged and admin
+        $user = $this->auth->user();
+        $userId = ($user !== null) ? $user->getUserId() : null;
+        if ($userId === null) {
+            header("location: ../../account/login#login");
+            exit();
+        }
+        if ($this->auth->isAdmin($userId) === false) {
+            header("location: ../../posts/1");
+            exit();
+        }
+        
         $postId=$request->getEditPostId();
         $formData = $request->getPostFormData();
         $title = $formData['title'];
@@ -105,6 +147,18 @@ class BackController
 
     public function delete(Request $request): void
     {
+        // access control, check is user is logged and admin
+        $user = $this->auth->user();
+        $userId = ($user !== null) ? $user->getUserId() : null;
+        if ($userId === null) {
+            header("location: ../../account/login#login");
+            exit();
+        }
+        if ($this->auth->isAdmin($userId) === false) {
+            header("location: ../../posts/1");
+            exit();
+        }
+
         $postId=$request->getEditPostId();
         if ($this->postManager->deletePost($postId) === true) {
             $this->session->setSession(['success' => "Article supprimé."]);
@@ -117,10 +171,23 @@ class BackController
 
     public function showAddPost(): void
     {
+        // access control, check is user is logged and admin
+        $user = $this->auth->user();
+        $userId = ($user !== null) ? $user->getUserId() : null;
+        if ($userId === null) {
+            header("location: ../../account/login#login");
+            exit();
+        }
+        if ($this->auth->isAdmin($userId) === false) {
+            header("location: ../../posts/1");
+            exit();
+        }
+
         $adminUsers = $this->userManager->getAdminUsers();
         $this->renderer->render('backoffice/AddPost.twig', [
             'adminUsers' => $adminUsers,
-            'session' => $this->session->getSession()
+            'session' => $this->session->getSession(),
+            'user' => $user
             ]);
         $this->session->remove('success');
         $this->session->remove('error');
@@ -128,6 +195,18 @@ class BackController
 
     public function addPost(Request $request): void
     {
+        // access control, check is user is logged and admin
+        $user = $this->auth->user();
+        $userId = ($user !== null) ? $user->getUserId() : null;
+        if ($userId === null) {
+            header("location: ../../account/login#login");
+            exit();
+        }
+        if ($this->auth->isAdmin($userId) === false) {
+            header("location: ../../posts/1");
+            exit();
+        }
+        
         $formData = $request->getPostFormData();
         $title = $formData['title'];
         $chapo = $formData['chapo'];
@@ -147,6 +226,18 @@ class BackController
 
     public function showCommentsManager(Request $request): void
     {
+        // access control, check is user is logged and admin
+        $user = $this->auth->user();
+        $userId = ($user !== null) ? $user->getUserId() : null;
+        if ($userId === null) {
+            header("location: ../../account/login#login");
+            exit();
+        }
+        if ($this->auth->isAdmin($userId) === false) {
+            header("location: ../../posts/1");
+            exit();
+        }
+        
         $commentPage=$request->getCommentManagerPage();
        
         $totalComments = $this->commentManager->getNumberofNotApprovedComments(); // total number of Comments
@@ -163,7 +254,8 @@ class BackController
             'listcomments' => $listComments,
             'currentPage' => $commentPage,
             'totalPages' => $totalCommentPages,
-            'session' => $this->session->getSession()
+            'session' => $this->session->getSession(),
+            'user' => $user
             ]);
         $this->session->remove('success');
         $this->session->remove('error');
@@ -171,6 +263,18 @@ class BackController
 
     public function approve(Request $request): void
     {
+        // access control, check is user is logged and admin
+        $user = $this->auth->user();
+        $userId = ($user !== null) ? $user->getUserId() : null;
+        if ($userId === null) {
+            header("location: ../../account/login#login");
+            exit();
+        }
+        if ($this->auth->isAdmin($userId) === false) {
+            header("location: ../../posts/1");
+            exit();
+        }
+        
         $commentId=$request->getCommentId();
         if ($this->commentManager->approveComment($commentId) === true) {
             $this->session->setSession(['success' => "Commentaire approuvé."]);
@@ -183,6 +287,18 @@ class BackController
 
     public function refuse(Request $request): void
     {
+        // access control, check is user is logged and admin
+        $user = $this->auth->user();
+        $userId = ($user !== null) ? $user->getUserId() : null;
+        if ($userId === null) {
+            header("location: ../../account/login#login");
+            exit();
+        }
+        if ($this->auth->isAdmin($userId) === false) {
+            header("location: ../../posts/1");
+            exit();
+        }
+
         $commentId=$request->getCommentId();
         if ($this->commentManager->refuseComment($commentId) === true) {
             $this->session->setSession(['success' => "Commentaire supprimé."]);
@@ -195,6 +311,18 @@ class BackController
 
     public function showUsersManager(Request $request): void
     {
+        // access control, check is user is logged and superadmin
+        $user = $this->auth->user();
+        $userId = ($user !== null) ? $user->getUserId() : null;
+        if ($userId === null) {
+            header("location: ../../account/login#login");
+            exit();
+        }
+        if ($this->auth->isSuperAdmin($userId) === false) {
+            header("location: ../../admin/posts/1");
+            exit();
+        }
+        
         $userPage=$request->getUserManagerPage();
 
         $totalUsers = $this->userManager->getNumberOfUsers();
@@ -211,7 +339,8 @@ class BackController
             'listUsers' => $listUsers,
             'currentPage' => $userPage,
             'totalPages' => $totalUserPages,
-            'session' => $this->session->getSession()
+            'session' => $this->session->getSession(),
+            'user' => $user
             ]);
         $this->session->remove('success');
         $this->session->remove('error');
@@ -219,8 +348,20 @@ class BackController
 
     public function promote(Request $request): void
     {
-        $userId=$request->getUserId();
-        if ($this->userManager->promoteUser($userId) === true) {
+        // access control, check is user is logged and superadmin
+        $user = $this->auth->user();
+        $userId = ($user !== null) ? $user->getUserId() : null;
+        if ($userId === null) {
+            header("location: ../../account/login#login");
+            exit();
+        }
+        if ($this->auth->isSuperAdmin($userId) === false) {
+            header("location: ../../admin/posts/1");
+            exit();
+        }
+
+        $user=$request->getUserId();
+        if ($this->userManager->promoteUser($user) === true) {
             $this->session->setSession(['success' => "Droits admin donnés à l'utilisateur."]);
             header("location: ../../admin/members/1");
             exit();
@@ -231,8 +372,20 @@ class BackController
 
     public function demote(Request $request): void
     {
-        $userId=$request->getUserId();
-        if ($this->userManager->demoteUser($userId) === true) {
+        // access control, check is user is logged and superadmin
+        $user = $this->auth->user();
+        $userId = ($user !== null) ? $user->getUserId() : null;
+        if ($userId === null) {
+            header("location: ../../account/login#login");
+            exit();
+        }
+        if ($this->auth->isSuperAdmin($userId) === false) {
+            header("location: ../../admin/posts/1");
+            exit();
+        }
+        
+        $user=$request->getUserId();
+        if ($this->userManager->demoteUser($user) === true) {
             $this->session->setSession(['success' => "Droits admin retirés à l'utilisateur."]);
             header("location: ../../admin/members/1");
             exit();

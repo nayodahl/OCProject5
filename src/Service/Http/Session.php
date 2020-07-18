@@ -23,11 +23,14 @@ class Session
         return $this->session;
     }
 
-    public function setSession(array $session): self
+    public function setSession(array $addedArray): self
     {
-        $this->session = $session;
-        $_SESSION = $session;
+        if (count($this->session) > 0) {
+            $this->session = $_SESSION = array_merge($this->session, $addedArray);
+            return $this;
+        }
 
+        $this->session = $_SESSION = $addedArray;
         return $this;
     }
     
@@ -37,5 +40,12 @@ class Session
         unset($_SESSION[$session]);
 
         return $this;
+    }
+
+    public function destroy(): void
+    {
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_destroy();
+        }
     }
 }

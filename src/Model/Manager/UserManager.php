@@ -81,13 +81,18 @@ class UserManager
                 
             return null;
         }
-        $req = $this->userRepo->checkLogin($login, $password);
-        if ($req === null) {
-            $this->session->setSession(['error' => "Identifiant ou mot de passe incorrect."]);
+        $user = $this->userRepo->checkLogin($login, $password);
+        if ($user === null) {
+            $this->session->setSession(['error' => "Identifiant ou mot de passe incorrect, ou utilisateur non activé (vérifiez vos mails)"]);
 
             return null;
         }
-        return $req;
+        $this->session->setSession([
+            'auth' => $user->getUserId(),
+            'success' => "Connexion réussie."
+        ]);
+
+        return $user;
     }
 
     public function activateUser(string $token): bool
