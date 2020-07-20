@@ -41,7 +41,8 @@ class PostController
         $this->renderer->render('frontoffice/HomePage.twig', [
             'listposts' => $listPosts,
             'session' => $this->session->getSession(),
-            'user' => $this->auth->user()
+            'user' => $this->auth->user(),
+            'token' => $this->auth->generateToken()
             ]);
         $this->session->remove('success')->remove('error')->remove('info');
     }
@@ -79,7 +80,8 @@ class PostController
             'prevId' => $prevId,
             'nextId' => $nextId,
             'session' => $this->session->getSession(),
-            'user' => $this->auth->user()
+            'user' => $this->auth->user(),
+            'token' => $this->auth->generateToken()
             ]);
         $this->session->remove('success')->remove('error');
     }
@@ -121,9 +123,18 @@ class PostController
             header("location: ../account/login#login");
             exit();
         }
-        
+       
         $postId=$request->getPostId();
-        $comment = $request->getCommentFormData();
+        $formData = $request->getCommentFormData();
+        $comment = $formData['comment'];
+        $token = $formData['token'];
+
+        // access control, check token from form
+        if ($this->auth->checkToken($token) === false) {
+            $this->session->setSession(['error' => "Erreur de token"]);
+            header("location: ../post/$postId/1#comments");
+            exit();
+        }
 
         if (($this->commentManager->addCommentToPost($postId, $authorId, $comment)) === true) {
             $this->session->setSession(['success' => "Votre commentaire est enregistré et en attente de validation."]);

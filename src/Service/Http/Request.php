@@ -79,12 +79,17 @@ class Request
         return $this->get[2];
     }
 
-    public function getCommentFormData(): ?string
+    public function getCommentFormData(): ?array
     {
         if ($this->post !== null) {
-            $this->post = ['comment' => $this->sanitizeTextArea($this->post['comment'])];
-            
-            return $this->post['comment'];
+            $this->post = [
+                'comment' => $this->sanitizeTextArea($this->post['comment']),
+                'token' => $this->post['token']
+        ];
+            return [
+                'comment' => $this->post['comment'],
+                'token' => $this->post['token']
+            ];
         }
     }
 

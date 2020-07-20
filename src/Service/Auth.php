@@ -59,4 +59,23 @@ class Auth
         
         return true;
     }
+
+    public function generateToken(): string
+    {
+        $token = bin2hex(random_bytes(64));
+        $this->session->setSession(['token' => $token]);
+        
+        return $token;
+    }
+
+    public function checkToken(string $token): bool
+    {
+        if (isset($this->session->getSession()['token']) && !empty($this->session->getSession()['token']) && !empty($token)) {
+            if ($this->session->getSession()['token'] === $token) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 }
