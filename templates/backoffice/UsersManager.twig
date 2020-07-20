@@ -41,10 +41,10 @@
                             <td width="220">{{ user.created }}</td>
                             <td>{{ user.type }}</td>
                             {% if user.type == 'admin' %}
-                                <td><a href="admin/demote/{{ user.userId }}">Retirer</a></td>
+                                <td><a href="super/demote/{{ user.userId }}">Retirer</a></td>
                             {% endif %}
                             {% if user.type == 'member' %}
-                                <td><a href="admin/promote/{{ user.userId }}">Donner</a></td>
+                                <td><a href="super/promote/{{ user.userId }}">Donner</a></td>
                             {% endif %}
                         </tr> 
                         {% endfor %}                        

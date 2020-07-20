@@ -26,18 +26,18 @@ $router->register('POST', '/account/signin', 'accountController', 'signinForm');
 $router->register('GET', '/account/activate/[token]', 'accountController', 'activate');//           /account/activate/
 
 // Back
-$router->register('GET', '/admin/posts/[0-9]', 'backController','showPostsManager');//          /admin/posts/$postsPage
-$router->register('GET', '/admin/post/[0-9]', 'backController', 'showEditPost');//             /admin/post/$postId
-$router->register('POST', '/admin/post/[0-9]', 'backController', 'modifyPost'); //             /admin/post/$postId
-$router->register('GET', '/admin/newpost', 'backController', 'showAddPost');//                      /admin/newpost
-$router->register('POST', '/admin/newpost', 'backController', 'addPost');//                         /admin/newpost
-$router->register('GET', '/admin/delete/[0-9]', 'backController', 'delete');//                 /admin/delete/$postId
-$router->register('GET', '/admin/comments/[0-9]', 'backController', 'showCommentsManager');///admin/comments/$commentPage
-$router->register('GET', '/admin/approve/[0-9]', 'backController', 'approve');//             /admin/approve/$commentId
-$router->register('GET', '/admin/refuse/[0-9]', 'backController', 'refuse');//               /admin/refuse/$commentId
-$router->register('GET', '/admin/members/[0-9]', 'backController', 'showUsersManager');//       /admin/members/$membersPage
-$router->register('GET', '/admin/promote/[0-9]', 'backController', 'promote');//               /admin/promote/$userId
-$router->register('GET', '/admin/demote/[0-9]', 'backController', 'demote');//                 /admin/demote/$userId
+$router->register('GET', '/admin/posts/[0-9]', 'adminController','showPostsManager');//          /admin/posts/$postsPage
+$router->register('GET', '/admin/post/[0-9]', 'adminController', 'showEditPost');//             /admin/post/$postId
+$router->register('POST', '/admin/post/[0-9]', 'adminController', 'modifyPost'); //             /admin/post/$postId
+$router->register('GET', '/admin/newpost', 'adminController', 'showAddPost');//                      /admin/newpost
+$router->register('POST', '/admin/newpost', 'adminController', 'addPost');//                         /admin/newpost
+$router->register('GET', '/admin/delete/[0-9]', 'adminController', 'delete');//                 /admin/delete/$postId
+$router->register('GET', '/admin/comments/[0-9]', 'adminController', 'showCommentsManager');///admin/comments/$commentPage
+$router->register('GET', '/admin/approve/[0-9]', 'adminController', 'approve');//             /admin/approve/$commentId
+$router->register('GET', '/admin/refuse/[0-9]', 'adminController', 'refuse');//               /admin/refuse/$commentId
+$router->register('GET', '/super/members/[0-9]', 'superAdminController', 'showUsersManager');//       /super/members/$membersPage
+$router->register('GET', '/super/promote/[0-9]', 'superAdminController', 'promote');//               /super/promote/$userId
+$router->register('GET', '/super/demote/[0-9]', 'superAdminController', 'demote');//                 /super/demote/$userId
 
 // Error
 $router->register('GET', '/404', 'errorController', 'show404');//                                   /404
