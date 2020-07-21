@@ -53,7 +53,7 @@ class AccountController
             'session' => $this->session->getSession(),
             'token' => $this->auth->generateToken()
         ]);
-        $this->session->remove('success')->remove('error');
+        $this->session->remove('success')->remove('error')->remove('info');
     }
 
     // Render Signin Page
@@ -70,7 +70,7 @@ class AccountController
             'session' => $this->session->getSession(),
             'token' => $this->auth->generateToken()
         ]);
-        $this->session->remove('success')->remove('error');
+        $this->session->remove('success')->remove('error')->remove('info');
     }
 
     // Contact Form
@@ -91,11 +91,11 @@ class AccountController
         }
 
         // input control
-        if ($lastname === null || (mb_strlen($lastname) > Request::MAX_STRING_LENGTH) || (mb_strlen($lastname) < Request::MIN_STRING_LENGTH) ||
-            $firstname === null || (mb_strlen($firstname) > Request::MAX_STRING_LENGTH) || (mb_strlen($lastname) < Request::MIN_STRING_LENGTH) ||
-            $email === null || (mb_strlen($email) > Request::MAX_STRING_LENGTH) || (filter_var($email, FILTER_VALIDATE_EMAIL) === false) ||
-            $message === null || (mb_strlen($message) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($lastname) < Request::MIN_TEXTAREA_LENGTH)
-            ) {
+        $badLastName = ($lastname === null) || (mb_strlen($lastname) > Request::MAX_STRING_LENGTH) || (mb_strlen($lastname) < Request::MIN_STRING_LENGTH);
+        $badFirstName = ($firstname === null) || (mb_strlen($firstname) > Request::MAX_STRING_LENGTH) || (mb_strlen($lastname) < Request::MIN_STRING_LENGTH);
+        $badEmail = ($email === null) || (mb_strlen($email) > Request::MAX_STRING_LENGTH) || (filter_var($email, FILTER_VALIDATE_EMAIL) === false);
+        $badMessage = ($message === null) || (mb_strlen($message) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($lastname) < Request::MIN_TEXTAREA_LENGTH);
+        if ($badLastName || $badFirstName || $badEmail || $badMessage) {
             $this->session->setSession(['error' => "tous les champs ne sont pas remplis ou corrects."]);
             header('location: #contact');
             exit();
@@ -228,14 +228,60 @@ class AccountController
 
         $req = $this->userManager->activateUser($request->getToken());
 
-        if ($req === true) {
+        if ($req === 1) {
             $this->session->setSession(['success' => "Votre inscription est définitivement validée, vous pouvez vous connecter."]);
             header('location: ../login#login');
             exit();
         }
+
+        // if token is no more valid
+        if ($req === 2) {
+            header('location: ../signin#signin');
+            exit();
+        }
        
-        $this->session->setSession(['error' => "Impossible de confirmer votre compte, erreur de token"]);
+        $this->session->setSession(['error' => "Impossible de confirmer votre compte, il y a un problème avec votre lien de confirmation"]);
         header('location: ../signin#signin');
+        exit();
+    }
+
+    // Resend confirmation mail
+    public function resendMail(): void
+    {
+        // access control, check is user is not logged
+        if ($this->auth->isLogged() === true) {
+            $this->session->setSession(['error' => "Vous êtes déjà connecté(e) et avez donc un compte"]);
+            header('location: ../posts/1');
+            exit();
+        }
+        $previousToken = $this->session->getSession()['previousToken'];
+        $req = $this->userManager->signinUserFromToken($previousToken);
+
+        if ($req !== null) {
+            $dest = $req['dest'];
+            $token = $req['token'];
+            $server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'www.blog.nayo.cloud';
+            
+            // rendering html content of mail with twig
+            $subject = $this->renderer->renderMail('frontoffice/signinMail.twig', 'subject');
+            $message = $this->renderer->renderMail('frontoffice/signinMail.twig', 'message', [ 'token' => $token, 'server' => $server ]);
+
+            $headers = [
+                'From' => 'contact@blog.nayo.cloud',
+                'X-Mailer' => 'PHP/' . phpversion(),
+                'MIME-Version' => '1.0',
+                'Content-type' => 'text/html; charset=utf-8'
+            ];
+            
+            // send mail
+            if (mail($dest, $subject, $message, $headers) === true) {
+                $this->session->setSession(['success' => "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription."]);
+                header('location: login#login');
+                exit();
+            };
+        }
+
+        header('location: signin#signin');
         exit();
     }
 }

@@ -90,10 +90,11 @@ class PostManager
 
     public function modifyPostContent(int $postId, ?string $title, ?string $chapo, ?int $authorId, ?string $content): bool
     {
-        if (($title === null) || (mb_strlen($title) > Request::MAX_STRING_LENGTH) || (mb_strlen($title) < Request::MIN_STRING_LENGTH)
-        || ($chapo == null) || (mb_strlen($chapo) > Request::MAX_STRING_LENGTH) || (mb_strlen($chapo) < Request::MIN_STRING_LENGTH)
-        || ($authorId === null)
-        || ($content == null) || (mb_strlen($content) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($content) < Request::MIN_TEXTAREA_LENGTH)) {
+        // check if input is valid
+        $badTitle = ($title === null) || (mb_strlen($title) > Request::MAX_STRING_LENGTH) || (mb_strlen($title) < Request::MIN_STRING_LENGTH);
+        $badChapo = ($chapo == null) || (mb_strlen($chapo) > Request::MAX_STRING_LENGTH) || (mb_strlen($chapo) < Request::MIN_STRING_LENGTH);
+        $badContent = ($content == null) || (mb_strlen($content) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($content) < Request::MIN_TEXTAREA_LENGTH);
+        if ($badTitle || $badChapo || ($authorId === null) || $badContent) {
             $this->session->setSession(['error' => "Champ(s) vide(s) ou trop long(s) ou auteur invalide."]);
             return false;
         }
@@ -108,10 +109,10 @@ class PostManager
 
     public function createPost(?string $title, ?string $chapo, ?int $authorId, ?string $content): ?int
     {
-        if (($title === null) || (mb_strlen($title) > Request::MAX_STRING_LENGTH) || (mb_strlen($title) < Request::MIN_STRING_LENGTH)
-        || ($chapo == null) || (mb_strlen($chapo) > Request::MAX_STRING_LENGTH) || (mb_strlen($chapo) < Request::MIN_STRING_LENGTH)
-        || ($authorId === null)
-        || ($content == null) || (mb_strlen($content) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($content) < Request::MIN_TEXTAREA_LENGTH)) {
+        $badTitle = ($title === null) || (mb_strlen($title) > Request::MAX_STRING_LENGTH) || (mb_strlen($title) < Request::MIN_STRING_LENGTH);
+        $badChapo = ($chapo == null) || (mb_strlen($chapo) > Request::MAX_STRING_LENGTH) || (mb_strlen($chapo) < Request::MIN_STRING_LENGTH);
+        $badContent = ($content == null) || (mb_strlen($content) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($content) < Request::MIN_TEXTAREA_LENGTH);
+        if ($badTitle || $badChapo || ($authorId === null) || $badContent) {
             $this->session->setSession(['error' => "Champ(s) vide(s) ou trop long(s) ou auteur invalide."]);
             return null;
         }

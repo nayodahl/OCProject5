@@ -24,6 +24,7 @@ $router->register('POST', '/account/login', 'accountController', 'loginForm');//
 $router->register('GET', '/account/signin', 'accountController', 'showSigninPage');//               /account/signin
 $router->register('POST', '/account/signin', 'accountController', 'signinForm');//                  /account/signin
 $router->register('GET', '/account/activate/[token]', 'accountController', 'activate');//           /account/activate/
+$router->register('GET', '/account/resendsignin', 'accountController', 'resendMail');//           /account/resendsignin/
 
 // Back
 $router->register('GET', '/admin/posts/[0-9]', 'adminController','showPostsManager');//          /admin/posts/$postsPage

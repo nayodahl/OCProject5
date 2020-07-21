@@ -7,6 +7,8 @@ use \App\Model\Entity\User;
 use \App\Model\Repository\UserRepository;
 use \App\Service\Http\Session;
 use \App\Service\Http\Request;
+use \DateTime;
+use \DateInterval;
 
 class UserManager
 {
@@ -75,12 +77,14 @@ class UserManager
     public function login(?string $login, ?string $password): ?User
     {
         // check if input is valid
-        if (($login === null) || (mb_strlen($login) > Request::MAX_LOGIN_LENGTH) || (mb_strlen($login) < Request::MIN_LOGIN_LENGTH)
-            || ($password == null) || (mb_strlen($password) > Request::MAX_STRING_LENGTH) || (mb_strlen($password) < Request::MIN_PASSWORD_LENGTH)) {
+        $badLogin = ($login === null) || (mb_strlen($login) > Request::MAX_LOGIN_LENGTH) || (mb_strlen($login) < Request::MIN_LOGIN_LENGTH);
+        $badPassword = ($password == null) || (mb_strlen($password) > Request::MAX_STRING_LENGTH) || (mb_strlen($password) < Request::MIN_PASSWORD_LENGTH);
+        if ($badLogin || $badPassword) {
             $this->session->setSession(['error' => "Identifiant ou mot de passe vide ou pas de la bonne longueur (entre 3 et 16 caractères alphanumériques pour le login, 8 caractères minimum pour le mot de passe)."]);
                 
             return null;
         }
+
         $user = $this->userRepo->checkLogin($login, $password);
         if ($user === null) {
             $this->session->setSession(['error' => "Identifiant ou mot de passe incorrect, ou utilisateur non activé (vérifiez vos mails)."]);
@@ -91,21 +95,41 @@ class UserManager
         return $user;
     }
 
-    public function activateUser(string $token): bool
+    // try to activate a User with the given token
+    // return 1 if OK
+    // return 2 if link is no more valid (2h max)
+    // return null if token not found, or error when writing in DB
+    public function activateUser(string $token): ?int
     {
-        if ($this->userRepo->searchToken($token) === true) {
-            return $this->userRepo->activateOneUser($token);
+        // search for token in DB
+        $user = $this->userRepo->searchToken($token);
+        if ($user !== null) {
+            // rule : if token is more than 2h old, then reject it and redirect to regenerate token form
+            $creation = DateTime::createFromFormat('j/m/Y \à H\hi', $user->getLastUpdate());
+            $creation->add(new DateInterval('PT2H')); // add 2 hours
+            $now = new DateTime();
+            if ($creation < $now) {
+                $this->session->setSession([
+                    'error' => "Votre lien de confirmation d'inscription n'est plus valide.",
+                    'info' => "plop",
+                    'previousToken' => $token
+                    ]);
+
+                return 2;
+            }
+            return ($this->userRepo->activateOneUser($token) === true) ? 1 : null;
         }
 
-        return false;
+        return null;
     }
 
     public function signin(?string $login, ?string $password, ?string $email): ?array
     {
         // check if input is valid
-        if (($login === null) || (mb_strlen($login) > Request::MAX_LOGIN_LENGTH) || (mb_strlen($login) < Request::MIN_LOGIN_LENGTH)
-        || ($password == null) || (mb_strlen($password) > Request::MAX_STRING_LENGTH) || (mb_strlen($password) < Request::MIN_PASSWORD_LENGTH)
-        || ($email == null) || (mb_strlen($email) > Request::MAX_STRING_LENGTH) || (filter_var($email, FILTER_VALIDATE_EMAIL) === false)) {
+        $badLogin = ($login === null) || (mb_strlen($login) > Request::MAX_LOGIN_LENGTH) || (mb_strlen($login) < Request::MIN_LOGIN_LENGTH);
+        $badPassword = ($password == null) || (mb_strlen($password) > Request::MAX_STRING_LENGTH) || (mb_strlen($password) < Request::MIN_PASSWORD_LENGTH);
+        $badEmail = ($email == null) || (mb_strlen($email) > Request::MAX_STRING_LENGTH) || (filter_var($email, FILTER_VALIDATE_EMAIL) === false);
+        if ($badLogin || $badPassword || $badEmail) {
             $this->session->setSession(['error' => "Tous les champs ne sont pas remplis ou corrects (entre 3 et 16 caractères alphanumériques pour le login, 8 caractères minimum pour le mot de passe, avec au moins une majuscule, au moins une minuscule, au moins un chiffre et au moins un caractère spécial)."]);
             return null;
         }
@@ -145,6 +169,24 @@ class UserManager
         $user = $this->userRepo->getUser($newUserId);
         $dest = $user->getEmail();
 
-        return [ 'dest' => $dest, 'token' => $token];
+        return ['dest' => $dest, 'token' => $token];
+    }
+
+    public function signinUserFromToken(string $previousToken): ?array
+    {
+        $user = $this->userRepo->searchToken($previousToken);
+        if ($user !== null) {
+            $userId = $user->getUserId();
+            
+            // generate new token (length 128) and insert in User
+            $token = bin2hex(random_bytes(64));
+            if ($this->userRepo->insertToken($token, $userId) === false) {
+                $this->session->setSession(['error' => "Impossible de générer le token"]);
+                return null;
+            }
+            
+            return ['dest' => $user->getEmail(), 'token' => $token];
+        }
+        return null;
     }
 }

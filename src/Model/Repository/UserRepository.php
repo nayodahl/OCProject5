@@ -143,13 +143,20 @@ class UserRepository extends Database
         return $result->execute();
     }
 
-    public function searchToken(string $token): bool
+    // search for token in User
+    // if token is found, then return the User, else null
+    public function searchToken(string $token): ?User
     {
-        $result = $this->dbConnect()->prepare('SELECT EXISTS (SELECT 1 from user WHERE user.token = :token)');
+        $result = $this->dbConnect()->prepare('SELECT id AS userId, user.login, user.password, user.email, user.type, user.activated, user.token, DATE_FORMAT(user.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(user.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate 
+        from user WHERE user.token = :token');
         $result->bindValue(':token', $token, PDO::PARAM_STR);
         $result->execute();
-        
-        return boolval(current($result->fetch()));
+        $user = $result->fetchObject(User::class);
+        if ($user === false) {
+            return null;
+        }
+
+        return $user;
     }
 
     public function activateOneUser(string $token): bool

@@ -20,7 +20,14 @@
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         {{ session.error }}
                     </div>    
-                {% endif %}              
+                {% endif %} 
+                {% if session.info %}
+                    <div class="alert alert-info alert-dismissible" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <a href="account/resendsignin">Renvoyer un mail de confirmation</a>
+                    </div>    
+                {% endif %} 
+                         
                 <form method="post" action="account/signin" name="sentSignin" id="signinForm" class="needs-validation" novalidate>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls">

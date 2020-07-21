@@ -142,7 +142,7 @@ class AdminController
         
         if ($req === true) {
             $this->session->setSession(['success' => "Article modifié."]);
-            header("location: ../../admin/post/$postId#modify");
+            header("location: ../../admin/posts/1");
             exit();
         }
         header("location: ../../admin/post/$postId#modify");
