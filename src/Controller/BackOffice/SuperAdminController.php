@@ -31,13 +31,12 @@ class SuperAdminController
     public function showUsersManager(Request $request): void
     {
         // access control, check is user is logged and superadmin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isSuperAdmin($userId) === false) {
+        $user = $this->auth->user();
+        if ($this->auth->isSuperAdmin($user->getUserId()) === false) {
             header("location: ../../admin/posts/1");
             exit();
         }
@@ -67,13 +66,11 @@ class SuperAdminController
     public function promote(Request $request): void
     {
         // access control, check is user is logged and superadmin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isSuperAdmin($userId) === false) {
+        if ($this->auth->isSuperAdmin($this->auth->user()->getUserId()) === false) {
             header("location: ../../admin/posts/1");
             exit();
         }
@@ -91,13 +88,11 @@ class SuperAdminController
     public function demote(Request $request): void
     {
         // access control, check is user is logged and superadmin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isSuperAdmin($userId) === false) {
+        if ($this->auth->isSuperAdmin($this->auth->user()->getUserId()) === false) {
             header("location: ../../admin/posts/1");
             exit();
         }

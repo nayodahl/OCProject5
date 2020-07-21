@@ -29,9 +29,19 @@ class Auth
             $this->session->setSession(['error' => "Vous devez être connecté"]);
             return null;
         }
+
         return $this->userRepo->getUser($userId) ?: null;
     }
 
+    public function isLogged(): bool
+    {
+        if ($this->user() === null) {
+            return false;
+        }
+        
+        return true;
+    }
+    
     public function isAdmin($userId): bool
     {
         $user = $this->userRepo->getUser($userId);
@@ -68,7 +78,7 @@ class Auth
         return $token;
     }
 
-    public function checkToken(string $token): bool
+    public function checkToken(?string $token): bool
     {
         if (isset($this->session->getSession()['token']) && !empty($this->session->getSession()['token']) && !empty($token)) {
             if ($this->session->getSession()['token'] === $token) {

@@ -49,11 +49,24 @@
           <li class="nav-item">
             <a class="nav-link" href="">Retour à l'accueil</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" class="disabled">
-              <i class="fa fa-user fa-fw"></i> {{ user.login }}
-            </a>
-          </li>
+          {% if session.auth %}
+            <li class="nav-item">
+              <a class="nav-link" class="disabled">
+                <i class="fa fa-user fa-fw"></i> {{ user.login }}
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="account/logout">
+                <i class="fa fa-sign-out-alt"></i>
+              </a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="account/login#login">
+                <i class="fa fa-user fa-fw"></i> Se Connecter
+              </a>
+            </li>  
+          {% endif %}
         </ul>
       </div>
     </div>

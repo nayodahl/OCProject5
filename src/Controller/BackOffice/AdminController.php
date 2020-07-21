@@ -44,13 +44,12 @@ class AdminController
     public function showPostsManager(Request $request): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        $user = $this->auth->user();
+        if ($this->auth->isAdmin($user->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }
@@ -80,13 +79,12 @@ class AdminController
     public function showEditPost(Request $request): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        $user = $this->auth->user();
+        if ($this->auth->isAdmin($user->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }
@@ -114,23 +112,22 @@ class AdminController
     public function modifyPost(Request $request): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        $user = $this->auth->user();
+        if ($this->auth->isAdmin($user->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }
         
         $postId=$request->getEditPostId();
         $formData = $request->getPostFormData();
-        $title = $formData['title'];
-        $chapo = $formData['chapo'];
-        $authorId = $formData['author'];
-        $content = $formData['content'];
+        $title = $formData['title'] ?? null;
+        $chapo = $formData['chapo'] ?? null;
+        $authorId = $formData['author'] ?? null;
+        $content = $formData['content'] ?? null;
                 
         $req = $this->postManager->modifyPostContent($postId, $title, $chapo, $authorId, $content);
         
@@ -146,13 +143,11 @@ class AdminController
     public function delete(Request $request): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        if ($this->auth->isAdmin($this->auth->user()->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }
@@ -170,13 +165,12 @@ class AdminController
     public function showAddPost(): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        $user = $this->auth->user();
+        if ($this->auth->isAdmin($user->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }
@@ -193,22 +187,20 @@ class AdminController
     public function addPost(Request $request): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        if ($this->auth->isAdmin($this->auth->user()->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }
         
         $formData = $request->getPostFormData();
-        $title = $formData['title'];
-        $chapo = $formData['chapo'];
-        $authorId = $formData['author'];
-        $content = $formData['content'];
+        $title = $formData['title'] ?? null;
+        $chapo = $formData['chapo'] ?? null;
+        $authorId = $formData['author'] ?? null;
+        $content = $formData['content'] ?? null;
                 
         $newPostId = $this->postManager->createPost($title, $chapo, $authorId, $content);
                 
@@ -224,13 +216,12 @@ class AdminController
     public function showCommentsManager(Request $request): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        $user = $this->auth->user();
+        if ($this->auth->isAdmin($user->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }
@@ -260,13 +251,11 @@ class AdminController
     public function approve(Request $request): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        if ($this->auth->isAdmin($this->auth->user()->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }
@@ -284,13 +273,11 @@ class AdminController
     public function refuse(Request $request): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        if ($this->auth->isAdmin($this->auth->user()->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }

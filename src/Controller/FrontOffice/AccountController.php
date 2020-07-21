@@ -43,7 +43,7 @@ class AccountController
     public function showLoginPage(): void
     {
         // access control, check is user is not logged
-        if ($this->auth->user() !== null) {
+        if ($this->auth->isLogged() === true) {
             $this->session->setSession(['error' => "Vous êtes déjà connecté(e)"]);
             header('location: ../posts/1');
             exit();
@@ -59,7 +59,7 @@ class AccountController
     public function showSigninPage(): void
     {
         // access control, check is user is not logged
-        if ($this->auth->user() !== null) {
+        if ($this->auth->isLogged() === true) {
             $this->session->setSession(['error' => "Vous êtes déjà connecté(e) et avez donc un compte"]);
             header('location: ../posts/1');
             exit();
@@ -75,15 +75,15 @@ class AccountController
     public function contactForm(Request $request): void
     {
         $formData = $request->getContactFormData();
-        $lastname = $formData['lastname'];
-        $firstname = $formData['firstname'];
-        $email = $formData['email'];
-        $message = $formData['message'];
+        $lastname = $formData['lastname'] ?? null;
+        $firstname = $formData['firstname'] ?? null;
+        $email = $formData['email'] ?? null;
+        $message = $formData['message'] ?? null;
 
-        if ($lastname === '' || (mb_strlen($lastname) > Request::MAX_STRING_LENGTH) ||
-            $firstname === '' || (mb_strlen($firstname) > Request::MAX_STRING_LENGTH) ||
-            $email === '' || (mb_strlen($email) > Request::MAX_STRING_LENGTH) || (filter_var($email, FILTER_VALIDATE_EMAIL) === false) ||
-            $message === '' || (mb_strlen($message) > Request::MAX_TEXTAREA_LENGTH)
+        if ($lastname === null || (mb_strlen($lastname) > Request::MAX_STRING_LENGTH) || (mb_strlen($lastname) < Request::MIN_STRING_LENGTH) ||
+            $firstname === null || (mb_strlen($firstname) > Request::MAX_STRING_LENGTH) || (mb_strlen($lastname) < Request::MIN_STRING_LENGTH) ||
+            $email === null || (mb_strlen($email) > Request::MAX_STRING_LENGTH) || (filter_var($email, FILTER_VALIDATE_EMAIL) === false) ||
+            $message === null || (mb_strlen($message) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($lastname) < Request::MIN_TEXTAREA_LENGTH)
             ) {
             $this->session->setSession(['error' => "tous les champs ne sont pas remplis ou corrects."]);
             header('location: ');
@@ -117,15 +117,15 @@ class AccountController
     public function loginForm(Request $request): void
     {
         // access control, check is user is not logged
-        if ($this->auth->user() !== null) {
+        if ($this->auth->isLogged() === true) {
             $this->session->setSession(['error' => "Vous êtes déjà connecté(e)"]);
             header('location: ../posts/1');
             exit();
         }
         
         $formData = $request->getLoginFormData();
-        $login = $formData['login'];
-        $password = $formData['password'];
+        $login = $formData['login'] ?? null;
+        $password = $formData['password'] ?? null;
         
         $user = $this->userManager->login($login, $password);
         
@@ -149,16 +149,16 @@ class AccountController
     public function signinForm(Request $request): void
     {
         // access control, check is user is not logged
-        if ($this->auth->user() !== null) {
+        if ($this->auth->isLogged() === true) {
             $this->session->setSession(['error' => "Vous êtes déjà connecté(e) et avez donc un compte"]);
             header('location: ../posts/1');
             exit();
         }
         
         $formData = $request->getSigninFormData();
-        $login = $formData['login'];
-        $password = $formData['password'];
-        $email = $formData['email'];
+        $login = $formData['login'] ?? null;
+        $password = $formData['password'] ?? null;
+        $email = $formData['email'] ?? null;
 
         $req = $this->userManager->signin($login, $password, $email);
         if ($req !== null) {
@@ -193,7 +193,7 @@ class AccountController
     public function activate(Request $request): void
     {
         // access control, check is user is not logged
-        if ($this->auth->user() !== null) {
+        if ($this->auth->isLogged() === true) {
             $this->session->setSession(['error' => "Vous êtes déjà connecté(e) et avez donc un compte"]);
             header('location: ../posts/1');
             exit();

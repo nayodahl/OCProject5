@@ -81,7 +81,7 @@ class Request
 
     public function getCommentFormData(): ?array
     {
-        if ($this->post !== null) {
+        if (isset($this->post) && !empty($this->post)) {
             $this->post = [
                 'comment' => $this->sanitizeTextArea($this->post['comment']),
                 'token' => $this->post['token']
@@ -91,11 +91,12 @@ class Request
                 'token' => $this->post['token']
             ];
         }
+        return null;
     }
 
     public function getLoginFormData(): ?array
     {
-        if ($this->post !== null) {
+        if (isset($this->post) && !empty($this->post)) {
             $this->post = [
                 'login' => $this->sanitizeLogin($this->post['login']),
                 'password' => $this->post['password']
@@ -105,11 +106,12 @@ class Request
                 'password' => $this->post['password']
             ];
         }
+        return null;
     }
 
     public function getSigninFormData(): ?array
     {
-        if ($this->post !== null) {
+        if (isset($this->post) && !empty($this->post)) {
             $this->post = [
                 'login' => $this->sanitizeLogin($this->post['login']),
                 'password' => $this->post['password'],
@@ -121,11 +123,12 @@ class Request
                 'email' => $this->post['email']
             ];
         }
+        return null;
     }
 
     public function getPostFormData(): ?array
     {
-        if ($this->post !== null) {
+        if (isset($this->post) && !empty($this->post)) {
             $this->post = [
                 'title' => $this->sanitizeString($this->post['title']),
                 'chapo' => $this->sanitizeString($this->post['chapo']),
@@ -140,11 +143,12 @@ class Request
                 'content' => $this->post['content']
             ];
         }
+        return null;
     }
 
     public function getContactFormData(): ?array
     {
-        if ($this->post !== null) {
+        if (isset($this->post) && !empty($this->post)) {
             $this->post = [
                 'lastname' => $this->sanitizeString($this->post['lastname']),
                 'firstname' => $this->sanitizeString($this->post['firstname']),
@@ -158,6 +162,7 @@ class Request
             'email' => $this->post['email'],
             'message' => $this->post['message']
         ];
+        return null;
     }
     
     // cleanup methods
