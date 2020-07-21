@@ -50,7 +50,8 @@ class AccountController
         }
 
         $this->renderer->render('frontoffice/LoginPage.twig', [
-            'session' => $this->session->getSession()
+            'session' => $this->session->getSession(),
+            'token' => $this->auth->generateToken()
         ]);
         $this->session->remove('success')->remove('error');
     }
@@ -66,7 +67,8 @@ class AccountController
         }
         
         $this->renderer->render('frontoffice/SigninPage.twig', [
-            'session' => $this->session->getSession()
+            'session' => $this->session->getSession(),
+            'token' => $this->auth->generateToken()
         ]);
         $this->session->remove('success')->remove('error');
     }
@@ -79,14 +81,23 @@ class AccountController
         $firstname = $formData['firstname'] ?? null;
         $email = $formData['email'] ?? null;
         $message = $formData['message'] ?? null;
+        $token = $formData['token'] ?? null;
 
+        // access control, check token from form
+        if ($this->auth->checkToken($token) === false) {
+            $this->session->setSession(['error' => "Erreur de formulaire"]);
+            header("location: #contact");
+            exit();
+        }
+
+        // input control
         if ($lastname === null || (mb_strlen($lastname) > Request::MAX_STRING_LENGTH) || (mb_strlen($lastname) < Request::MIN_STRING_LENGTH) ||
             $firstname === null || (mb_strlen($firstname) > Request::MAX_STRING_LENGTH) || (mb_strlen($lastname) < Request::MIN_STRING_LENGTH) ||
             $email === null || (mb_strlen($email) > Request::MAX_STRING_LENGTH) || (filter_var($email, FILTER_VALIDATE_EMAIL) === false) ||
             $message === null || (mb_strlen($message) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($lastname) < Request::MIN_TEXTAREA_LENGTH)
             ) {
             $this->session->setSession(['error' => "tous les champs ne sont pas remplis ou corrects."]);
-            header('location: ');
+            header('location: #contact');
             exit();
         }
         
@@ -104,12 +115,12 @@ class AccountController
         // send mail
         if (mail('contact@blog.nayo.cloud', $subject, $message, $headers) === false) {
             $this->session->setSession(['error' => "Erreur lors de l'envoi du message"]);
-            header('location: ');
+            header('location: #contact');
             exit();
         };
 
         $this->session->setSession(['info' => "Votre message a bien été envoyé"]);
-        header('location: ');
+        header('location: #contact');
         exit();
     }
 
@@ -126,6 +137,14 @@ class AccountController
         $formData = $request->getLoginFormData();
         $login = $formData['login'] ?? null;
         $password = $formData['password'] ?? null;
+        $token = $formData['token'] ?? null;
+
+        // access control, check token from form
+        if ($this->auth->checkToken($token) === false) {
+            $this->session->setSession(['error' => "Erreur de formulaire"]);
+            header("location: login#login");
+            exit();
+        }
         
         $user = $this->userManager->login($login, $password);
         
@@ -159,6 +178,14 @@ class AccountController
         $login = $formData['login'] ?? null;
         $password = $formData['password'] ?? null;
         $email = $formData['email'] ?? null;
+        $token = $formData['token'] ?? null;
+
+        // access control, check token from form
+        if ($this->auth->checkToken($token) === false) {
+            $this->session->setSession(['error' => "Erreur de formulaire"]);
+            header("location: login#login");
+            exit();
+        }
 
         $req = $this->userManager->signin($login, $password, $email);
         if ($req !== null) {

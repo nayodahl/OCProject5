@@ -99,11 +99,13 @@ class Request
         if (isset($this->post) && !empty($this->post)) {
             $this->post = [
                 'login' => $this->sanitizeLogin($this->post['login']),
-                'password' => $this->post['password']
+                'password' => $this->post['password'],
+                'token' => $this->post['token']
         ];
             return [
                 'login' => $this->post['login'],
-                'password' => $this->post['password']
+                'password' => $this->post['password'],
+                'token' => $this->post['token']
             ];
         }
         return null;
@@ -115,12 +117,14 @@ class Request
             $this->post = [
                 'login' => $this->sanitizeLogin($this->post['login']),
                 'password' => $this->post['password'],
-                'email' => $this->sanitizeEmail($this->post['email'])
+                'email' => $this->sanitizeEmail($this->post['email']),
+                'token' => $this->post['token']
         ];
             return [
                 'login' => $this->post['login'],
                 'password' => $this->post['password'],
-                'email' => $this->post['email']
+                'email' => $this->post['email'],
+                'token' => $this->post['token']
             ];
         }
         return null;
@@ -133,14 +137,16 @@ class Request
                 'title' => $this->sanitizeString($this->post['title']),
                 'chapo' => $this->sanitizeString($this->post['chapo']),
                 'author' => $this->sanitizeInteger((int)$this->post['author']),
-                'content' => $this->sanitizeTextArea($this->post['content'])
+                'content' => $this->sanitizeTextArea($this->post['content']),
+                'token' => $this->post['token']
                 
             ];
             return [
                 'title' => $this->post['title'],
                 'chapo' => $this->post['chapo'],
                 'author' => $this->post['author'],
-                'content' => $this->post['content']
+                'content' => $this->post['content'],
+                'token' => $this->post['token']
             ];
         }
         return null;
@@ -153,14 +159,16 @@ class Request
                 'lastname' => $this->sanitizeString($this->post['lastname']),
                 'firstname' => $this->sanitizeString($this->post['firstname']),
                 'email' => $this->sanitizeEmail($this->post['email']),
-                'message' => $this->sanitizeTextArea($this->post['message'])
+                'message' => $this->sanitizeTextArea($this->post['message']),
+                'token' => $this->post['token']
             ];
         }
         return [
             'lastname' => $this->post['lastname'],
             'firstname' => $this->post['firstname'],
             'email' => $this->post['email'],
-            'message' => $this->post['message']
+            'message' => $this->post['message'],
+            'token' => $this->post['token']
         ];
         return null;
     }

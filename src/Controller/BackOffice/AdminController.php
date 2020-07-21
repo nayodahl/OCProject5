@@ -71,7 +71,7 @@ class AdminController
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
             'session' => $this->session->getSession(),
-            'user' => $user
+            'user' => $user,
             ]);
         $this->session->remove('success')->remove('error');
     }
@@ -104,7 +104,8 @@ class AdminController
             'postId' => $postId,
             'adminUsers' => $adminUsers,
             'session' => $this->session->getSession(),
-            'user' => $user
+            'user' => $user,
+            'token' => $this->auth->generateToken()
             ]);
         $this->session->remove('success')->remove('error');
     }
@@ -128,6 +129,14 @@ class AdminController
         $chapo = $formData['chapo'] ?? null;
         $authorId = $formData['author'] ?? null;
         $content = $formData['content'] ?? null;
+        $token = $formData['token'] ?? null;
+
+        // access control, check token from form
+        if ($this->auth->checkToken($token) === false) {
+            $this->session->setSession(['error' => "Erreur de formulaire"]);
+            header("location: ../../admin/post/$postId#modify");
+            exit();
+        }
                 
         $req = $this->postManager->modifyPostContent($postId, $title, $chapo, $authorId, $content);
         
@@ -179,7 +188,8 @@ class AdminController
         $this->renderer->render('backoffice/AddPost.twig', [
             'adminUsers' => $adminUsers,
             'session' => $this->session->getSession(),
-            'user' => $user
+            'user' => $user,
+            'token' => $this->auth->generateToken()
             ]);
         $this->session->remove('success')->remove('error');
     }
@@ -201,12 +211,20 @@ class AdminController
         $chapo = $formData['chapo'] ?? null;
         $authorId = $formData['author'] ?? null;
         $content = $formData['content'] ?? null;
+        $token = $formData['token'] ?? null;
+
+        // access control, check token from form
+        if ($this->auth->checkToken($token) === false) {
+            $this->session->setSession(['error' => "Erreur de formulaire"]);
+            header("location: ../admin/newpost#add");
+            exit();
+        }
                 
         $newPostId = $this->postManager->createPost($title, $chapo, $authorId, $content);
                 
         if (isset($newPostId) && ($newPostId > 0)) {
             $this->session->setSession(['success' => "Article publié."]);
-            header("location: ../admin/post/$newPostId");
+            header("location: ../admin/posts/1");
             exit();
         }
         header("location: ../admin/newpost#add");
