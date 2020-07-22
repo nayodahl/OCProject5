@@ -117,12 +117,14 @@ class Request
             $this->post = [
                 'login' => $this->sanitizeLogin($this->post['login']),
                 'password' => $this->post['password'],
+                'confirm' => $this->post['confirm'],
                 'email' => $this->sanitizeEmail($this->post['email']),
                 'token' => $this->post['token']
         ];
             return [
                 'login' => $this->post['login'],
                 'password' => $this->post['password'],
+                'confirm' => $this->post['confirm'],
                 'email' => $this->post['email'],
                 'token' => $this->post['token']
             ];

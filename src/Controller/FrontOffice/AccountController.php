@@ -180,6 +180,7 @@ class AccountController
         $formData = $request->getSigninFormData();
         $login = $formData['login'] ?? null;
         $password = $formData['password'] ?? null;
+        $confirm = $formData['confirm'] ?? null;
         $email = $formData['email'] ?? null;
         $token = $formData['token'] ?? null;
 
@@ -190,7 +191,7 @@ class AccountController
             exit();
         }
 
-        $req = $this->userManager->signin($login, $password, $email);
+        $req = $this->userManager->signin($login, $password, $confirm, $email);
         if ($req !== null) {
             $dest = $req['dest'];
             $token = $req['token'];

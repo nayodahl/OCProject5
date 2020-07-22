@@ -123,8 +123,14 @@ class UserManager
         return null;
     }
 
-    public function signin(?string $login, ?string $password, ?string $email): ?array
+    public function signin(?string $login, ?string $password, ?string $confirm, ?string $email): ?array
     {
+        // check if password and password confirmation fields are equals
+        if ($password !== $confirm) {
+            $this->session->setSession(['error' => "Le mot de passe et sa confirmation ne correspondent pas."]);
+            return null;
+        }
+        
         // check if input is valid
         $badLogin = ($login === null) || (mb_strlen($login) > Request::MAX_LOGIN_LENGTH) || (mb_strlen($login) < Request::MIN_LOGIN_LENGTH);
         $badPassword = ($password == null) || (mb_strlen($password) > Request::MAX_STRING_LENGTH) || (mb_strlen($password) < Request::MIN_PASSWORD_LENGTH);
@@ -133,7 +139,7 @@ class UserManager
             $this->session->setSession(['error' => "Tous les champs ne sont pas remplis ou corrects (entre 3 et 16 caractères alphanumériques pour le login, 8 caractères minimum pour le mot de passe, avec au moins une majuscule, au moins une minuscule, au moins un chiffre et au moins un caractère spécial)."]);
             return null;
         }
-        
+
         // check if user already exists
         if (($this->userRepo->userExists($login)) === true) {
             $this->session->setSession(['error' => "Ce login est déjà utilisé"]);
