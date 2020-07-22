@@ -16,6 +16,9 @@ use \App\Service\Auth;
 
 class AccountController
 {
+    private const CONTACT_MAIL = 'contact@blog.nayo.cloud';
+    private const SERVER_URL = 'www.blog.nayo.cloud';
+    
     private $renderer;
     private $postRepo;
     private $postManager;
@@ -106,14 +109,14 @@ class AccountController
         $message = $this->renderer->renderMail('frontoffice/contactMail.twig', 'message', [ 'firstname' => $firstname, 'lastname' => $lastname, 'email' => $email, 'message' => $message ]);
 
         $headers = [
-            'From' => 'contact@blog.nayo.cloud',
+            'From' => Self::CONTACT_MAIL,
             'X-Mailer' => 'PHP/' . phpversion(),
             'MIME-Version' => '1.0',
             'Content-type' => 'text/html; charset=utf-8'
         ];
         
-        // send mail
-        if (mail('contact@blog.nayo.cloud', $subject, $message, $headers) === false) {
+        // send mail, change first parameter to your own choosen contact mail if needed
+        if (mail(Self::CONTACT_MAIL, $subject, $message, $headers) === false) {
             $this->session->setSession(['error' => "Erreur lors de l'envoi du message"]);
             header('location: #contact');
             exit();
@@ -191,14 +194,14 @@ class AccountController
         if ($req !== null) {
             $dest = $req['dest'];
             $token = $req['token'];
-            $server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'www.blog.nayo.cloud';
+            $server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : self::SERVER_URL;
             
             // rendering html content of mail with twig
             $subject = $this->renderer->renderMail('frontoffice/signinMail.twig', 'subject');
             $message = $this->renderer->renderMail('frontoffice/signinMail.twig', 'message', [ 'token' => $token, 'server' => $server ]);
 
             $headers = [
-                'From' => 'contact@blog.nayo.cloud',
+                'From' => Self::CONTACT_MAIL,
                 'X-Mailer' => 'PHP/' . phpversion(),
                 'MIME-Version' => '1.0',
                 'Content-type' => 'text/html; charset=utf-8'
@@ -260,14 +263,14 @@ class AccountController
         if ($req !== null) {
             $dest = $req['dest'];
             $token = $req['token'];
-            $server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'www.blog.nayo.cloud';
+            $server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : self::SERVER_URL;
             
             // rendering html content of mail with twig
             $subject = $this->renderer->renderMail('frontoffice/signinMail.twig', 'subject');
             $message = $this->renderer->renderMail('frontoffice/signinMail.twig', 'message', [ 'token' => $token, 'server' => $server ]);
 
             $headers = [
-                'From' => 'contact@blog.nayo.cloud',
+                'From' => Self::CONTACT_MAIL,
                 'X-Mailer' => 'PHP/' . phpversion(),
                 'MIME-Version' => '1.0',
                 'Content-type' => 'text/html; charset=utf-8'
