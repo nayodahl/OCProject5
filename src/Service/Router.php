@@ -5,7 +5,8 @@ namespace App\Service;
 
 use \App\Controller\FrontOffice\PostController;
 use \App\Controller\FrontOffice\AccountController;
-use \App\Controller\BackOffice\BackController;
+use \App\Controller\BackOffice\AdminController;
+use \App\Controller\BackOffice\SuperAdminController;
 use \App\Controller\ErrorController;
 use \App\Service\Http\Request;
 
@@ -13,7 +14,8 @@ class Router
 {
     private $postController;
     private $accountController;
-    private $backController;
+    private $adminController;
+    private $superAdminController;
     private $errorController;
     private $routes;
     private $request;
@@ -100,8 +102,11 @@ class Router
     // Routing entry request, and calling the needed controller on demand
     public function routerRequest($controller, $action): void
     {
-        if ($controller === "backController") {
-            $this->backController = new BackController();
+        if ($controller === "adminController") {
+            $this->adminController = new AdminController();
+        };
+        if ($controller === "superAdminController") {
+            $this->superAdminController = new SuperAdminController();
         };
         if ($controller === "accountController") {
             $this->accountController = new AccountController();

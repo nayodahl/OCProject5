@@ -15,7 +15,7 @@ use \App\Service\Http\Request;
 use \App\Service\Http\Session;
 use \App\Service\Auth;
 
-class BackController
+class AdminController
 {
     private $renderer;
     private $postRepo;
@@ -44,13 +44,12 @@ class BackController
     public function showPostsManager(Request $request): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        $user = $this->auth->user();
+        if ($this->auth->isAdmin($user->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }
@@ -72,7 +71,7 @@ class BackController
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
             'session' => $this->session->getSession(),
-            'user' => $user
+            'user' => $user,
             ]);
         $this->session->remove('success')->remove('error');
     }
@@ -80,13 +79,12 @@ class BackController
     public function showEditPost(Request $request): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        $user = $this->auth->user();
+        if ($this->auth->isAdmin($user->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }
@@ -106,7 +104,8 @@ class BackController
             'postId' => $postId,
             'adminUsers' => $adminUsers,
             'session' => $this->session->getSession(),
-            'user' => $user
+            'user' => $user,
+            'token' => $this->auth->generateToken()
             ]);
         $this->session->remove('success')->remove('error');
     }
@@ -114,29 +113,36 @@ class BackController
     public function modifyPost(Request $request): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        $user = $this->auth->user();
+        if ($this->auth->isAdmin($user->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }
         
         $postId=$request->getEditPostId();
         $formData = $request->getPostFormData();
-        $title = $formData['title'];
-        $chapo = $formData['chapo'];
-        $authorId = $formData['author'];
-        $content = $formData['content'];
+        $title = $formData['title'] ?? null;
+        $chapo = $formData['chapo'] ?? null;
+        $authorId = $formData['author'] ?? null;
+        $content = $formData['content'] ?? null;
+        $token = $formData['token'] ?? null;
+
+        // access control, check token from form
+        if ($this->auth->checkToken($token) === false) {
+            $this->session->setSession(['error' => "Erreur de formulaire"]);
+            header("location: ../../admin/post/$postId#modify");
+            exit();
+        }
                 
         $req = $this->postManager->modifyPostContent($postId, $title, $chapo, $authorId, $content);
         
         if ($req === true) {
             $this->session->setSession(['success' => "Article modifié."]);
-            header("location: ../../admin/post/$postId#modify");
+            header("location: ../../admin/posts/1");
             exit();
         }
         header("location: ../../admin/post/$postId#modify");
@@ -146,13 +152,11 @@ class BackController
     public function delete(Request $request): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        if ($this->auth->isAdmin($this->auth->user()->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }
@@ -170,13 +174,12 @@ class BackController
     public function showAddPost(): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        $user = $this->auth->user();
+        if ($this->auth->isAdmin($user->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }
@@ -185,7 +188,8 @@ class BackController
         $this->renderer->render('backoffice/AddPost.twig', [
             'adminUsers' => $adminUsers,
             'session' => $this->session->getSession(),
-            'user' => $user
+            'user' => $user,
+            'token' => $this->auth->generateToken()
             ]);
         $this->session->remove('success')->remove('error');
     }
@@ -193,28 +197,34 @@ class BackController
     public function addPost(Request $request): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        if ($this->auth->isAdmin($this->auth->user()->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }
         
         $formData = $request->getPostFormData();
-        $title = $formData['title'];
-        $chapo = $formData['chapo'];
-        $authorId = $formData['author'];
-        $content = $formData['content'];
+        $title = $formData['title'] ?? null;
+        $chapo = $formData['chapo'] ?? null;
+        $authorId = $formData['author'] ?? null;
+        $content = $formData['content'] ?? null;
+        $token = $formData['token'] ?? null;
+
+        // access control, check token from form
+        if ($this->auth->checkToken($token) === false) {
+            $this->session->setSession(['error' => "Erreur de formulaire"]);
+            header("location: ../admin/newpost#add");
+            exit();
+        }
                 
         $newPostId = $this->postManager->createPost($title, $chapo, $authorId, $content);
                 
         if (isset($newPostId) && ($newPostId > 0)) {
             $this->session->setSession(['success' => "Article publié."]);
-            header("location: ../admin/post/$newPostId");
+            header("location: ../admin/posts/1");
             exit();
         }
         header("location: ../admin/newpost#add");
@@ -224,13 +234,12 @@ class BackController
     public function showCommentsManager(Request $request): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        $user = $this->auth->user();
+        if ($this->auth->isAdmin($user->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }
@@ -260,13 +269,11 @@ class BackController
     public function approve(Request $request): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        if ($this->auth->isAdmin($this->auth->user()->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }
@@ -284,13 +291,11 @@ class BackController
     public function refuse(Request $request): void
     {
         // access control, check is user is logged and admin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
+        if ($this->auth->isLogged() === false) {
             header("location: ../../account/login#login");
             exit();
         }
-        if ($this->auth->isAdmin($userId) === false) {
+        if ($this->auth->isAdmin($this->auth->user()->getUserId()) === false) {
             header("location: ../../posts/1");
             exit();
         }
@@ -302,90 +307,6 @@ class BackController
             exit();
         }
         header("location: ../../admin/comments/1");
-        exit();
-    }
-
-    public function showUsersManager(Request $request): void
-    {
-        // access control, check is user is logged and superadmin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
-            header("location: ../../account/login#login");
-            exit();
-        }
-        if ($this->auth->isSuperAdmin($userId) === false) {
-            header("location: ../../admin/posts/1");
-            exit();
-        }
-        
-        $userPage=$request->getUserManagerPage();
-
-        $totalUsers = $this->userManager->getNumberOfUsers();
-        $pagerArray = $this->userManager->getUsersManagerPager($userPage, $totalUsers);
-        $offset = $pagerArray['offset'];
-        $limit = $pagerArray['limit'];
-        $totalUserPages = $pagerArray['totalUsersPages'];
-        $userPage = $pagerArray['userPage'];
-        
-        // getting the Members from DB
-        $listUsers = $this->userManager->getUsersPage((int)$offset, $limit);
-        
-        $this->renderer->render('backoffice/UsersManager.twig', [
-            'listUsers' => $listUsers,
-            'currentPage' => $userPage,
-            'totalPages' => $totalUserPages,
-            'session' => $this->session->getSession(),
-            'user' => $user
-            ]);
-        $this->session->remove('success')->remove('error');
-    }
-
-    public function promote(Request $request): void
-    {
-        // access control, check is user is logged and superadmin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
-            header("location: ../../account/login#login");
-            exit();
-        }
-        if ($this->auth->isSuperAdmin($userId) === false) {
-            header("location: ../../admin/posts/1");
-            exit();
-        }
-
-        $user=$request->getUserId();
-        if ($this->userManager->promoteUser($user) === true) {
-            $this->session->setSession(['success' => "Droits admin donnés à l'utilisateur."]);
-            header("location: ../../admin/members/1");
-            exit();
-        }
-        header("location: ../../admin/members/1");
-        exit();
-    }
-
-    public function demote(Request $request): void
-    {
-        // access control, check is user is logged and superadmin
-        $user = $this->auth->user();
-        $userId = ($user !== null) ? $user->getUserId() : null;
-        if ($userId === null) {
-            header("location: ../../account/login#login");
-            exit();
-        }
-        if ($this->auth->isSuperAdmin($userId) === false) {
-            header("location: ../../admin/posts/1");
-            exit();
-        }
-        
-        $user=$request->getUserId();
-        if ($this->userManager->demoteUser($user) === true) {
-            $this->session->setSession(['success' => "Droits admin retirés à l'utilisateur."]);
-            header("location: ../../admin/members/1");
-            exit();
-        }
-        header("location: ../../admin/members/1");
         exit();
     }
 }

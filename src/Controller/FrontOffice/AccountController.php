@@ -16,6 +16,9 @@ use \App\Service\Auth;
 
 class AccountController
 {
+    private const CONTACT_MAIL = 'contact@blog.nayo.cloud';
+    private const SERVER_URL = 'www.blog.nayo.cloud';
+    
     private $renderer;
     private $postRepo;
     private $postManager;
@@ -43,50 +46,61 @@ class AccountController
     public function showLoginPage(): void
     {
         // access control, check is user is not logged
-        if ($this->auth->user() !== null) {
+        if ($this->auth->isLogged() === true) {
             $this->session->setSession(['error' => "Vous êtes déjà connecté(e)"]);
             header('location: ../posts/1');
             exit();
         }
 
         $this->renderer->render('frontoffice/LoginPage.twig', [
-            'session' => $this->session->getSession()
+            'session' => $this->session->getSession(),
+            'token' => $this->auth->generateToken()
         ]);
-        $this->session->remove('success')->remove('error');
+        $this->session->remove('success')->remove('error')->remove('info');
     }
 
     // Render Signin Page
     public function showSigninPage(): void
     {
         // access control, check is user is not logged
-        if ($this->auth->user() !== null) {
+        if ($this->auth->isLogged() === true) {
             $this->session->setSession(['error' => "Vous êtes déjà connecté(e) et avez donc un compte"]);
             header('location: ../posts/1');
             exit();
         }
         
         $this->renderer->render('frontoffice/SigninPage.twig', [
-            'session' => $this->session->getSession()
+            'session' => $this->session->getSession(),
+            'token' => $this->auth->generateToken()
         ]);
-        $this->session->remove('success')->remove('error');
+        $this->session->remove('success')->remove('error')->remove('info');
     }
 
     // Contact Form
     public function contactForm(Request $request): void
     {
         $formData = $request->getContactFormData();
-        $lastname = $formData['lastname'];
-        $firstname = $formData['firstname'];
-        $email = $formData['email'];
-        $message = $formData['message'];
+        $lastname = $formData['lastname'] ?? null;
+        $firstname = $formData['firstname'] ?? null;
+        $email = $formData['email'] ?? null;
+        $message = $formData['message'] ?? null;
+        $token = $formData['token'] ?? null;
 
-        if ($lastname === '' || (mb_strlen($lastname) > Request::MAX_STRING_LENGTH) ||
-            $firstname === '' || (mb_strlen($firstname) > Request::MAX_STRING_LENGTH) ||
-            $email === '' || (mb_strlen($email) > Request::MAX_STRING_LENGTH) || (filter_var($email, FILTER_VALIDATE_EMAIL) === false) ||
-            $message === '' || (mb_strlen($message) > Request::MAX_TEXTAREA_LENGTH)
-            ) {
+        // access control, check token from form
+        if ($this->auth->checkToken($token) === false) {
+            $this->session->setSession(['error' => "Erreur de formulaire"]);
+            header("location: #contact");
+            exit();
+        }
+
+        // input control
+        $badLastName = ($lastname === null) || (mb_strlen($lastname) > Request::MAX_STRING_LENGTH) || (mb_strlen($lastname) < Request::MIN_STRING_LENGTH);
+        $badFirstName = ($firstname === null) || (mb_strlen($firstname) > Request::MAX_STRING_LENGTH) || (mb_strlen($lastname) < Request::MIN_STRING_LENGTH);
+        $badEmail = ($email === null) || (mb_strlen($email) > Request::MAX_STRING_LENGTH) || (filter_var($email, FILTER_VALIDATE_EMAIL) === false);
+        $badMessage = ($message === null) || (mb_strlen($message) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($lastname) < Request::MIN_TEXTAREA_LENGTH);
+        if ($badLastName || $badFirstName || $badEmail || $badMessage) {
             $this->session->setSession(['error' => "tous les champs ne sont pas remplis ou corrects."]);
-            header('location: ');
+            header('location: #contact');
             exit();
         }
         
@@ -95,21 +109,21 @@ class AccountController
         $message = $this->renderer->renderMail('frontoffice/contactMail.twig', 'message', [ 'firstname' => $firstname, 'lastname' => $lastname, 'email' => $email, 'message' => $message ]);
 
         $headers = [
-            'From' => 'contact@blog.nayo.cloud',
+            'From' => Self::CONTACT_MAIL,
             'X-Mailer' => 'PHP/' . phpversion(),
             'MIME-Version' => '1.0',
             'Content-type' => 'text/html; charset=utf-8'
         ];
         
-        // send mail
-        if (mail('contact@blog.nayo.cloud', $subject, $message, $headers) === false) {
+        // send mail, change first parameter to your own choosen contact mail if needed
+        if (mail(Self::CONTACT_MAIL, $subject, $message, $headers) === false) {
             $this->session->setSession(['error' => "Erreur lors de l'envoi du message"]);
-            header('location: ');
+            header('location: #contact');
             exit();
         };
 
         $this->session->setSession(['info' => "Votre message a bien été envoyé"]);
-        header('location: ');
+        header('location: #contact');
         exit();
     }
 
@@ -117,15 +131,23 @@ class AccountController
     public function loginForm(Request $request): void
     {
         // access control, check is user is not logged
-        if ($this->auth->user() !== null) {
+        if ($this->auth->isLogged() === true) {
             $this->session->setSession(['error' => "Vous êtes déjà connecté(e)"]);
             header('location: ../posts/1');
             exit();
         }
         
         $formData = $request->getLoginFormData();
-        $login = $formData['login'];
-        $password = $formData['password'];
+        $login = $formData['login'] ?? null;
+        $password = $formData['password'] ?? null;
+        $token = $formData['token'] ?? null;
+
+        // access control, check token from form
+        if ($this->auth->checkToken($token) === false) {
+            $this->session->setSession(['error' => "Erreur de formulaire"]);
+            header("location: login#login");
+            exit();
+        }
         
         $user = $this->userManager->login($login, $password);
         
@@ -149,29 +171,38 @@ class AccountController
     public function signinForm(Request $request): void
     {
         // access control, check is user is not logged
-        if ($this->auth->user() !== null) {
+        if ($this->auth->isLogged() === true) {
             $this->session->setSession(['error' => "Vous êtes déjà connecté(e) et avez donc un compte"]);
             header('location: ../posts/1');
             exit();
         }
         
         $formData = $request->getSigninFormData();
-        $login = $formData['login'];
-        $password = $formData['password'];
-        $email = $formData['email'];
+        $login = $formData['login'] ?? null;
+        $password = $formData['password'] ?? null;
+        $confirm = $formData['confirm'] ?? null;
+        $email = $formData['email'] ?? null;
+        $token = $formData['token'] ?? null;
 
-        $req = $this->userManager->signin($login, $password, $email);
+        // access control, check token from form
+        if ($this->auth->checkToken($token) === false) {
+            $this->session->setSession(['error' => "Erreur de formulaire"]);
+            header("location: login#login");
+            exit();
+        }
+
+        $req = $this->userManager->signin($login, $password, $confirm, $email);
         if ($req !== null) {
             $dest = $req['dest'];
             $token = $req['token'];
-            $server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'www.blog.nayo.cloud';
+            $server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : self::SERVER_URL;
             
             // rendering html content of mail with twig
             $subject = $this->renderer->renderMail('frontoffice/signinMail.twig', 'subject');
             $message = $this->renderer->renderMail('frontoffice/signinMail.twig', 'message', [ 'token' => $token, 'server' => $server ]);
 
             $headers = [
-                'From' => 'contact@blog.nayo.cloud',
+                'From' => Self::CONTACT_MAIL,
                 'X-Mailer' => 'PHP/' . phpversion(),
                 'MIME-Version' => '1.0',
                 'Content-type' => 'text/html; charset=utf-8'
@@ -193,7 +224,7 @@ class AccountController
     public function activate(Request $request): void
     {
         // access control, check is user is not logged
-        if ($this->auth->user() !== null) {
+        if ($this->auth->isLogged() === true) {
             $this->session->setSession(['error' => "Vous êtes déjà connecté(e) et avez donc un compte"]);
             header('location: ../posts/1');
             exit();
@@ -201,14 +232,60 @@ class AccountController
 
         $req = $this->userManager->activateUser($request->getToken());
 
-        if ($req === true) {
+        if ($req === 1) {
             $this->session->setSession(['success' => "Votre inscription est définitivement validée, vous pouvez vous connecter."]);
             header('location: ../login#login');
             exit();
         }
+
+        // if token is no more valid
+        if ($req === 2) {
+            header('location: ../signin#signin');
+            exit();
+        }
        
-        $this->session->setSession(['error' => "Impossible de confirmer votre compte, erreur de token"]);
+        $this->session->setSession(['error' => "Impossible de confirmer votre compte, il y a un problème avec votre lien de confirmation"]);
         header('location: ../signin#signin');
+        exit();
+    }
+
+    // Resend confirmation mail
+    public function resendMail(): void
+    {
+        // access control, check is user is not logged
+        if ($this->auth->isLogged() === true) {
+            $this->session->setSession(['error' => "Vous êtes déjà connecté(e) et avez donc un compte"]);
+            header('location: ../posts/1');
+            exit();
+        }
+        $previousToken = $this->session->getSession()['previousToken'];
+        $req = $this->userManager->signinUserFromToken($previousToken);
+
+        if ($req !== null) {
+            $dest = $req['dest'];
+            $token = $req['token'];
+            $server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : self::SERVER_URL;
+            
+            // rendering html content of mail with twig
+            $subject = $this->renderer->renderMail('frontoffice/signinMail.twig', 'subject');
+            $message = $this->renderer->renderMail('frontoffice/signinMail.twig', 'message', [ 'token' => $token, 'server' => $server ]);
+
+            $headers = [
+                'From' => Self::CONTACT_MAIL,
+                'X-Mailer' => 'PHP/' . phpversion(),
+                'MIME-Version' => '1.0',
+                'Content-type' => 'text/html; charset=utf-8'
+            ];
+            
+            // send mail
+            if (mail($dest, $subject, $message, $headers) === true) {
+                $this->session->setSession(['success' => "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription."]);
+                header('location: login#login');
+                exit();
+            };
+        }
+
+        header('location: signin#signin');
         exit();
     }
 }

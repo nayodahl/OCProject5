@@ -20,7 +20,14 @@
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         {{ session.error }}
                     </div>    
-                {% endif %}              
+                {% endif %} 
+                {% if session.info %}
+                    <div class="alert alert-info alert-dismissible" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <a href="account/resendsignin">Renvoyer un mail de confirmation</a>
+                    </div>    
+                {% endif %} 
+                         
                 <form method="post" action="account/signin" name="sentSignin" id="signinForm" class="needs-validation" novalidate>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls">
@@ -33,15 +40,23 @@
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls">
                         <label>Mot de passe</label>
-                        <input name="password" type="password" class="form-control" placeholder="Mot de passe" id="password" required data-validation-required-message="Entrez votre adresse email.">
+                        <input name="password" type="password" class="form-control" placeholder="Mot de passe" id="password" required data-validation-required-message="Entrez votre mot de passe.">
                         <div class="invalid-feedback">Entrez un mot de passe valide.</div>
                         <p class="help-block text-danger"></p>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls">
+                        <label>Confirmation</label>
+                        <input name="confirm" type="password" class="form-control" placeholder="Confirmation" id="confirm" required data-validation-required-message="Confirmez votre mot de passe.">
+                        <div class="invalid-feedback">Les mots de passe ne correspondent pas.</div>
+                        <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls">
                         <label>Email</label>
-                        <input name="email" type="email" class="form-control" placeholder="Email" id="email" required data-validation-required-message="Entrez votre nom.">
+                        <input name="email" type="email" class="form-control" placeholder="Email" id="email" required data-validation-required-message="Entrez votre adresse email.">
                         <div class="invalid-feedback">Entrez email valide.</div>
                         <p class="help-block text-danger"></p>
                         </div>
@@ -52,8 +67,8 @@
                         <a href="account/login" class="btn btn-primary">Annuler</a>
                         <button type="submit" class="btn btn-primary" id="sendLoginButton">Envoyer</button>
                     </div>
+                    <input type="hidden" name="token" id="token" value="{{ token }}"/>
                 </form>
-
                 <script>
                     // starter JavaScript for disabling form submissions if there are invalid fields, from bootstrap4 doc
                     (function() {
@@ -74,7 +89,18 @@
                     }, false);
                     })();
                 </script>
-
+                <script>    
+                    var password = document.getElementById("password"), confirm_password = document.getElementById("confirm");
+                    function validatePassword(){
+                        if(password.value != confirm_password.value) {
+                            confirm_password.setCustomValidity("Les mots de passe ne correspondent pas");
+                        } else {
+                            confirm_password.setCustomValidity('');
+                        }
+                    }
+                    password.onchange = validatePassword;
+                    confirm_password.onkeyup = validatePassword;      
+                </script> 
             </div>
         </div>
     </div>

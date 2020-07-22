@@ -61,9 +61,9 @@ class CommentManager
         return ['offset' => $offset, 'limit' => $limit, 'totalCommentPages' => $totalCommentPages, 'commentPage' => $commentPage];
     }
 
-    public function addCommentToPost(int $postId, int $authorId, string $comment): bool
+    public function addCommentToPost(int $postId, int $authorId, ?string $comment): bool
     {
-        if (($comment === '') || (mb_strlen($comment) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($comment) < Request::MIN_TEXTAREA_LENGTH)) {
+        if (($comment === null) || (mb_strlen($comment) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($comment) < Request::MIN_TEXTAREA_LENGTH)) {
             $this->session->setSession(['error' => "Commentaire vide ou trop long."]);
             return false;
         }

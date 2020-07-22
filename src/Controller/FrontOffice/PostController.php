@@ -41,7 +41,8 @@ class PostController
         $this->renderer->render('frontoffice/HomePage.twig', [
             'listposts' => $listPosts,
             'session' => $this->session->getSession(),
-            'user' => $this->auth->user()
+            'user' => $this->auth->user(),
+            'token' => $this->auth->generateToken()
             ]);
         $this->session->remove('success')->remove('error')->remove('info');
     }
@@ -79,7 +80,8 @@ class PostController
             'prevId' => $prevId,
             'nextId' => $nextId,
             'session' => $this->session->getSession(),
-            'user' => $this->auth->user()
+            'user' => $this->auth->user(),
+            'token' => $this->auth->generateToken()
             ]);
         $this->session->remove('success')->remove('error');
     }
@@ -113,17 +115,25 @@ class PostController
     public function addComment(Request $request): void
     {
         // access control, check is user is logged
-        $user = $this->auth->user();
-        $authorId = ($user !== null) ? $user->getUserId() : null;
-
-        if ($user === null) {
+        if ($this->auth->isLogged() === false) {
             $this->session->setSession(['error' => "Vous devez être authentifié pour pouvoir commenter un article."]);
             header("location: ../account/login#login");
             exit();
         }
-        
+       
         $postId=$request->getPostId();
-        $comment = $request->getCommentFormData();
+        $user = $this->auth->user();
+        $authorId = ($user !== null) ? $user->getUserId() : null;
+        $formData = $request->getCommentFormData();
+        $comment = $formData['comment'] ?? null;
+        $token = $formData['token'] ?? null;
+
+        // access control, check token from form
+        if ($this->auth->checkToken($token) === false) {
+            $this->session->setSession(['error' => "Erreur de formulaire"]);
+            header("location: ../post/$postId/1#comments");
+            exit();
+        }
 
         if (($this->commentManager->addCommentToPost($postId, $authorId, $comment)) === true) {
             $this->session->setSession(['success' => "Votre commentaire est enregistré et en attente de validation."]);

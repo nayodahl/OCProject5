@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-// class to connect to database
 
 namespace App\Service;
 
 use \PDO;
 
+// class to connect to database
 class Database
 {
     protected function dbConnect(): PDO
