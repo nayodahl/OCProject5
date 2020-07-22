@@ -1,11 +1,14 @@
-# OpenClassRooms Blog Project 5 - Create your first own Blog with PHP
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5d0bddca95ba4ce3bb5daaa24e5ba77b)](https://app.codacy.com/manual/nayodahl/OCProject5?utm_source=github.com&utm_medium=referral&utm_content=nayodahl/OCProject5&utm_campaign=Badge_Grade_Dashboard)
 
-Blog project for OpenClassroom, done with Vanilla PHP
+# OPENCLASSROOMS Blog Project 5 - Create your first own Blog with PHP
+
+Blog project for OPENCLASSROOMS, done with Vanilla PHP
 
 ## What is this Blog ?
 
 This blog is made of only PHP (except Twig as Template engine and a Bootstrap theme) using MVC architecture.
 This is intentionnal and for a learning purpose, before starting to use PHP frameworks.
+This means it has a custom router (inspired by Altorouter), custom Session management, custom Authentication and registration system etc...
 Here are the rules that needed to be followed : 
 
 * The blog has pages for visitors, and pages for administration.
@@ -38,10 +41,6 @@ Messages from contact form will be sent to this address.
 - Username from blog_demodata.sql : AntoineD or DavidC (member profile), aurelm or fannyb (admin profile), anthonyf (superadmin profile)
 - Password for all users is @dmIn123
 
-## Code Quality
-
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5d0bddca95ba4ce3bb5daaa24e5ba77b)](https://app.codacy.com/manual/nayodahl/OCProject5?utm_source=github.com&utm_medium=referral&utm_content=nayodahl/OCProject5&utm_campaign=Badge_Grade_Dashboard)
-
-## Auteur
+## Author
 
 **Anthony Fachaux** - Openclassrooms Student - Dev PHP/Symfony
