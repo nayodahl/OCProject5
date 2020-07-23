@@ -38,7 +38,7 @@ class PostController
     public function home(): void
     {
         $listPosts = $this->postManager->getHomepagePosts();
-        $this->renderer->render('frontoffice/HomePage.twig', [
+        $this->renderer->render('FrontOffice/HomePage.twig', [
             'listposts' => $listPosts,
             'session' => $this->session->getSession(),
             'user' => $this->auth->user(),
@@ -71,7 +71,7 @@ class PostController
         $listComments = $this->commentManager->getApprovedComments($postId, (int)$offset, $limit);
 
         // twig rendering with some parameters
-        $this->renderer->render('frontoffice/SinglePostPage.twig', [
+        $this->renderer->render('FrontOffice/SinglePostPage.twig', [
             'post' => $post,
             'postId' => $postId,
             'listcomments' => $listComments,
@@ -101,7 +101,7 @@ class PostController
         // getting the Posts from DB
         $listPosts = $this->postManager->getPostsPage((int)$offset, $limit);
 
-        $this->renderer->render('frontoffice/PostsPage.twig', [
+        $this->renderer->render('FrontOffice/PostsPage.twig', [
             'listposts' => $listPosts,
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,

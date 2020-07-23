@@ -66,7 +66,7 @@ class AdminController
         // getting the Posts from DB
         $listPosts = $this->postManager->getPostsPage($offset, $limit);
 
-        $this->renderer->render('backoffice/PostsManager.twig', [
+        $this->renderer->render('BackOffice/PostsManager.twig', [
             'listposts' => $listPosts,
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
@@ -99,7 +99,7 @@ class AdminController
         $adminUsers = $this->userManager->getAdminUsers();
 
         // twig rendering with some parameters
-        $this->renderer->render('backoffice/EditPost.twig', [
+        $this->renderer->render('BackOffice/EditPost.twig', [
             'post' => $post,
             'postId' => $postId,
             'adminUsers' => $adminUsers,
@@ -185,7 +185,7 @@ class AdminController
         }
 
         $adminUsers = $this->userManager->getAdminUsers();
-        $this->renderer->render('backoffice/AddPost.twig', [
+        $this->renderer->render('BackOffice/AddPost.twig', [
             'adminUsers' => $adminUsers,
             'session' => $this->session->getSession(),
             'user' => $user,
@@ -256,7 +256,7 @@ class AdminController
         $listComments = $this->commentManager->getNotApprovedComments($offset, $limit);
 
         // twig rendering with some parameters
-        $this->renderer->render('backoffice/CommentsManager.twig', [
+        $this->renderer->render('BackOffice/CommentsManager.twig', [
             'listcomments' => $listComments,
             'currentPage' => $commentPage,
             'totalPages' => $totalCommentPages,

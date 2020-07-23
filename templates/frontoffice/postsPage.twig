@@ -1,4 +1,4 @@
-{% extends 'layoutFront.twig' %}
+{% extends 'LayoutFront.twig' %}
 
 {% block content %}
     <!-- Main Content -->
@@ -35,7 +35,7 @@
                 <!-- Pager -->
                 <div class="clearfix">                                
                 </div>
-                {% include 'frontoffice/PaginationPostsPage.twig' with {
+                {% include 'FrontOffice/PaginationPostsPage.twig' with {
                     currentPage: currentPage,
                     lastPage: totalPages
                 } only %}

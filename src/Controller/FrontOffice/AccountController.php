@@ -52,7 +52,7 @@ class AccountController
             exit();
         }
 
-        $this->renderer->render('frontoffice/LoginPage.twig', [
+        $this->renderer->render('FrontOffice/LoginPage.twig', [
             'session' => $this->session->getSession(),
             'token' => $this->auth->generateToken()
         ]);
@@ -69,7 +69,7 @@ class AccountController
             exit();
         }
         
-        $this->renderer->render('frontoffice/SigninPage.twig', [
+        $this->renderer->render('FrontOffice/SigninPage.twig', [
             'session' => $this->session->getSession(),
             'token' => $this->auth->generateToken()
         ]);
@@ -105,8 +105,8 @@ class AccountController
         }
         
         // rendering html content of mail with twig
-        $subject = $this->renderer->renderMail('frontoffice/contactMail.twig', 'subject');
-        $message = $this->renderer->renderMail('frontoffice/contactMail.twig', 'message', [ 'firstname' => $firstname, 'lastname' => $lastname, 'email' => $email, 'message' => $message ]);
+        $subject = $this->renderer->renderMail('FrontOffice/ContactMail.twig', 'subject');
+        $message = $this->renderer->renderMail('FrontOffice/ContactMail.twig', 'message', [ 'firstname' => $firstname, 'lastname' => $lastname, 'email' => $email, 'message' => $message ]);
 
         $headers = [
             'From' => Self::CONTACT_MAIL,
@@ -198,8 +198,8 @@ class AccountController
             $server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : self::SERVER_URL;
             
             // rendering html content of mail with twig
-            $subject = $this->renderer->renderMail('frontoffice/signinMail.twig', 'subject');
-            $message = $this->renderer->renderMail('frontoffice/signinMail.twig', 'message', [ 'token' => $token, 'server' => $server ]);
+            $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');
+            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'server' => $server ]);
 
             $headers = [
                 'From' => Self::CONTACT_MAIL,
@@ -267,8 +267,8 @@ class AccountController
             $server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : self::SERVER_URL;
             
             // rendering html content of mail with twig
-            $subject = $this->renderer->renderMail('frontoffice/signinMail.twig', 'subject');
-            $message = $this->renderer->renderMail('frontoffice/signinMail.twig', 'message', [ 'token' => $token, 'server' => $server ]);
+            $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');
+            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'server' => $server ]);
 
             $headers = [
                 'From' => Self::CONTACT_MAIL,
