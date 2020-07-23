@@ -83,7 +83,7 @@ class Router
 
                 // only case when param is a token and not an int, then we change the regex
                 if (preg_match('/token/', $route['route']) === 1) {
-                    $regex="#^/account/activate/[0-9a-zA-Z]{128}$#";
+                    $regex="#^/account/activate/[0-9a-zA-Z]{32}$#";
                     $match = preg_match($regex, $requestUrl) === 1;
                 }
             }

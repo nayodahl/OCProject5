@@ -166,8 +166,8 @@ class UserManager
         // create new user with not activated status
         $newUserId = $this->userRepo->addUser($login, $passwordHash, $email);
 
-        // generate token (length 128) and insert in User
-        $token = bin2hex(random_bytes(64));
+        // generate token (length 32) and insert in User
+        $token = bin2hex(random_bytes(16));
         if ($this->userRepo->insertToken($token, $newUserId) === false) {
             $this->session->setSession(['error' => "Impossible de générer le token"]);
             return null;
@@ -184,8 +184,8 @@ class UserManager
         if ($user !== null) {
             $userId = $user->getUserId();
             
-            // generate new token (length 128) and insert in User
-            $token = bin2hex(random_bytes(64));
+            // generate new token (length 32) and insert in User
+            $token = bin2hex(random_bytes(16));
             if ($this->userRepo->insertToken($token, $userId) === false) {
                 $this->session->setSession(['error' => "Impossible de générer le token"]);
                 return null;

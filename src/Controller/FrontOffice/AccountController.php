@@ -17,7 +17,7 @@ use \App\Service\Auth;
 class AccountController
 {
     private const CONTACT_MAIL = 'contact@blog.nayo.cloud';
-    private const SERVER_URL = 'www.blog.nayo.cloud';
+    private const SERVER_URL = 'https://blog.nayo.cloud';
     
     private $renderer;
     private $postRepo;
@@ -195,18 +195,30 @@ class AccountController
         if ($req !== null) {
             $dest = $req['dest'];
             $token = $req['token'];
-            $server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : self::SERVER_URL;
+            $server = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : self::SERVER_URL;
             
-            // rendering html content of mail with twig
-            $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');
-            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'server' => $server ]);
+            //create a boundary for the email.
+            $boundary = uniqid('np');
 
+            //headers - specify your from email address and name here
+            //and specify the boundary for the email            
             $headers = [
                 'From' => Self::CONTACT_MAIL,
                 'X-Mailer' => 'PHP/' . phpversion(),
                 'MIME-Version' => '1.0',
-                'Content-type' => 'text/html; charset=utf-8'
-            ];
+                'Content-type' => "multipart/alternative;boundary=\"" . $boundary . "\""
+            ];  
+
+            // rendering html content of mail with twig
+            $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');            
+            
+            $message = "Content-type: text/plain;charset=utf-8\r\n\r\n";
+            $message .= $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'messageplaintext', [ 'token' => $token, 'server' => $server ]);
+            $message .= "\r\n\r\n" . $boundary . "\r\n";
+
+            $message .= "Content-type: text/html;charset=utf-8\r\n\r\n";
+            $message .= $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'messagehtml', [ 'token' => $token, 'server' => $server ]);
+            $message .= "\r\n\r\n" . $boundary . "--";
             
             // send mail
             if (mail($dest, $subject, $message, $headers) === true) {

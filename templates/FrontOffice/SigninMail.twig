@@ -2,7 +2,11 @@
 Validation de votre inscription au Dev Blog d'Anthony Fachaux
 {% endblock %}
 
-{% block message %}
+{% block messageplaintext %}
+Bonjour &agrave; toi et Bienvenue ! \n  Cliques sur ce lien : {{ server }}/account/activate/{{ token }} pour valider définitivement ton inscription au Dev Blog d'Anthony Fachaux !
+{% endblock %}
+
+{% block messagehtml %}
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -31,3 +35,4 @@ Validation de votre inscription au Dev Blog d'Anthony Fachaux
   </body>
 </html>
 {% endblock %}
+
