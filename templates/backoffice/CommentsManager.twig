@@ -1,4 +1,4 @@
-{% extends 'layoutBack.twig' %}
+{% extends 'LayoutBack.twig' %}
 
 {% block content %}  
     {% if listcomments %}
@@ -48,7 +48,7 @@
 
                 <!-- Pager for Comments-->
                 <div class="clearfix">
-                    {% include 'backoffice/PaginationComment.twig' with {
+                    {% include 'BackOffice/PaginationComment.twig' with {
                         currentPage: currentPage,
                         lastPage: totalPages,    
                     } only %}

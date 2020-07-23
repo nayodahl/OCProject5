@@ -53,7 +53,7 @@ class SuperAdminController
         // getting the Members from DB
         $listUsers = $this->userManager->getUsersPage((int)$offset, $limit);
         
-        $this->renderer->render('backoffice/UsersManager.twig', [
+        $this->renderer->render('BackOffice/UsersManager.twig', [
             'listUsers' => $listUsers,
             'currentPage' => $userPage,
             'totalPages' => $totalUserPages,
