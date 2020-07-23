@@ -103,17 +103,20 @@ class AccountController
             header('location: #contact');
             exit();
         }
-        
-        // rendering html content of mail with twig
-        $subject = $this->renderer->renderMail('FrontOffice/ContactMail.twig', 'subject');
-        $message = $this->renderer->renderMail('FrontOffice/ContactMail.twig', 'message', [ 'firstname' => $firstname, 'lastname' => $lastname, 'email' => $email, 'message' => $message ]);
+
+        //create a boundary for the email.
+        $boundary = uniqid('np');
 
         $headers = [
             'From' => Self::CONTACT_MAIL,
             'X-Mailer' => 'PHP/' . phpversion(),
             'MIME-Version' => '1.0',
-            'Content-type' => 'text/html; charset=utf-8'
-        ];
+            'Content-type' => "multipart/alternative;boundary=\"" . $boundary . "\""
+        ]; 
+        
+        // rendering html content of mail with twig
+        $subject = $this->renderer->renderMail('FrontOffice/ContactMail.twig', 'subject');
+        $message = $this->renderer->renderMail('FrontOffice/ContactMail.twig', 'message', [ 'firstname' => $firstname, 'lastname' => $lastname, 'email' => $email, 'message' => $message, 'boundary' => $boundary ]);
         
         // send mail, change first parameter to your own choosen contact mail if needed
         if (mail(Self::CONTACT_MAIL, $subject, $message, $headers) === false) {
@@ -200,8 +203,6 @@ class AccountController
             //create a boundary for the email.
             $boundary = uniqid('np');
 
-            //headers - specify your from email address and name here
-            //and specify the boundary for the email            
             $headers = [
                 'From' => Self::CONTACT_MAIL,
                 'X-Mailer' => 'PHP/' . phpversion(),
@@ -210,16 +211,9 @@ class AccountController
             ];  
 
             // rendering html content of mail with twig
-            $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');            
-            
-            $message = "Content-type: text/plain;charset=utf-8\r\n\r\n";
-            $message .= $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'messageplaintext', [ 'token' => $token, 'server' => $server ]);
-            $message .= "\r\n\r\n" . $boundary . "\r\n";
+            $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');    
+            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'server' => $server, 'boundary' => $boundary ]);          
 
-            $message .= "Content-type: text/html;charset=utf-8\r\n\r\n";
-            $message .= $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'messagehtml', [ 'token' => $token, 'server' => $server ]);
-            $message .= "\r\n\r\n" . $boundary . "--";
-            
             // send mail
             if (mail($dest, $subject, $message, $headers) === true) {
                 $this->session->setSession(['success' => "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription."]);
@@ -276,22 +270,25 @@ class AccountController
         if ($req !== null) {
             $dest = $req['dest'];
             $token = $req['token'];
-            $server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : self::SERVER_URL;
-            
-            // rendering html content of mail with twig
-            $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');
-            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'server' => $server ]);
+            $server = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : self::SERVER_URL;
+
+            //create a boundary for the email.
+            $boundary = uniqid('np');
 
             $headers = [
                 'From' => Self::CONTACT_MAIL,
                 'X-Mailer' => 'PHP/' . phpversion(),
                 'MIME-Version' => '1.0',
-                'Content-type' => 'text/html; charset=utf-8'
-            ];
+                'Content-type' => "multipart/alternative;boundary=\"" . $boundary . "\""
+            ];  
+            
+            // rendering html content of mail with twig
+            $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');    
+            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'server' => $server, 'boundary' => $boundary ]);  
             
             // send mail
             if (mail($dest, $subject, $message, $headers) === true) {
-                $this->session->setSession(['success' => "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription."]);
+                $this->session->setSession(['success' => "Votre inscription a de nouveau été enregistrée, vous allez recevoir un nouveau mail pour valider votre inscription."]);
                 header('location: login#login');
                 exit();
             };

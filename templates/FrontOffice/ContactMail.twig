@@ -3,18 +3,21 @@ Formulaire de contact du Dev Blog d'Anthony Fachaux
 {% endblock %}
 
 {% block message %}
+--{{ boundary }}
+Content-type: text/plain;charset=utf-8
+Message envoyé par {{ firstname }} {{ lastname }} : {{ message }}
+
+--{{ boundary }}
+Content-type: text/html;charset=utf-8
 <!DOCTYPE html>
 <html lang="fr">
-
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="Anthony Fachaux">
-
     <title>Message envoyé par le formulaire de contact du Dev Blog d'Anthony Fachaux</title>
   </head>
-
   <body>     
       <div class="container">
           <div class="row">
@@ -34,4 +37,6 @@ Formulaire de contact du Dev Blog d'Anthony Fachaux
     <hr>
   </body>
 </html>
+
+--{{ boundary }}
 {% endblock %}
