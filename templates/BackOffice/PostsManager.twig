@@ -41,11 +41,11 @@
                             <td>{{ post.title }}</td>
                             <td>{{ post.chapo }}</td>
                             <td>{{ post.authorLogin }}</td>
-                            <td width="240">{{ post.lastUpdate }}</td>
+                            <td class="td-lastupdate">{{ post.lastUpdate }}</td>
                             <td><a href="admin/post/{{ post.postId }}">Modifier</a></td>
                         </tr> 
                         {% endfor %}                        
-                    <tbody>
+                    </tbody>
                 </table>
 
                 <!-- Pager -->

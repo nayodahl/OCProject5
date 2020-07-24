@@ -45,7 +45,7 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#login");
+            header("location: ../../account/login#loginform");
             exit();
         }
         $user = $this->auth->user();
@@ -80,7 +80,7 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#login");
+            header("location: ../../account/login#loginform");
             exit();
         }
         $user = $this->auth->user();
@@ -114,7 +114,7 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#login");
+            header("location: ../../account/login#loginform");
             exit();
         }
         $user = $this->auth->user();
@@ -153,7 +153,7 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#login");
+            header("location: ../../account/login#loginform");
             exit();
         }
         if ($this->auth->isAdmin($this->auth->user()->getUserId()) === false) {
@@ -175,7 +175,7 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#login");
+            header("location: ../../account/login#loginform");
             exit();
         }
         $user = $this->auth->user();
@@ -198,7 +198,7 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#login");
+            header("location: ../../account/login#loginform");
             exit();
         }
         if ($this->auth->isAdmin($this->auth->user()->getUserId()) === false) {
@@ -235,7 +235,7 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#login");
+            header("location: ../../account/login#loginform");
             exit();
         }
         $user = $this->auth->user();
@@ -270,7 +270,7 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#login");
+            header("location: ../../account/login#loginform");
             exit();
         }
         if ($this->auth->isAdmin($this->auth->user()->getUserId()) === false) {
@@ -292,7 +292,7 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#login");
+            header("location: ../../account/login#loginform");
             exit();
         }
         if ($this->auth->isAdmin($this->auth->user()->getUserId()) === false) {

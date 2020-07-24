@@ -38,7 +38,7 @@
                             <td>{{ user.userId }}</td>
                             <td>{{ user.login }}</td>
                             <td>{{ user.email }}</td>
-                            <td width="220">{{ user.created }}</td>
+                            <td class="td-lastupdate">{{ user.created }}</td>
                             <td>{{ user.type }}</td>
                             {% if user.type == 'admin' %}
                                 <td><a href="super/demote/{{ user.userId }}">Retirer</a></td>
@@ -48,7 +48,7 @@
                             {% endif %}
                         </tr> 
                         {% endfor %}                        
-                    <tbody>
+                    </tbody>
                 </table>
 
                 <!-- Pager -->

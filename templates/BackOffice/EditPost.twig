@@ -39,7 +39,8 @@
                     <div class="control-group">
                         <div class="form-group controls">
                             <label for="author">Auteur :</label>
-                            <select id="author" name="author" type="text" class="form-control" form="PostForm" required data-validation-required-message="Sélectionnez un auteur.">
+                            <select id="author" name="author" class="form-control" form="PostForm" required data-validation-required-message="Sélectionnez un auteur...">
+                                <option value="" disabled selected hidden>Sélectionnez un auteur...</option>
                                 {% for adminUser in adminUsers %}
                                     <option value="{{ adminUser.userId }}">{{ adminUser.login }}</option>
                                 {% endfor %}
@@ -51,7 +52,7 @@
                     <div class="control-group">
                         <div class="form-group  controls">
                             <label>Contenu : </label>
-                            <textarea type="text" name="content" rows="30" class="form-control" id="content" maxlength="4000" required data-validation-required-message="Tapez le contenu de l'article ici.">{{ post.content }}</textarea>
+                            <textarea name="content" rows="30" class="form-control" id="content" maxlength="4000" required data-validation-required-message="Tapez le contenu de l'article ici.">{{ post.content }}</textarea>
                             <div class="invalid-feedback">Tapez un contenu d'article valide.</div>
                             <p class="help-block text-danger"></p>
                         </div>
