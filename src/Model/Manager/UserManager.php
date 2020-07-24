@@ -147,9 +147,9 @@ class UserManager
         }
         
         // Regex for username
-        $regex = '/^[a-z0-9_-]{3,15}$/';
+        $regex = '/^[a-zA-Z0-9_-]{3,15}$/';
         if (preg_match($regex, $login) === 0) {
-            $this->session->setSession(['error' => "Le login ne respecte pas les règles de complexité : entre 3 et 16 caractères alphanumériques."]);
+            $this->session->setSession(['error' => "Le login ne respecte pas les règles de complexité : entre 3 et 16 caractères alphanumériques ainsi que - et _"]);
             return null;
         }
 
