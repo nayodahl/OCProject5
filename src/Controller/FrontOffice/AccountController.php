@@ -198,7 +198,6 @@ class AccountController
         if ($req !== null) {
             $dest = $req['dest'];
             $token = $req['token'];
-            $server = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : self::SERVER_URL;
             
             //create a boundary for the email.
             $boundary = uniqid('np');
@@ -212,7 +211,7 @@ class AccountController
 
             // rendering html content of mail with twig
             $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');    
-            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'server' => $server, 'boundary' => $boundary ]);          
+            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'boundary' => $boundary ]);          
 
             // send mail
             if (mail($dest, $subject, $message, $headers) === true) {
@@ -270,7 +269,6 @@ class AccountController
         if ($req !== null) {
             $dest = $req['dest'];
             $token = $req['token'];
-            $server = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : self::SERVER_URL;
 
             //create a boundary for the email.
             $boundary = uniqid('np');
@@ -284,7 +282,7 @@ class AccountController
             
             // rendering html content of mail with twig
             $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');    
-            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'server' => $server, 'boundary' => $boundary ]);  
+            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'boundary' => $boundary ]);  
             
             // send mail
             if (mail($dest, $subject, $message, $headers) === true) {
