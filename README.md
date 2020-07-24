@@ -21,21 +21,32 @@ Here are the rules that needed to be followed :
 ## Getting started
 
 - Clone Repository
-- Install dependancies using Composer, without using --dev flag if you don't need them
+- Install dependancies using Composer (composer install or composer update, https://getcomposer.org/doc/01-basic-usage.md)
+- Generates autoload file with Composer (composer dump-autoload, https://getcomposer.org/doc/01-basic-usage.md)
 - Create a database on your SQL server and import blog_demodata.sql file
 - Configure access to this database in file src\Service\Database.php
-- Configure your mail credentials on your PHP server, as this blog is using php mail function to send mails. I used a https://mailtrap.io/ inbox during the development 
+- Configure your mail setup on your PHP server, as this blog is using php mail function to send mails. I used a https://mailtrap.io/ inbox during the development 
 - Configure your contact mail on file src\Controller\FrontOffice\AccountController.php, on line 19 :
 
 ```php
 
 class AccountController
 {
-    private const CONTACT_MAIL = 'contact@blog.exemple.com';
-    private const SERVER_URL = 'www.blog.exemple.com';
+    private const CONTACT_MAIL = 'contact@exemple.com';
+    private const SERVER_URL = 'https://exemple.com';
 
 ```
 Messages from contact form will be sent to this address.
+
+- Configure the basepath of the blog installation on your server on file src\View\View.php, on line 23 :
+
+```php
+
+    $this->twig->addGlobal('basepath', 'http://localhost/OCProject5/public/');
+
+```
+
+## Let's go
 
 - Username from blog_demodata.sql : AntoineD or DavidC (member profile), aurelm or fannyb (admin profile), anthonyf (superadmin profile)
 - Password for all users is @dmIn123

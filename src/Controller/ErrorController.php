@@ -16,6 +16,6 @@ class ErrorController
 
     public function show404(): void
     {
-        $this->renderer->render('frontoffice/404.twig');
+        $this->renderer->render('FrontOffice/404.twig');
     }
 }
