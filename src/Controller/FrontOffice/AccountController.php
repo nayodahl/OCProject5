@@ -231,7 +231,7 @@ class AccountController
         // access control, check is user is not logged
         if ($this->auth->isLogged() === true) {
             $this->session->setSession(['error' => "Vous êtes déjà connecté(e) et avez donc un compte"]);
-            header('location: ../posts/1');
+            header('location: ../../posts/1');
             exit();
         }
 
@@ -249,7 +249,7 @@ class AccountController
             exit();
         }
        
-        $this->session->setSession(['error' => "Impossible de confirmer votre compte, il y a un problème avec votre lien de confirmation"]);
+        $this->session->setSession(['error' => "Impossible de confirmer votre compte, il y a un problème avec votre lien de confirmation, ou peut-être avez-vous déjà activé votre compte ?"]);
         header('location: ../signin#signin');
         exit();
     }
