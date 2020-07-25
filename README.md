@@ -42,7 +42,7 @@ Messages from contact form will be sent to this address.
 
 ```php
 
-    $this->twig->addGlobal('basepath', 'http://localhost/OCProject5/public/');
+    $this->twig->addGlobal('basepath', 'https://exemple.com/');
 
 ```
 

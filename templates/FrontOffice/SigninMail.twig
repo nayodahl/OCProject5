@@ -5,7 +5,7 @@ Validation de votre inscription au Dev Blog d'Anthony Fachaux
 {% block message %}
 --{{ boundary }}
 Content-type: text/plain;charset=utf-8
-Bonjour et Bienvenue ! Cliques sur ce lien : {{ server }}/account/activate/{{ token }} pour valider définitivement ton inscription au Dev Blog d'Anthony Fachaux !
+Bonjour et Bienvenue ! Copie ce lien : {{ basepath }}account/activate/{{ token }} pour valider définitivement ton inscription au Dev Blog d'Anthony Fachaux !
 
 --{{ boundary }}
 Content-type: text/html;charset=utf-8
@@ -25,7 +25,7 @@ Content-type: text/html;charset=utf-8
                   <div class="post-preview">
                       <h3>Bonjour à toi et Bienvenue ! </h3>
                       <p>
-                          Cliques sur ce <a href="{{ server }}/account/activate/{{ token }}">lien</a> pour valider définitivement ton inscription au Dev Blog d'Anthony Fachaux !
+                          Clique sur ce <a href="{{ basepath }}account/activate/{{ token }}">lien</a> pour valider définitivement ton inscription au Dev Blog d'Anthony Fachaux !
                       </p>
                   </div>                
               </div>
