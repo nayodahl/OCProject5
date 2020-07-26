@@ -3,20 +3,10 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use \App\Controller\FrontOffice\PostController;
-use \App\Controller\FrontOffice\AccountController;
-use \App\Controller\BackOffice\AdminController;
-use \App\Controller\BackOffice\SuperAdminController;
-use \App\Controller\ErrorController;
 use \App\Service\Http\Request;
 
 class Router
 {
-    private $postController;
-    private $accountController;
-    private $adminController;
-    private $superAdminController;
-    private $errorController;
     private $routes;
     private $request;
     
@@ -102,22 +92,14 @@ class Router
     // Routing entry request, and calling the needed controller on demand
     public function routerRequest($controller, $action): void
     {
-        if ($controller === "adminController") {
-            $this->adminController = new AdminController();
-        };
-        if ($controller === "superAdminController") {
-            $this->superAdminController = new SuperAdminController();
-        };
-        if ($controller === "accountController") {
-            $this->accountController = new AccountController();
-        };
-        if ($controller === "postController") {
-            $this->postController = new PostController();
-        };
-        if ($controller === "errorController") {
-            $this->errorController = new ErrorController();
-        };
-        
-        $this->{$controller}->{$action}($this->request);
+        $controller ='\App\Controller'. $controller;
+        if(class_exists($controller) && method_exists($controller, $action)){
+            $run = new $controller;
+            $run->{$action}($this->request);
+            exit();
+        }
+        // else 404
+        $run = new \App\Controller\ErrorController;
+        $run->show404();
     }
 }
