@@ -102,6 +102,7 @@ class PostRepository extends Database
     }
 
     // Update Post
+    // return true if OK
     public function updatePost(int $postId, string $title, string $chapo, int $authorId, string $content): bool
     {
         $result = $this->dbConnect()->prepare('UPDATE post SET title = :title, chapo = :chapo, post.user_id = :authorId, content = :content, last_update=NOW() WHERE post.id = :postId');
@@ -119,6 +120,7 @@ class PostRepository extends Database
     }
 
     // Add new Post
+    // Return the ID of the newly created Post
     public function addPost(string $title, string $chapo, int $authorId, string $content): ?int
     {
         $conn = $this->dbConnect();
@@ -133,6 +135,7 @@ class PostRepository extends Database
     }
 
     // Delete a Post
+    // return true if OK
     public function deleteOnePost(int $postId): bool
     {
         $result = $this->dbConnect()->prepare('DELETE FROM post WHERE post.id = :postId');

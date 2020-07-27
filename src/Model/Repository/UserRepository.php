@@ -24,11 +24,11 @@ class UserRepository extends Database
         return $result->fetchObject(User::class);
     }
     
-    // get total number of Posts
+    // get total number of Users that have admin or member profile (so we exclude superadmin user)
     // return an int
-    public function countUsers()
+    public function countUsers(): int
     {
-        return (int)current($this->dbConnect()->query("SELECT COUNT(id) from user")->fetch());
+        return (int)current($this->dbConnect()->query('SELECT COUNT(id) from user WHERE user.type <> "superadmin"')->fetch());
     }
 
     // get Users that have admin or member profile (so we exclude superadmin user), sorted by alphabetical order, with limit and offset as parameters
@@ -134,6 +134,8 @@ class UserRepository extends Database
         return (int)($conn->lastInsertId());
     }
 
+    // insert Token in User
+    // Return true is OK
     public function insertToken(string $token, int $newUserId): bool
     {
         $result = $this->dbConnect()->prepare('UPDATE user SET token = :token, last_update=NOW() WHERE user.id = :userId');
@@ -159,6 +161,8 @@ class UserRepository extends Database
         return $user;
     }
 
+    // Update "activated" attribute of a User
+    // Return true if OK
     public function activateOneUser(string $token): bool
     {
         $result = $this->dbConnect()->prepare('UPDATE user SET token = NULL, activated = 1, last_update=NOW() WHERE user.token = :token');

@@ -123,6 +123,8 @@ class UserManager
         return null;
     }
 
+    // signin new User
+    // return its mail and a generated token if OK, else null
     public function signin(?string $login, ?string $password, ?string $confirm, ?string $email): ?array
     {
         // check if password and password confirmation fields are equals
@@ -178,6 +180,8 @@ class UserManager
         return ['dest' => $dest, 'token' => $token];
     }
 
+    // alternative signin method, in case the User already had a confirmation link
+    // return its mail and a newly generated token if OK, else null
     public function signinUserFromToken(string $previousToken): ?array
     {
         $user = $this->userRepo->searchToken($previousToken);

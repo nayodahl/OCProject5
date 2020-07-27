@@ -40,7 +40,7 @@ class AdminController
         $this->auth = new Auth();
     }
 
-    // Render Posts Manager page (default)
+    // Render Posts Manager page (default for backoffice)
     public function showPostsManager(Request $request): void
     {
         // access control, check is user is logged and admin

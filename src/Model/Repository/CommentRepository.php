@@ -50,7 +50,7 @@ class CommentRepository extends Database
         return $result->fetchAll(PDO::FETCH_CLASS, Comment::class);
     }
 
-    // get total number of Comments
+    // get total number of Comments with status as parameter, 1 is for approved, 0 for not approved
     // return an int
     public function countComments(int $approved): int
     {
@@ -61,6 +61,8 @@ class CommentRepository extends Database
         return (int)current($result->fetch());
     }
 
+    // count number of approved Comments from a Post
+    // return an int
     public function countNumberOfApprovedCommentsFromPost(int $postId): int
     {
         $result = $this->dbConnect()->prepare('SELECT COUNT(id) FROM comment WHERE post_id= :postId AND approved= 1');
@@ -70,7 +72,8 @@ class CommentRepository extends Database
         return (int)current($result->fetch());
     }
 
-    // write Comment in DB
+    // Insert Comment in DB
+    // return true if OK
     public function insertCommentToPost(int $postId, int $authorId, string $comment): bool
     {
         $result = $this->dbConnect()->prepare('INSERT INTO comment(post_id, comment.user_id, content) VALUES (:postId, :authorId, :comment)');
@@ -85,7 +88,8 @@ class CommentRepository extends Database
         return false;
     }
 
-    // approve Comment in DB
+    // Update "approved" attribute of a Comment in DB
+    // return true if OK
     public function setCommentToApproved(int $commentId): bool
     {
         $result = $this->dbConnect()->prepare('UPDATE comment SET approved = 1, last_update=NOW() WHERE id = :commentId');
@@ -97,7 +101,8 @@ class CommentRepository extends Database
         return false;
     }
 
-    // refuse Comment in DB
+    // refuse Comment in DB, so deleting it
+    // return true if OK
     public function deleteComment(int $commentId): bool
     {
         $result = $this->dbConnect()->prepare('DELETE FROM comment WHERE id = :commentId');
