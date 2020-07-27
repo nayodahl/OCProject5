@@ -24,25 +24,27 @@ Here are the rules that needed to be followed :
 - Install dependancies using Composer (composer install or composer update, https://getcomposer.org/doc/01-basic-usage.md)
 - Generates autoload file with Composer (composer dump-autoload, https://getcomposer.org/doc/01-basic-usage.md)
 - Create a database on your SQL server and import blog_demodata.sql file
-- Configure access to this database in file src\Service\Database.php
+- Configure access to this database in config file src\config.ini 
 - Configure your mail setup on your PHP server, as this blog is using php mail function to send mails. I used a https://mailtrap.io/ inbox during the development 
-- Configure your contact mail on file src\Controller\FrontOffice\AccountController.php, on line 19 :
+- Configure your contact mail and the server url on config file src\config.ini :
+- Change path of config file on src\Service\Database.php, line 13
 
 ```php
 
-class AccountController
-{
-    private const CONTACT_MAIL = 'contact@exemple.com';
-    private const SERVER_URL = 'https://exemple.com';
+    protected function dbConnect(): PDO
+    {
+        $ini = parse_ini_file('\path\of\your\vhost\src\config.ini');
 
 ```
 Messages from contact form will be sent to this address.
 
-- Configure the basepath of the blog installation on your server on file src\View\View.php, on line 23 :
+- Change path of config file on src\Controller\AccountController.php, line 33
 
 ```php
 
-    $this->twig->addGlobal('basepath', 'https://exemple.com/');
+        public function __construct()
+    {
+        $ini = parse_ini_file('\path\of\your\vhost\src\config.ini');
 
 ```
 

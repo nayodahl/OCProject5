@@ -20,7 +20,7 @@
                         {{ session.error }}
                     </div>    
                 {% endif %}              
-                <form method="post" action="account/login" name="sentLogin" id="loginForm" class="needs-validation" novalidate>
+                <form method="post" action="/account/login" name="sentLogin" id="loginForm" class="needs-validation" novalidate>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls">
                         <label>Login</label>
@@ -40,7 +40,7 @@
                     <br>
                     <div id="success"></div>
                     <div class="form-group form-inline justify-content-center">
-                        <a href="" class="btn btn-primary">Annuler</a>
+                        <a href="/" class="btn btn-primary">Annuler</a>
                         <button type="submit" class="btn btn-primary" id="sendLoginButton">Se Connecter</button>
                     </div>
                     <input type="hidden" name="token" id="token" value="{{ token }}"/>
@@ -66,7 +66,7 @@
                     })();
                 </script>
                 <div class="col-md-6 mx-auto">
-                    <a href="account/signin#signin">Pas encore de compte ?</a>
+                    <a href="/account/signin#signin">Pas encore de compte ?</a>
                 </div>
             </div>
         </div>

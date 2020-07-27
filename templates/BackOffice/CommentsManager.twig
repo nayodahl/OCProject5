@@ -38,10 +38,10 @@
                             <td>{{ comment.commentId }}</td>
                             <td>{{ comment.authorLogin }}</td>
                             <td>{{ comment.content }}</td>
-                            <td><a target="_blank" rel="noopener noreferrer" href="post&#47;{{ comment.postId }}&#47;1#comments">{{ comment.postTitle }}</a></td>
+                            <td><a target="_blank" rel="noopener noreferrer" href="/post/{{ comment.postId }}/1#comments">{{ comment.postTitle }}</a></td>
                             <td class="td-lastupdate">{{ comment.created }}</td>
-                            <td><a href="admin/approve/{{ comment.commentId }}">Approuver</a></td>
-                            <td><a href="admin/refuse/{{ comment.commentId }}">Refuser</a></td>
+                            <td><a href="/admin/approve/{{ comment.commentId }}">Approuver</a></td>
+                            <td><a href="/admin/refuse/{{ comment.commentId }}">Refuser</a></td>
                         </tr> 
                         {% endfor %}                        
                     </tbody>

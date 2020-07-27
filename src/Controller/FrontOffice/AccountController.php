@@ -15,10 +15,7 @@ use \App\Service\Http\Session;
 use \App\Service\Auth;
 
 class AccountController
-{
-    private const CONTACT_MAIL = 'contact@blog.nayo.cloud';
-    private const SERVER_URL = 'https://blog.nayo.cloud';
-    
+{    
     private $renderer;
     private $postRepo;
     private $postManager;
@@ -28,9 +25,15 @@ class AccountController
     private $userManager;
     private $session;
     private $auth;
+    private $contactMail;
+    private $serverUrl;
 
     public function __construct()
     {
+        $ini = parse_ini_file('C:\xampp\htdocs\OCProject5\src\config.ini');
+        $this->contactMail = $ini['contact_email'];
+        $this->serverUrl = $ini['server_url'];
+        
         $this->renderer = new View();
         $this->postRepo = new PostRepository();
         $this->postManager = new PostManager($this->postRepo);
@@ -108,7 +111,7 @@ class AccountController
         $boundary = uniqid('np');
 
         $headers = [
-            'From' => Self::CONTACT_MAIL,
+            'From' => $this->contactMail,
             'X-Mailer' => 'PHP/' . phpversion(),
             'MIME-Version' => '1.0',
             'Content-type' => "multipart/alternative;boundary=\"" . $boundary . "\""
@@ -119,7 +122,7 @@ class AccountController
         $message = $this->renderer->renderMail('FrontOffice/ContactMail.twig', 'message', [ 'firstname' => $firstname, 'lastname' => $lastname, 'email' => $email, 'message' => $message, 'boundary' => $boundary ]);
         
         // send mail, change first parameter to your own choosen contact mail if needed
-        if (mail(Self::CONTACT_MAIL, $subject, $message, $headers) === false) {
+        if (mail($this->contactMail, $subject, $message, $headers) === false) {
             $this->session->setSession(['error' => "Erreur lors de l'envoi du message"]);
             header('location: #contact');
             exit();
@@ -203,7 +206,7 @@ class AccountController
             $boundary = uniqid('np');
 
             $headers = [
-                'From' => Self::CONTACT_MAIL,
+                'From' => $this->contactMail,
                 'X-Mailer' => 'PHP/' . phpversion(),
                 'MIME-Version' => '1.0',
                 'Content-type' => "multipart/alternative;boundary=\"" . $boundary . "\""
@@ -211,7 +214,7 @@ class AccountController
 
             // rendering html content of mail with twig
             $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');    
-            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'boundary' => $boundary ]);          
+            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'boundary' => $boundary, 'basepath' => $this->serverUrl]);          
 
             // send mail
             if (mail($dest, $subject, $message, $headers) === true) {
@@ -274,7 +277,7 @@ class AccountController
             $boundary = uniqid('np');
 
             $headers = [
-                'From' => Self::CONTACT_MAIL,
+                'From' => $this->contactMail,
                 'X-Mailer' => 'PHP/' . phpversion(),
                 'MIME-Version' => '1.0',
                 'Content-type' => "multipart/alternative;boundary=\"" . $boundary . "\""
@@ -282,7 +285,7 @@ class AccountController
             
             // rendering html content of mail with twig
             $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');    
-            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'boundary' => $boundary ]);  
+            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'boundary' => $boundary, 'basepath' => $this->serverUrl ]);  
             
             // send mail
             if (mail($dest, $subject, $message, $headers) === true) {

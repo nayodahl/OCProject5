@@ -24,11 +24,11 @@
                 {% if session.info %}
                     <div class="alert alert-info alert-dismissible" role="alert">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <a href="account/resendsignin">Renvoyer un mail de confirmation</a>
+                        <a href="/account/resendsignin">Renvoyer un mail de confirmation</a>
                     </div>    
                 {% endif %} 
                          
-                <form method="post" action="account/signin" name="sentSignin" id="signinForm" class="needs-validation" novalidate>
+                <form method="post" action="/account/signin" name="sentSignin" id="signinForm" class="needs-validation" novalidate>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls">
                         <label>Login</label>
@@ -64,7 +64,7 @@
                     <br>
                     <div id="success"></div>
                     <div class="form-group form-inline justify-content-center">
-                        <a href="account/login" class="btn btn-primary">Annuler</a>
+                        <a href="/account/login" class="btn btn-primary">Annuler</a>
                         <button type="submit" class="btn btn-primary" id="sendLoginButton">Créer un compte</button>
                     </div>
                     <input type="hidden" name="token" id="token" value="{{ token }}"/>

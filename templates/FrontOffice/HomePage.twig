@@ -16,7 +16,7 @@
 
                 {% for post in listposts %}
                     <div class="post-preview">
-                        <a href="post&#47;{{ post.postId }}&#47;1">
+                        <a href="/post/{{ post.postId }}/1">
                         <h2 class="post-title">
                             {{ post.title }}
                         </h2>
@@ -27,14 +27,14 @@
                         <p class="post-meta">Publié par {{ post.authorLogin }} le {{ post.lastUpdate }}</p>
                     </div>
                     <div class="clearfix">
-                    <a class="btn btn-primary float-right" href="post&#47;{{ post.postId }}&#47;1">Lire la suite &rarr;</a>
+                    <a class="btn btn-primary float-right" href="/post/{{ post.postId }}/1">Lire la suite &rarr;</a>
                     </div>
                     <hr>
                 {% endfor %}
 
                 <!-- Pager -->
                 <div class="clearfix">
-                    <a class="btn btn-primary float-right" href="posts">Anciens Articles &rarr;</a>
+                    <a class="btn btn-primary float-right" href="/posts">Anciens Articles &rarr;</a>
                 </div>
             </div>
         </div>
@@ -61,7 +61,7 @@
                 {% endif %} 
                 <p>Envoyez-moi un message et je vous répondrai dans les plus brefs délais !</p>
 
-                <form method="post" action="#contact" name="sentMessage" id="contactForm" class="needs-validation" novalidate>
+                <form method="post" action="/#contact" name="sentMessage" id="contactForm" class="needs-validation" novalidate>
                     <div class="control-group">
                         <div class="form-row">
                             <div class="form-group col-lg-6 floating-label-form-group controls">
