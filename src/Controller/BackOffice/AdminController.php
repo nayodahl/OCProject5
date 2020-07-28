@@ -45,12 +45,12 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#loginform");
+            header("Location: /account/login#loginform");
             exit();
         }
         $user = $this->auth->user();
         if ($this->auth->isAdmin($user->getUserId()) === false) {
-            header("location: ../../posts/1");
+            header("Location: /posts/1");
             exit();
         }
         
@@ -80,19 +80,19 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#loginform");
+            header("Location: /account/login#loginform");
             exit();
         }
         $user = $this->auth->user();
         if ($this->auth->isAdmin($user->getUserId()) === false) {
-            header("location: ../../posts/1");
+            header("Location: /posts/1");
             exit();
         }
         
         $postId=$request->getEditPostId();
         $post = $this->postManager->getSinglePost($postId);
         if ($post === null) {
-            header('location: ../../admin/posts/1');
+            header('Location: /admin/posts/1');
             exit();
         }
 
@@ -114,12 +114,12 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#loginform");
+            header("Location: /account/login#loginform");
             exit();
         }
         $user = $this->auth->user();
         if ($this->auth->isAdmin($user->getUserId()) === false) {
-            header("location: ../../posts/1");
+            header("Location: /posts/1");
             exit();
         }
         
@@ -134,7 +134,7 @@ class AdminController
         // access control, check token from form
         if ($this->auth->checkToken($token) === false) {
             $this->session->setSession(['error' => "Erreur de formulaire"]);
-            header("location: ../../admin/post/$postId#modify");
+            header("Location: /admin/post/$postId#modify");
             exit();
         }
                 
@@ -142,10 +142,10 @@ class AdminController
         
         if ($req === true) {
             $this->session->setSession(['success' => "Article modifié."]);
-            header("location: ../../admin/posts/1");
+            header("Location: /admin/posts/1");
             exit();
         }
-        header("location: ../../admin/post/$postId#modify");
+        header("Location: /admin/post/$postId#modify");
         exit();
     }
 
@@ -153,21 +153,21 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#loginform");
+            header("Location: /account/login#loginform");
             exit();
         }
         if ($this->auth->isAdmin($this->auth->user()->getUserId()) === false) {
-            header("location: ../../posts/1");
+            header("Location: /posts/1");
             exit();
         }
 
         $postId=$request->getEditPostId();
         if ($this->postManager->deletePost($postId) === true) {
             $this->session->setSession(['success' => "Article supprimé."]);
-            header("location: ../../admin/posts/1");
+            header("Location: /admin/posts/1");
             exit();
         }
-        header("location: ../../admin/posts/1");
+        header("Location: /admin/posts/1");
         exit();
     }
 
@@ -175,12 +175,12 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#loginform");
+            header("Location: /account/login#loginform");
             exit();
         }
         $user = $this->auth->user();
         if ($this->auth->isAdmin($user->getUserId()) === false) {
-            header("location: ../../posts/1");
+            header("Location: /posts/1");
             exit();
         }
 
@@ -198,11 +198,11 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#loginform");
+            header("Location: /account/login#loginform");
             exit();
         }
         if ($this->auth->isAdmin($this->auth->user()->getUserId()) === false) {
-            header("location: ../../posts/1");
+            header("Location: /posts/1");
             exit();
         }
         
@@ -216,7 +216,7 @@ class AdminController
         // access control, check token from form
         if ($this->auth->checkToken($token) === false) {
             $this->session->setSession(['error' => "Erreur de formulaire"]);
-            header("location: ../admin/newpost#add");
+            header("Location: /admin/newpost#add");
             exit();
         }
                 
@@ -224,10 +224,10 @@ class AdminController
                 
         if (isset($newPostId) && ($newPostId > 0)) {
             $this->session->setSession(['success' => "Article publié."]);
-            header("location: ../admin/posts/1");
+            header("Location: /admin/posts/1");
             exit();
         }
-        header("location: ../admin/newpost#add");
+        header("Location: /admin/newpost#add");
         exit();
     }
 
@@ -235,12 +235,12 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#loginform");
+            header("Location: /account/login#loginform");
             exit();
         }
         $user = $this->auth->user();
         if ($this->auth->isAdmin($user->getUserId()) === false) {
-            header("location: ../../posts/1");
+            header("Location: /posts/1");
             exit();
         }
         
@@ -270,21 +270,21 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#loginform");
+            header("Location: /account/login#loginform");
             exit();
         }
         if ($this->auth->isAdmin($this->auth->user()->getUserId()) === false) {
-            header("location: ../../posts/1");
+            header("Location: /posts/1");
             exit();
         }
         
         $commentId=$request->getCommentId();
         if ($this->commentManager->approveComment($commentId) === true) {
             $this->session->setSession(['success' => "Commentaire approuvé."]);
-            header("location: ../../admin/comments/1");
+            header("Location: /admin/comments/1");
             exit();
         }
-        header("location: ../../admin/comments/1");
+        header("Location: /admin/comments/1");
         exit();
     }
 
@@ -292,21 +292,21 @@ class AdminController
     {
         // access control, check is user is logged and admin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#loginform");
+            header("Location: /account/login#loginform");
             exit();
         }
         if ($this->auth->isAdmin($this->auth->user()->getUserId()) === false) {
-            header("location: ../../posts/1");
+            header("Location: /posts/1");
             exit();
         }
 
         $commentId=$request->getCommentId();
         if ($this->commentManager->refuseComment($commentId) === true) {
             $this->session->setSession(['success' => "Commentaire supprimé."]);
-            header("location: ../../admin/comments/1");
+            header("Location: /admin/comments/1");
             exit();
         }
-        header("location: ../../admin/comments/1");
+        header("Location: /admin/comments/1");
         exit();
     }
 }

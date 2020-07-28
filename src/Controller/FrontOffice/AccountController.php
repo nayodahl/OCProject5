@@ -51,7 +51,7 @@ class AccountController
         // access control, check is user is not logged
         if ($this->auth->isLogged() === true) {
             $this->session->setSession(['error' => "Vous êtes déjà connecté(e)"]);
-            header('location: ../posts/1');
+            header('Location: /posts/1');
             exit();
         }
 
@@ -68,7 +68,7 @@ class AccountController
         // access control, check is user is not logged
         if ($this->auth->isLogged() === true) {
             $this->session->setSession(['error' => "Vous êtes déjà connecté(e) et avez donc un compte"]);
-            header('location: ../posts/1');
+            header('Location: /posts/1');
             exit();
         }
         
@@ -92,7 +92,7 @@ class AccountController
         // access control, check token from form
         if ($this->auth->checkToken($token) === false) {
             $this->session->setSession(['error' => "Erreur de formulaire"]);
-            header("location: #contact");
+            header("Location: /#contact");
             exit();
         }
 
@@ -103,7 +103,7 @@ class AccountController
         $badMessage = ($message === null) || (mb_strlen($message) > Request::MAX_TEXTAREA_LENGTH) || (mb_strlen($lastname) < Request::MIN_TEXTAREA_LENGTH);
         if ($badLastName || $badFirstName || $badEmail || $badMessage) {
             $this->session->setSession(['error' => "tous les champs ne sont pas remplis ou corrects."]);
-            header('location: #contact');
+            header('Location: /#contact');
             exit();
         }
 
@@ -124,12 +124,12 @@ class AccountController
         // send mail, change first parameter to your own choosen contact mail if needed
         if (mail($this->contactMail, $subject, $message, $headers) === false) {
             $this->session->setSession(['error' => "Erreur lors de l'envoi du message"]);
-            header('location: #contact');
+            header('Location: /#contact');
             exit();
         };
 
         $this->session->setSession(['info' => "Votre message a bien été envoyé"]);
-        header('location: #contact');
+        header('Location: /#contact');
         exit();
     }
 
@@ -139,7 +139,7 @@ class AccountController
         // access control, check is user is not logged
         if ($this->auth->isLogged() === true) {
             $this->session->setSession(['error' => "Vous êtes déjà connecté(e)"]);
-            header('location: ../posts/1');
+            header('Location: /posts/1');
             exit();
         }
         
@@ -151,17 +151,17 @@ class AccountController
         // access control, check token from form
         if ($this->auth->checkToken($token) === false) {
             $this->session->setSession(['error' => "Erreur de formulaire"]);
-            header("location: login#loginform");
+            header("Location: /login#loginform");
             exit();
         }
         
         $user = $this->userManager->login($login, $password);
         
         if ($user !== null) {
-            header('location: ../');
+            header('Location: /');
             exit();
         }
-        header('location: login#loginform');
+        header('Location: /login#loginform');
         exit();
     }
 
@@ -169,7 +169,7 @@ class AccountController
     public function logout(): void
     {
         $this->session->destroy();
-        header('location: ../');
+        header('Location: /');
         exit();
     }
 
@@ -179,7 +179,7 @@ class AccountController
         // access control, check is user is not logged
         if ($this->auth->isLogged() === true) {
             $this->session->setSession(['error' => "Vous êtes déjà connecté(e) et avez donc un compte"]);
-            header('location: ../posts/1');
+            header('Location: /posts/1');
             exit();
         }
         
@@ -193,7 +193,7 @@ class AccountController
         // access control, check token from form
         if ($this->auth->checkToken($token) === false) {
             $this->session->setSession(['error' => "Erreur de formulaire"]);
-            header("location: login#loginform");
+            header("Location: /login#loginform");
             exit();
         }
 
@@ -219,12 +219,12 @@ class AccountController
             // send mail
             if (mail($dest, $subject, $message, $headers) === true) {
                 $this->session->setSession(['success' => "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription."]);
-                header('location: login#loginform');
+                header('Location: /login#loginform');
                 exit();
             };
         }
 
-        header('location: signin#signin');
+        header('Location: /signin#signin');
         exit();
     }
 
@@ -234,7 +234,7 @@ class AccountController
         // access control, check is user is not logged
         if ($this->auth->isLogged() === true) {
             $this->session->setSession(['error' => "Vous êtes déjà connecté(e) et avez donc un compte"]);
-            header('location: ../../posts/1');
+            header('Location: /posts/1');
             exit();
         }
 
@@ -242,18 +242,18 @@ class AccountController
 
         if ($req === 1) {
             $this->session->setSession(['success' => "Votre inscription est définitivement validée, vous pouvez vous connecter."]);
-            header('location: ../login#loginform');
+            header('Location: /login#loginform');
             exit();
         }
 
         // if token is no more valid
         if ($req === 2) {
-            header('location: ../signin#signin');
+            header('Location: /signin#signin');
             exit();
         }
        
         $this->session->setSession(['error' => "Impossible de confirmer votre compte, il y a un problème avec votre lien de confirmation, ou peut-être avez-vous déjà activé votre compte ?"]);
-        header('location: ../signin#signin');
+        header('Location: /signin#signin');
         exit();
     }
 
@@ -263,7 +263,7 @@ class AccountController
         // access control, check is user is not logged
         if ($this->auth->isLogged() === true) {
             $this->session->setSession(['error' => "Vous êtes déjà connecté(e) et avez donc un compte"]);
-            header('location: ../posts/1');
+            header('Location: /posts/1');
             exit();
         }
         $previousToken = $this->session->getSession()['previousToken'];
@@ -290,12 +290,12 @@ class AccountController
             // send mail
             if (mail($dest, $subject, $message, $headers) === true) {
                 $this->session->setSession(['success' => "Votre inscription a de nouveau été enregistrée, vous allez recevoir un nouveau mail pour valider votre inscription."]);
-                header('location: login#loginform');
+                header('Location: /login#loginform');
                 exit();
             };
         }
 
-        header('location: signin#signin');
+        header('Location: /signin#signin');
         exit();
     }
 }
