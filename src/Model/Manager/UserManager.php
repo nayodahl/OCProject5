@@ -147,6 +147,12 @@ class UserManager
             $this->session->setSession(['error' => "Ce login est déjà utilisé"]);
             return null;
         }
+
+        // check if email already exists
+        if (($this->userRepo->emailExists($email)) === true) {
+            $this->session->setSession(['error' => "Cet email est déjà utilisé"]);
+            return null;
+        }
         
         // Regex for username
         $regex = '/^[a-zA-Z0-9_-]{3,15}$/';

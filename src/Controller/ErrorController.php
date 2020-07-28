@@ -23,7 +23,7 @@ class ErrorController
     public function show404(): void
     {
         header("HTTP/1.0 404 Not Found");
-        $this->renderer->render('FrontOffice/404.twig', [ 
+        $this->renderer->render('FrontOffice/404.twig', [
             'session' => $this->session->getSession(),
             'user' => $this->auth->user()
         ]);

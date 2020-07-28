@@ -117,7 +117,7 @@ class PostController
         // access control, check is user is logged
         if ($this->auth->isLogged() === false) {
             $this->session->setSession(['error' => "Vous devez être authentifié pour pouvoir commenter un article."]);
-            header("Location: account/login#loginform");
+            header("Location: /account/login#loginform");
             exit();
         }
        

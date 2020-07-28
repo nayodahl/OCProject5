@@ -121,6 +121,17 @@ class UserRepository extends Database
         return boolval(current($result->fetch()));
     }
 
+    // check if email already exists in Users
+    // Return true it exists, else false
+    public function emailExists(string $email): bool
+    {
+        $result = $this->dbConnect()->prepare('SELECT EXISTS (SELECT 1 from user WHERE user.email = :email)');
+        $result->bindValue(':email', $email, PDO::PARAM_STR);
+        $result->execute();
+        
+        return boolval(current($result->fetch()));
+    }
+
     // Create new User
     public function addUser(string $login, string $passwordHash, string $email): ?int
     {

@@ -15,7 +15,7 @@ use \App\Service\Http\Session;
 use \App\Service\Auth;
 
 class AccountController
-{    
+{
     private $renderer;
     private $postRepo;
     private $postManager;
@@ -115,7 +115,7 @@ class AccountController
             'X-Mailer' => 'PHP/' . phpversion(),
             'MIME-Version' => '1.0',
             'Content-type' => "multipart/alternative;boundary=\"" . $boundary . "\""
-        ]; 
+        ];
         
         // rendering html content of mail with twig
         $subject = $this->renderer->renderMail('FrontOffice/ContactMail.twig', 'subject');
@@ -151,7 +151,7 @@ class AccountController
         // access control, check token from form
         if ($this->auth->checkToken($token) === false) {
             $this->session->setSession(['error' => "Erreur de formulaire"]);
-            header("Location: /login#loginform");
+            header("Location: /account/login#loginform");
             exit();
         }
         
@@ -161,7 +161,7 @@ class AccountController
             header('Location: /');
             exit();
         }
-        header('Location: /login#loginform');
+        header('Location: /account/login#loginform');
         exit();
     }
 
@@ -193,7 +193,7 @@ class AccountController
         // access control, check token from form
         if ($this->auth->checkToken($token) === false) {
             $this->session->setSession(['error' => "Erreur de formulaire"]);
-            header("Location: /login#loginform");
+            header("Location: /account/login#loginform");
             exit();
         }
 
@@ -210,21 +210,21 @@ class AccountController
                 'X-Mailer' => 'PHP/' . phpversion(),
                 'MIME-Version' => '1.0',
                 'Content-type' => "multipart/alternative;boundary=\"" . $boundary . "\""
-            ];  
+            ];
 
             // rendering html content of mail with twig
-            $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');    
-            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'boundary' => $boundary, 'basepath' => $this->serverUrl]);          
+            $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');
+            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'boundary' => $boundary, 'basepath' => $this->serverUrl]);
 
             // send mail
             if (mail($dest, $subject, $message, $headers) === true) {
                 $this->session->setSession(['success' => "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription."]);
-                header('Location: /login#loginform');
+                header('Location: /account/login#loginform');
                 exit();
             };
         }
 
-        header('Location: /signin#signin');
+        header('Location: /account/signin#signin');
         exit();
     }
 
@@ -242,18 +242,18 @@ class AccountController
 
         if ($req === 1) {
             $this->session->setSession(['success' => "Votre inscription est définitivement validée, vous pouvez vous connecter."]);
-            header('Location: /login#loginform');
+            header('Location: /account/login#loginform');
             exit();
         }
 
         // if token is no more valid
         if ($req === 2) {
-            header('Location: /signin#signin');
+            header('Location: /account/signin#signin');
             exit();
         }
        
         $this->session->setSession(['error' => "Impossible de confirmer votre compte, il y a un problème avec votre lien de confirmation, ou peut-être avez-vous déjà activé votre compte ?"]);
-        header('Location: /signin#signin');
+        header('Location: /account/signin#signin');
         exit();
     }
 
@@ -281,21 +281,21 @@ class AccountController
                 'X-Mailer' => 'PHP/' . phpversion(),
                 'MIME-Version' => '1.0',
                 'Content-type' => "multipart/alternative;boundary=\"" . $boundary . "\""
-            ];  
+            ];
             
             // rendering html content of mail with twig
-            $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');    
-            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'boundary' => $boundary, 'basepath' => $this->serverUrl ]);  
+            $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');
+            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'boundary' => $boundary, 'basepath' => $this->serverUrl ]);
             
             // send mail
             if (mail($dest, $subject, $message, $headers) === true) {
                 $this->session->setSession(['success' => "Votre inscription a de nouveau été enregistrée, vous allez recevoir un nouveau mail pour valider votre inscription."]);
-                header('Location: /login#loginform');
+                header('Location: /account/login#loginform');
                 exit();
             };
         }
 
-        header('Location: /signin#signin');
+        header('Location: /account/signin#signin');
         exit();
     }
 }

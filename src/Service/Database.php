@@ -15,7 +15,7 @@ class Database
         $dbUser = $ini['db_user'];
         $dbPassword = $ini['db_password'];
         
-        return new PDO("mysql:host=localhost;dbname=$dbName;charset=utf8", $dbUser,  $dbPassword, [
+        return new PDO("mysql:host=localhost;dbname=$dbName;charset=utf8", $dbUser, $dbPassword, [
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         ]);
