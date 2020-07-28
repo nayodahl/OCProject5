@@ -5,18 +5,22 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">                
-                <div class="post-preview">
-                    <h2 class="post-title">
-                        {{ post.title }}
-                    </h2>
-                    <h4 class="post-subtitle">
-                        {{ post.chapo }}
-                    </h4>
-                    <p>
-                        {{ post.content }}
-                    </p>
-                    <p class="post-meta">Publié par {{ post.authorLogin }} le {{ post.lastUpdate }}</p>
-                </div>
+                <article class="post-preview">
+                    <header>
+                        <h2 class="post-title">
+                            {{ post.title }}
+                        </h2>
+                        <h4 class="post-subtitle">
+                            {{ post.chapo }}
+                        </h4>
+                    </header>
+                    <section>
+                        <p>
+                            {{ post.content }}
+                        </p>
+                    </section>
+                    <p class="post-meta">Publié par {{ post.authorLogin }} le <time>{{ post.lastUpdate }}</time></p>
+                </article>
                 
                 <!-- Pager for Posts-->
                 <div class="clearfix">

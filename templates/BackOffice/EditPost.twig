@@ -40,7 +40,7 @@
                         <div class="form-group controls">
                             <label for="author">Auteur :</label>
                             <select id="author" name="author" class="form-control" form="PostForm" required data-validation-required-message="Sélectionnez un auteur...">
-                                <option value="" disabled selected hidden>Sélectionnez un auteur...</option>
+                                <option value="" disabled selected hidden>Sélectionnez un auteur ( actuellement : {{ post.authorLogin }} ) ...</option>
                                 {% for adminUser in adminUsers %}
                                     <option value="{{ adminUser.userId }}">{{ adminUser.login }}</option>
                                 {% endfor %}
