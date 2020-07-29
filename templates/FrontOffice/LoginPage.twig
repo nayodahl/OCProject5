@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
-                <h2 class="section-heading" id="loginform">Connexion</h2>
+                <h2 class="section-heading" id="logintitle">Connexion</h2>
             </div>
             <div class="col-lg-6 col-md-4 mx-auto">
                 {% if session.success %}
@@ -20,10 +20,10 @@
                         {{ session.error }}
                     </div>    
                 {% endif %}              
-                <form method="post" action="account/login" name="sentLogin" id="loginForm" class="needs-validation" novalidate>
+                <form method="post" action="/account/login" name="sentLogin" id="loginform" class="needs-validation" novalidate>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls">
-                        <label>Login</label>
+                        <label for="login">Login</label>
                         <input name="login" type="text" class="form-control" placeholder="Login" id="login" required data-validation-required-message="Entrez votre nom.">
                         <div class="invalid-feedback">Entrez un login valide.</div>
                         <p class="help-block text-danger"></p>
@@ -31,7 +31,7 @@
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls">
-                        <label>Mot de passe</label>
+                        <label for="password">Mot de passe</label>
                         <input name="password" type="password" class="form-control" placeholder="Mot de passe" id="password" required data-validation-required-message="Entrez votre adresse email.">
                         <div class="invalid-feedback">Entrez un mot de passe valide.</div>
                         <p class="help-block text-danger"></p>
@@ -40,7 +40,7 @@
                     <br>
                     <div id="success"></div>
                     <div class="form-group form-inline justify-content-center">
-                        <a href="" class="btn btn-primary">Annuler</a>
+                        <a href="/" class="btn btn-primary">Annuler</a>
                         <button type="submit" class="btn btn-primary" id="sendLoginButton">Se Connecter</button>
                     </div>
                     <input type="hidden" name="token" id="token" value="{{ token }}"/>
@@ -66,7 +66,7 @@
                     })();
                 </script>
                 <div class="col-md-6 mx-auto">
-                    <a href="account/signin#signin">Pas encore de compte ?</a>
+                    <a href="/account/signin#signin">Pas encore de compte ?</a>
                 </div>
             </div>
         </div>

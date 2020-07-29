@@ -51,7 +51,8 @@ class Request
 
     public function getCommentPage(): int
     {
-        return (int)$this->get[2];
+        // if not defined, return 1
+        return isset($this->get[2]) ? (int)$this->get[2] : 1;
     }
 
     public function getCommentManagerPage(): int

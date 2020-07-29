@@ -55,7 +55,7 @@ class PostController
 
         $post = $this->postManager->getSinglePost($postId);
         if ($post === null) {
-            header('location: ../../posts/1');
+            header('Location: /posts/1');
             exit();
         }
         $nextId = $this->postManager->getNextPostId($postId);
@@ -117,7 +117,7 @@ class PostController
         // access control, check is user is logged
         if ($this->auth->isLogged() === false) {
             $this->session->setSession(['error' => "Vous devez être authentifié pour pouvoir commenter un article."]);
-            header("location: ../account/login#loginform");
+            header("Location: /account/login#logintitle");
             exit();
         }
        
@@ -131,7 +131,7 @@ class PostController
         // access control, check token from form
         if ($this->auth->checkToken($token) === false) {
             $this->session->setSession(['error' => "Erreur de formulaire"]);
-            header("location: ../post/$postId/1#comments");
+            header("Location: /post/$postId/1#comments");
             exit();
         }
 
@@ -139,7 +139,7 @@ class PostController
             $this->session->setSession(['success' => "Votre commentaire est enregistré et en attente de validation."]);
         }
 
-        header("location: ../post/$postId/1#comments");
+        header("Location: /post/$postId/1#comments");
         exit();
     }
 }

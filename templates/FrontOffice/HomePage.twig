@@ -15,8 +15,8 @@
                 <hr>
 
                 {% for post in listposts %}
-                    <div class="post-preview">
-                        <a href="post&#47;{{ post.postId }}&#47;1">
+                    <article class="post-preview">
+                        <a href="/post/{{ post.postId }}/1">
                         <h2 class="post-title">
                             {{ post.title }}
                         </h2>
@@ -25,16 +25,16 @@
                         </h3>
                         </a>
                         <p class="post-meta">Publié par {{ post.authorLogin }} le {{ post.lastUpdate }}</p>
-                    </div>
+                    </article>
                     <div class="clearfix">
-                    <a class="btn btn-primary float-right" href="post&#47;{{ post.postId }}&#47;1">Lire la suite &rarr;</a>
+                    <a class="btn btn-primary float-right" href="/post/{{ post.postId }}/1">Lire la suite &rarr;</a>
                     </div>
                     <hr>
                 {% endfor %}
 
                 <!-- Pager -->
                 <div class="clearfix">
-                    <a class="btn btn-primary float-right" href="posts">Anciens Articles &rarr;</a>
+                    <a class="btn btn-primary float-right" href="/posts">Anciens Articles &rarr;</a>
                 </div>
             </div>
         </div>
@@ -61,17 +61,17 @@
                 {% endif %} 
                 <p>Envoyez-moi un message et je vous répondrai dans les plus brefs délais !</p>
 
-                <form method="post" action="#contact" name="sentMessage" id="contactForm" class="needs-validation" novalidate>
+                <form method="post" action="/#contact" name="sentMessage" id="contactForm" class="needs-validation" novalidate>
                     <div class="control-group">
                         <div class="form-row">
                             <div class="form-group col-lg-6 floating-label-form-group controls">
-                                <label>Nom</label>
+                                <label for="lastname">Nom</label>
                                 <input name="lastname" type="text" class="form-control" placeholder="Nom" id="lastname" required data-validation-required-message="Entrez votre nom.">
                                 <div class="invalid-feedback">Entrez un nom valide.</div>
                                 <p class="help-block text-danger"></p>
                             </div>
                             <div class="form-group col-lg-6 floating-label-form-group controls">
-                                <label>Prénom</label>
+                                <label for="firstname">Prénom</label>
                                 <input name="firstname" type="text" class="form-control" placeholder="Prénom" id="firstname" required data-validation-required-message="Entrez votre prénom.">
                                 <div class="invalid-feedback">Entrez un prénom valide.</div>
                                 <p class="help-block text-danger"></p>
@@ -80,7 +80,7 @@
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls">
-                            <label>Email</label>
+                            <label for="email">Email</label>
                             <input name="email" type="email" class="form-control" placeholder="Email" id="email" required data-validation-required-message="Entrez votre adresse email.">
                             <div class="invalid-feedback">Entrez un email valide.</div>
                             <p class="help-block text-danger"></p>
@@ -88,7 +88,7 @@
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls">
-                            <label>Message</label>
+                            <label for="message">Message</label>
                             <textarea name="message" rows="5" class="form-control" placeholder="Message" id="message" maxlength="500" required data-validation-required-message="Entrez votre message ici."></textarea>
                             <div class="invalid-feedback">Entrez un message valide.</div>
                             <p class="help-block text-danger"></p>

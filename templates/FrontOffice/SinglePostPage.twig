@@ -5,18 +5,22 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">                
-                <div class="post-preview">
-                    <h2 class="post-title">
-                        {{ post.title }}
-                    </h2>
-                    <h4 class="post-subtitle">
-                        {{ post.chapo }}
-                    </h4>
-                    <p>
-                        {{ post.content }}
-                    </p>
+                <article class="post-preview">
+                    <header>
+                        <h2 class="post-title">
+                            {{ post.title }}
+                        </h2>
+                    </header>
+                    <section>
+                        <h4 class="post-subtitle">
+                            {{ post.chapo }}
+                        </h4>                   
+                        <p>
+                            {{ post.content }}
+                        </p>
+                    </section>
                     <p class="post-meta">Publié par {{ post.authorLogin }} le {{ post.lastUpdate }}</p>
-                </div>
+                </article>
                 
                 <!-- Pager for Posts-->
                 <div class="clearfix">
@@ -35,7 +39,7 @@
     {% if listcomments %}
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-md-10 mx-auto">                
+            <div class="col-lg-8 col-md-10 mx-auto"  id="commentspart">                
 
                 {% for comment in listcomments %}
                 <div class="post-preview">
@@ -76,11 +80,11 @@
                         {{ session.error }}
                     </div>    
                 {% endif %} 
-                <form method="post" action="addcomment/{{ postId }}" name="sentMessage" id="contactForm" class="needs-validation" novalidate>
+                <form method="post" action="/addcomment/{{ postId }}" name="sentMessage" id="contactForm" class="needs-validation" novalidate>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls">
-                        <label>Tapez votre message</label>
-                        <textarea rows="5" name="comment" class="form-control" placeholder="Votre message (vous devez être connecté pour ajouter un commentaire, et il sera soumis à validation"  required data-validation-required-message="Entre votre message ici."></textarea>
+                        <label for="comment">Tapez votre message</label>
+                        <textarea rows="5" name="comment" id="comment" class="form-control" placeholder="Votre message (vous devez être connecté pour ajouter un commentaire, et il sera soumis à validation"  required data-validation-required-message="Entre votre message ici."></textarea>
                         <p class="help-block text-danger"></p>
                         </div>
                     </div>

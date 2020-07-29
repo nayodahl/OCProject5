@@ -93,7 +93,7 @@ class Router
     public function routerRequest($controller, $action): void
     {
         $controller ='\App\Controller'. $controller;
-        if(class_exists($controller) && method_exists($controller, $action)){
+        if (class_exists($controller) && method_exists($controller, $action)) {
             $run = new $controller;
             $run->{$action}($this->request);
             exit();

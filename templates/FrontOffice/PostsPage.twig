@@ -15,8 +15,8 @@
                 <hr>
 
                 {% for post in listposts %}
-                    <div class="post-preview">
-                        <a href="post&#47;{{ post.postId }}&#47;1">
+                    <article class="post-preview">
+                        <a href="/post/{{ post.postId }}/1">
                         <h2 class="post-title">
                             {{ post.title }}
                         </h2>
@@ -25,9 +25,9 @@
                         </h3>
                         </a>
                         <p class="post-meta">Publié par {{ post.authorLogin }} le {{ post.lastUpdate }}</p>
-                    </div>
+                    </article>
                     <div class="clearfix">
-                    <a class="btn btn-primary float-right" href="post&#47;{{ post.postId }}&#47;1">Lire la suite &rarr;</a>
+                    <a class="btn btn-primary float-right" href="/post/{{ post.postId }}/1">Lire la suite &rarr;</a>
                 </div>
                     <hr>
                 {% endfor %}

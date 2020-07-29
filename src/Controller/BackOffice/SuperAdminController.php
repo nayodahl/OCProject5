@@ -32,12 +32,12 @@ class SuperAdminController
     {
         // access control, check is user is logged and superadmin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#loginform");
+            header("Location: /account/login#logintitle");
             exit();
         }
         $user = $this->auth->user();
         if ($this->auth->isSuperAdmin($user->getUserId()) === false) {
-            header("location: ../../admin/posts/1");
+            header("Location: /admin/posts/1");
             exit();
         }
         
@@ -67,21 +67,21 @@ class SuperAdminController
     {
         // access control, check is user is logged and superadmin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#loginform");
+            header("Location: /account/login#logintitle");
             exit();
         }
         if ($this->auth->isSuperAdmin($this->auth->user()->getUserId()) === false) {
-            header("location: ../../admin/posts/1");
+            header("Location: /admin/posts/1");
             exit();
         }
 
         $user=$request->getUserId();
         if ($this->userManager->promoteUser($user) === true) {
             $this->session->setSession(['success' => "Droits admin donnés à l'utilisateur."]);
-            header("location: ../../super/members/1");
+            header("Location: /super/members/1");
             exit();
         }
-        header("location: ../../super/members/1");
+        header("Location: /super/members/1");
         exit();
     }
 
@@ -89,21 +89,21 @@ class SuperAdminController
     {
         // access control, check is user is logged and superadmin
         if ($this->auth->isLogged() === false) {
-            header("location: ../../account/login#loginform");
+            header("Location: /account/login#logintitle");
             exit();
         }
         if ($this->auth->isSuperAdmin($this->auth->user()->getUserId()) === false) {
-            header("location: ../../admin/posts/1");
+            header("Location: /admin/posts/1");
             exit();
         }
         
         $user=$request->getUserId();
         if ($this->userManager->demoteUser($user) === true) {
             $this->session->setSession(['success' => "Droits admin retirés à l'utilisateur."]);
-            header("location: ../../super/members/1");
+            header("Location: /super/members/1");
             exit();
         }
-        header("location: ../../super/members/1");
+        header("Location: /super/members/1");
         exit();
     }
 }

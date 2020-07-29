@@ -5,23 +5,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="author" content="Anthony Fachaux">
-  <base href="{{ basepath }}"/>
 
   <title>Anthony Fachaux, Mon Blog de Dev PHP </title>
 
-  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png">
 
   <!-- Bootstrap core CSS -->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Custom fonts for this template -->
-  <link href="css/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="/css/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
   <!-- Custom styles for this template -->
-  <link href="css/clean-blog.min.css" rel="stylesheet">
+  <link href="/css/clean-blog.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -29,7 +28,7 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
     <div class="container">
-      <a class="navbar-brand" href="admin/posts"><img src="img/logo-white.png" alt=""></a>
+      <a class="navbar-brand" href="admin/posts"><img src="/img/logo-white.png" alt="logo du dev blog"></a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         Menu
         <i class="fas fa-bars"></i>
@@ -37,31 +36,31 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="admin/posts/1">Articles</a>
+            <a class="nav-link" href="/admin/posts/1">Articles</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="admin/comments/1">Commentaires</a>
+            <a class="nav-link" href="/admin/comments/1">Commentaires</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="super/members/1">Membres</a>
+            <a class="nav-link" href="/super/members/1">Membres</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">Retour à l'accueil</a>
+            <a class="nav-link" href="/">Retour à l'accueil</a>
           </li>
           {% if session.auth %}
             <li class="nav-item">
-              <a class="nav-link" class="disabled">
+              <a class="nav-link disabled">
                 <i class="fa fa-user fa-fw"></i> {{ user.login }}
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="account/logout">
+              <a class="nav-link" href="/account/logout">
                 <i class="fa fa-sign-out-alt"></i>
               </a>
             </li>
           {% else %}
             <li class="nav-item">
-              <a class="nav-link" href="account/login#login">
+              <a class="nav-link" href="/account/login#logintitle">
                 <i class="fa fa-user fa-fw"></i> Se Connecter
               </a>
             </li>  
@@ -72,7 +71,7 @@
   </nav>
 
   <!-- Page Header -->
-  <header class="masthead" style="background-image: url('img/typewriter.jpg')">
+  <header class="masthead" style="background-image: url('/img/typewriter.jpg')">
     <div class="overlay"></div>
     <div class="container">
       <div class="row">
@@ -104,10 +103,10 @@
   </footer>
 
   <!-- Bootstrap core JavaScript -->
-  <script src="js/jquery.min.js"></script>
-  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/bootstrap.bundle.min.js"></script>
 
   <!-- Custom scripts for this template -->
-  <script src="js/clean-blog.min.js"></script>
+  <script src="/js/clean-blog.min.js"></script>
 </body>
 </html>

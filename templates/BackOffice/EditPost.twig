@@ -19,7 +19,7 @@
                     </div>    
                 {% endif %} 
                 <hr>                               
-                <form method="post" action="admin/post/{{ postId }}" name="sentMessage" id="PostForm" class="needs-validation" novalidate>
+                <form method="post" action="/admin/post/{{ postId }}" name="sentMessage" id="PostForm" class="needs-validation" novalidate>
                     <div class="control-group">
                         <div class="form-group controls">
                             <label>Titre :</label>
@@ -40,7 +40,7 @@
                         <div class="form-group controls">
                             <label for="author">Auteur :</label>
                             <select id="author" name="author" class="form-control" form="PostForm" required data-validation-required-message="Sélectionnez un auteur...">
-                                <option value="" disabled selected hidden>Sélectionnez un auteur...</option>
+                                <option value="" disabled selected hidden>Sélectionnez un auteur ( actuellement : {{ post.authorLogin }} ) ...</option>
                                 {% for adminUser in adminUsers %}
                                     <option value="{{ adminUser.userId }}">{{ adminUser.login }}</option>
                                 {% endfor %}
@@ -61,10 +61,10 @@
                     <div id="success"></div>
                     <div class="row justify-content-center">
                         <div col-md-2>
-                            <a class="btn btn-primary" href="admin/delete/{{ post.postId }}">Supprimer l'article</a>
+                            <a class="btn btn-primary" href="/admin/delete/{{ post.postId }}">Supprimer l'article</a>
                         </div>
                         <div col-md-2>
-                            <a class="btn btn-primary" href="admin/posts/1">Annuler</a>
+                            <a class="btn btn-primary" href="/admin/posts/1">Annuler</a>
                         </div>
                         <div col-md-2>
                             <button type="submit" class="btn btn-primary" id="sendMessageButton">Enregistrer</button>

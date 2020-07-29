@@ -20,7 +20,6 @@ class View
             'cache' => false,
             'debug' => true,]
         );
-        $this->twig->addGlobal('basepath', 'http://localhost/OCProject5/public/');
     }
 
     public function render(string $view, array $params = []): void

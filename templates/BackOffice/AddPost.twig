@@ -19,7 +19,7 @@
                     </div>    
                 {% endif %} 
                 <hr>                               
-                <form method="post" action="admin/newpost" name="sentMessage" id="PostForm" class="needs-validation" novalidate>
+                <form method="post" action="/admin/newpost" name="sentMessage" id="PostForm" class="needs-validation" novalidate>
                     <div class="control-group">
                         <div class="form-group controls">
                             <label>Titre :</label>
@@ -61,7 +61,7 @@
                     <div id="success"></div>
                     <div class="row justify-content-center">
                         <div col-md-2>
-                            <a class="btn btn-primary" href="admin/posts/1">Annuler</a></a>
+                            <a class="btn btn-primary" href="/admin/posts/1">Annuler</a></a>
                         </div>
                         <div col-md-2>
                             <button type="submit" class="btn btn-primary" id="sendMessageButton">Publier</button>
