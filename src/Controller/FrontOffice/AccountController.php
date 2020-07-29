@@ -151,7 +151,7 @@ class AccountController
         // access control, check token from form
         if ($this->auth->checkToken($token) === false) {
             $this->session->setSession(['error' => "Erreur de formulaire"]);
-            header("Location: /account/login#loginform");
+            header("Location: /account/login#logintitle");
             exit();
         }
         
@@ -161,7 +161,7 @@ class AccountController
             header('Location: /');
             exit();
         }
-        header('Location: /account/login#loginform');
+        header('Location: /account/login#logintitle');
         exit();
     }
 
@@ -193,7 +193,7 @@ class AccountController
         // access control, check token from form
         if ($this->auth->checkToken($token) === false) {
             $this->session->setSession(['error' => "Erreur de formulaire"]);
-            header("Location: /account/login#loginform");
+            header("Location: /account/login#logintitle");
             exit();
         }
 
@@ -219,7 +219,7 @@ class AccountController
             // send mail
             if (mail($dest, $subject, $message, $headers) === true) {
                 $this->session->setSession(['success' => "Votre inscription a bien été enregistrée, vous allez recevoir un mail pour valider votre inscription."]);
-                header('Location: /account/login#loginform');
+                header('Location: /account/login#logintitle');
                 exit();
             };
         }
@@ -242,7 +242,7 @@ class AccountController
 
         if ($req === 1) {
             $this->session->setSession(['success' => "Votre inscription est définitivement validée, vous pouvez vous connecter."]);
-            header('Location: /account/login#loginform');
+            header('Location: /account/login#logintitle');
             exit();
         }
 
@@ -290,7 +290,7 @@ class AccountController
             // send mail
             if (mail($dest, $subject, $message, $headers) === true) {
                 $this->session->setSession(['success' => "Votre inscription a de nouveau été enregistrée, vous allez recevoir un nouveau mail pour valider votre inscription."]);
-                header('Location: /account/login#loginform');
+                header('Location: /account/login#logintitle');
                 exit();
             };
         }

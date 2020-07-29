@@ -32,7 +32,7 @@ class SuperAdminController
     {
         // access control, check is user is logged and superadmin
         if ($this->auth->isLogged() === false) {
-            header("Location: /account/login#loginform");
+            header("Location: /account/login#logintitle");
             exit();
         }
         $user = $this->auth->user();
@@ -67,7 +67,7 @@ class SuperAdminController
     {
         // access control, check is user is logged and superadmin
         if ($this->auth->isLogged() === false) {
-            header("Location: /account/login#loginform");
+            header("Location: /account/login#logintitle");
             exit();
         }
         if ($this->auth->isSuperAdmin($this->auth->user()->getUserId()) === false) {
@@ -89,7 +89,7 @@ class SuperAdminController
     {
         // access control, check is user is logged and superadmin
         if ($this->auth->isLogged() === false) {
-            header("Location: /account/login#loginform");
+            header("Location: /account/login#logintitle");
             exit();
         }
         if ($this->auth->isSuperAdmin($this->auth->user()->getUserId()) === false) {
