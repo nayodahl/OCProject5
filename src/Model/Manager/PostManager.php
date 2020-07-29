@@ -13,10 +13,10 @@ class PostManager
     private $postRepo;
     private $session;
 
-    public function __construct(PostRepository $postRepository)
+    public function __construct(PostRepository $postRepository, Session $session)
     {
         $this->postRepo = $postRepository;
-        $this->session = new Session();
+        $this->session = $session;
     }
     
     public function getSinglePost(int $postId): ?Post

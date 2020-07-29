@@ -13,11 +13,11 @@ class ErrorController
     private $session;
     private $auth;
 
-    public function __construct()
+    public function __construct(View $renderer, Session $session, Auth $auth)
     {
-        $this->renderer = new View();
-        $this->session = new Session();
-        $this->auth = new Auth();
+        $this->renderer = $renderer;
+        $this->session = $session;
+        $this->auth = $auth;
     }
 
     public function show404(): void

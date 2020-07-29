@@ -3,17 +3,46 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use \App\View\View;
 use \App\Service\Http\Request;
+use \App\Model\Repository\PostRepository;
+use \App\Model\Manager\PostManager;
+use \App\Controller\FrontOffice\PostController;
+use \App\Controller\ErrorController;
+use \App\Model\Repository\CommentRepository;
+use \App\Model\Manager\CommentManager;
+use \App\Service\Http\Session;
 
 class Router
 {
     private $routes;
     private $request;
+    private $renderer;
+    private $postRepo;
+    private $postManager;
+    private $postController;
+    private $commentRepo;
+    private $commentManager;
+    private $session;
+    private $auth;
     
     public function __construct()
     {
         // dependancies
         $this->request = new Request();
+        $this->renderer = new View();
+        $this->session = new Session();
+        $this->auth = new Auth();
+
+        $this->postRepo = new PostRepository();
+        $this->commentRepo = new CommentRepository();
+
+        // injecting dependancies 
+        $this->postManager = new PostManager($this->postRepo, $this->session);        
+        $this->commentManager = new CommentManager($this->commentRepo);
+        $this->postController = new PostController($this->postManager, $this->commentManager, $this->renderer, $this->session, $this->auth);
+        $this->errorController = new ErrorController($this->renderer, $this->session, $this->auth);
+        
     }
 
     // register all routes
@@ -92,14 +121,14 @@ class Router
     // Routing entry request, and calling the needed controller on demand
     public function routerRequest($controller, $action): void
     {
-        $controller ='\App\Controller'. $controller;
-        if (class_exists($controller) && method_exists($controller, $action)) {
-            $run = new $controller;
-            $run->{$action}($this->request);
+        
+        if (property_exists($this, $controller)){
+      
+            call_user_func_array([$this->{$controller}, $action], [$this->request]);
             exit();
+
         }
         // else 404
-        $run = new \App\Controller\ErrorController;
-        $run->show404();
+        call_user_func([$this->errorController, 'show404']);
     }
 }

@@ -4,9 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\FrontOffice;
 
 use \App\View\View;
-use \App\Model\Repository\PostRepository;
 use \App\Model\Manager\PostManager;
-use \App\Model\Repository\CommentRepository;
 use \App\Model\Manager\CommentManager;
 use \App\Service\Http\Request;
 use \App\Service\Http\Session;
@@ -16,22 +14,19 @@ use \App\Model\Entity\User;
 class PostController
 {
     private $renderer;
-    private $postRepo;
     private $postManager;
-    private $commentRepo;
     private $commentManager;
     private $session;
     private $auth;
 
-    public function __construct()
+    public function __construct(PostManager $postManager, CommentManager $commentManager, View $renderer, Session $session, Auth $auth)
     {
-        $this->renderer = new View();
-        $this->postRepo = new PostRepository();
-        $this->postManager = new PostManager($this->postRepo);
-        $this->commentRepo = new CommentRepository();
-        $this->commentManager = new CommentManager($this->commentRepo);
-        $this->session = new Session();
-        $this->auth = new Auth();
+        $this->renderer = $renderer;
+        $this->postManager = $postManager;
+        $this->commentManager = $commentManager;
+        $this->session = $session;
+        $this->auth = $auth;
+
     }
 
     // Render homepage, by getting the last 4 most recent posts

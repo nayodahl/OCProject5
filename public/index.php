@@ -13,11 +13,11 @@ $router = new Router();
 
 // Routes
 //  Front
-$router->register('GET', '/', '\FrontOffice\PostController', 'home');//                                          /
+$router->register('GET', '/', 'postController', 'home');//                                          /
 $router->register('POST', '/', '\FrontOffice\AccountController', 'contactForm');//                               /
-$router->register('GET', '/posts/[0-9]', '\FrontOffice\PostController', 'showPostsPage'); //                     /posts/$postsPage
-$router->register('GET', '/post/[0-9]/[0-9]', '\FrontOffice\PostController', 'showSinglePost');//                /post/$postId/$commentPage
-$router->register('POST', '/addcomment/[0-9]', '\FrontOffice\PostController', 'addComment');//                   /addcomment/$postId
+$router->register('GET', '/posts/[0-9]', 'postController', 'showPostsPage'); //                     /posts/$postsPage
+$router->register('GET', '/post/[0-9]/[0-9]', 'postController', 'showSinglePost');//                /post/$postId/$commentPage
+$router->register('POST', '/addcomment/[0-9]', 'postController', 'addComment');//                   /addcomment/$postId
 $router->register('GET', '/account/login', '\FrontOffice\AccountController', 'showLoginPage');//                 /account/login
 $router->register('GET', '/account/logout', '\FrontOffice\AccountController', 'logout');     //                  /account/logout
 $router->register('POST', '/account/login', '\FrontOffice\AccountController', 'loginForm');//                    /account/login
@@ -41,7 +41,7 @@ $router->register('GET', '/super/promote/[0-9]', '\BackOffice\SuperAdminControll
 $router->register('GET', '/super/demote/[0-9]', '\BackOffice\SuperAdminController', 'demote');//             /super/demote/$userId
 
 // Error
-$router->register('GET', '/404', '\ErrorController', 'show404');//                                          /404
+$router->register('GET', '/404', 'errorController', 'show404');//                                          /404
 
 $match = $router->match();
 if ($match === null){
