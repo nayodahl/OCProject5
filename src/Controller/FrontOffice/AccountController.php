@@ -13,6 +13,7 @@ use \App\Model\Manager\UserManager;
 use \App\Service\Http\Request;
 use \App\Service\Http\Session;
 use \App\Service\Auth;
+use \App\Service\Config;
 
 class AccountController
 {
@@ -25,15 +26,10 @@ class AccountController
     private $userManager;
     private $session;
     private $auth;
-    private $contactMail;
-    private $serverUrl;
+    private $config;
 
     public function __construct()
     {
-        $ini = parse_ini_file('C:\xampp\htdocs\OCProject5\src\config.ini');
-        $this->contactMail = $ini['contact_email'];
-        $this->serverUrl = $ini['server_url'];
-        
         $this->renderer = new View();
         $this->postRepo = new PostRepository();
         $this->postManager = new PostManager($this->postRepo);
@@ -43,6 +39,7 @@ class AccountController
         $this->userManager = new UserManager($this->userRepo);
         $this->session = new Session();
         $this->auth = new Auth();
+        $this->config = new Config();
     }
 
     // Render Login Page
@@ -111,7 +108,7 @@ class AccountController
         $boundary = uniqid('np');
 
         $headers = [
-            'From' => $this->contactMail,
+            'From' => $this->config->contactMail,
             'X-Mailer' => 'PHP/' . phpversion(),
             'MIME-Version' => '1.0',
             'Content-type' => "multipart/alternative;boundary=\"" . $boundary . "\""
@@ -122,7 +119,7 @@ class AccountController
         $message = $this->renderer->renderMail('FrontOffice/ContactMail.twig', 'message', [ 'firstname' => $firstname, 'lastname' => $lastname, 'email' => $email, 'message' => $message, 'boundary' => $boundary ]);
         
         // send mail, change first parameter to your own choosen contact mail if needed
-        if (mail($this->contactMail, $subject, $message, $headers) === false) {
+        if (mail($this->config->contactMail, $subject, $message, $headers) === false) {
             $this->session->setSession(['error' => "Erreur lors de l'envoi du message"]);
             header('Location: /#contact');
             exit();
@@ -206,7 +203,7 @@ class AccountController
             $boundary = uniqid('np');
 
             $headers = [
-                'From' => $this->contactMail,
+                'From' => $this->config->contactMail,
                 'X-Mailer' => 'PHP/' . phpversion(),
                 'MIME-Version' => '1.0',
                 'Content-type' => "multipart/alternative;boundary=\"" . $boundary . "\""
@@ -214,7 +211,7 @@ class AccountController
 
             // rendering html content of mail with twig
             $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');
-            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'boundary' => $boundary, 'basepath' => $this->serverUrl]);
+            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'boundary' => $boundary, 'basepath' => $this->config->serverUrl]);
 
             // send mail
             if (mail($dest, $subject, $message, $headers) === true) {
@@ -277,7 +274,7 @@ class AccountController
             $boundary = uniqid('np');
 
             $headers = [
-                'From' => $this->contactMail,
+                'From' => $this->config->contactMail,
                 'X-Mailer' => 'PHP/' . phpversion(),
                 'MIME-Version' => '1.0',
                 'Content-type' => "multipart/alternative;boundary=\"" . $boundary . "\""
@@ -285,7 +282,7 @@ class AccountController
             
             // rendering html content of mail with twig
             $subject = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'subject');
-            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'boundary' => $boundary, 'basepath' => $this->serverUrl ]);
+            $message = $this->renderer->renderMail('FrontOffice/SigninMail.twig', 'message', [ 'token' => $token, 'boundary' => $boundary, 'basepath' => $this->config->serverUrl ]);
             
             // send mail
             if (mail($dest, $subject, $message, $headers) === true) {

@@ -4,18 +4,22 @@ declare(strict_types=1);
 namespace App\Service;
 
 use \PDO;
+use App\Service\Config;
 
 // class to connect to database
 class Database
 {
+    private $config;
+
+    public function __construct()
+    {
+        $this->config = new Config();
+    }
+
     protected function dbConnect(): PDO
     {
-        $ini = parse_ini_file('C:\xampp\htdocs\OCProject5\src\config.ini');
-        $dbName = $ini['db_name'];
-        $dbUser = $ini['db_user'];
-        $dbPassword = $ini['db_password'];
         
-        return new PDO("mysql:host=localhost;dbname=$dbName;charset=utf8", $dbUser, $dbPassword, [
+        return new PDO("mysql:host=localhost;dbname=" . $this->config->dbName . ";charset=utf8", $this->config->dbUser, $this->config->dbPassword, [
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         ]);
