@@ -4,11 +4,8 @@ declare(strict_types=1);
 namespace App\Controller\BackOffice;
 
 use \App\View\View;
-use \App\Model\Repository\PostRepository;
 use \App\Model\Manager\PostManager;
-use \App\Model\Repository\CommentRepository;
 use \App\Model\Manager\CommentManager;
-use \App\Model\Repository\UserRepository;
 use \App\Model\Manager\UserManager;
 use \App\Model\Entity\User;
 use \App\Service\Http\Request;
@@ -18,26 +15,20 @@ use \App\Service\Auth;
 class AdminController
 {
     private $renderer;
-    private $postRepo;
     private $postManager;
-    private $commentRepo;
     private $commentManager;
     private $userManager;
-    private $userRepo;
     private $session;
     private $auth;
 
-    public function __construct()
+    public function __construct(PostManager $postManager, CommentManager $commentManager, UserManager $userManager, View $renderer, Session $session, Auth $auth)
     {
-        $this->renderer = new View();
-        $this->postRepo = new PostRepository();
-        $this->postManager = new PostManager($this->postRepo);
-        $this->commentRepo = new CommentRepository();
-        $this->commentManager = new CommentManager($this->commentRepo);
-        $this->userRepo = new UserRepository();
-        $this->userManager = new UserManager($this->userRepo);
-        $this->session = new Session();
-        $this->auth = new Auth();
+        $this->postManager = $postManager;
+        $this->commentManager = $commentManager;
+        $this->userManager = $userManager;
+        $this->renderer = $renderer;
+        $this->session = $session;
+        $this->auth = $auth;
     }
 
     // Render Posts Manager page (default for backoffice)

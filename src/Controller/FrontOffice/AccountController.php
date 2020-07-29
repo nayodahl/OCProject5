@@ -4,11 +4,8 @@ declare(strict_types=1);
 namespace App\Controller\FrontOffice;
 
 use \App\View\View;
-use \App\Model\Repository\PostRepository;
 use \App\Model\Manager\PostManager;
-use \App\Model\Repository\CommentRepository;
 use \App\Model\Manager\CommentManager;
-use \App\Model\Repository\UserRepository;
 use \App\Model\Manager\UserManager;
 use \App\Service\Http\Request;
 use \App\Service\Http\Session;
@@ -17,29 +14,23 @@ use \App\Service\Config;
 
 class AccountController
 {
-    private $renderer;
-    private $postRepo;
     private $postManager;
-    private $commentRepo;
     private $commentManager;
-    private $userRepo;
     private $userManager;
+    private $renderer;
     private $session;
     private $auth;
     private $config;
 
-    public function __construct()
+    public function __construct(PostManager $postManager, CommentManager $commentManager, UserManager $userManager, View $renderer, Session $session, Auth $auth, Config $config)
     {
-        $this->renderer = new View();
-        $this->postRepo = new PostRepository();
-        $this->postManager = new PostManager($this->postRepo);
-        $this->commentRepo = new CommentRepository();
-        $this->commentManager = new CommentManager($this->commentRepo);
-        $this->userRepo = new UserRepository();
-        $this->userManager = new UserManager($this->userRepo);
-        $this->session = new Session();
-        $this->auth = new Auth();
-        $this->config = new Config();
+        $this->postManager = $postManager;
+        $this->commentManager = $commentManager;
+        $this->userManager = $userManager;
+        $this->renderer = $renderer;
+        $this->session = $session;
+        $this->auth = $auth;
+        $this->config = $config;
     }
 
     // Render Login Page

@@ -15,10 +15,10 @@ class UserManager
     private $userRepo;
     private $session;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, Session $session)
     {
         $this->userRepo = $userRepository;
-        $this->session = new Session();
+        $this->session = $session;
     }
 
     public function getUsersPage(int $offset, int $limit): array

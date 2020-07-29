@@ -7,13 +7,20 @@ use \App\Model\Entity\User;
 use \App\Service\Database;
 use \PDO;
 
-class UserRepository extends Database
+class UserRepository
 {
+    private $database;
+    
+    public function __construct(Database $database)
+    {
+        $this->database = $database;
+    }
+    
     //get User from its id
     //return User
     public function getUser(int $userId): User
     {
-        $result = $this->dbConnect()->prepare(
+        $result = $this->database->dbConnect()->prepare(
             'SELECT user.id AS userId, user.login, user.password, user.email, user.type, user.activated, user.token, DATE_FORMAT(user.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(user.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate 
             FROM user
             WHERE user.id = :userId'
@@ -28,14 +35,14 @@ class UserRepository extends Database
     // return an int
     public function countUsers(): int
     {
-        return (int)current($this->dbConnect()->query('SELECT COUNT(id) from user WHERE user.type <> "superadmin"')->fetch());
+        return (int)current($this->database->dbConnect()->query('SELECT COUNT(id) from user WHERE user.type <> "superadmin"')->fetch());
     }
 
     // get Users that have admin or member profile (so we exclude superadmin user), sorted by alphabetical order, with limit and offset as parameters
     // return an array of Users
     public function getNonSuperAdminUsers(int $offset, int $limit): array
     {
-        $result = $this->dbConnect()->prepare(
+        $result = $this->database->dbConnect()->prepare(
             'SELECT id AS userId, user.login, user.password, user.email, user.type, user.token, DATE_FORMAT(user.created, \'%d/%m/%Y à %Hh%i\') AS created 
             FROM user 
             WHERE user.type <> "superadmin"
@@ -52,7 +59,7 @@ class UserRepository extends Database
     // return an array of Users
     public function getAllAdminUsers(): array
     {
-        $result = $this->dbConnect()->prepare(
+        $result = $this->database->dbConnect()->prepare(
             'SELECT id AS userId, user.login, user.password, user.email, user.type, user.token, DATE_FORMAT(user.created, \'%d/%m/%Y à %Hh%i\') AS created 
             FROM user 
             WHERE user.type = "admin" OR user.type = "superadmin"
@@ -67,7 +74,7 @@ class UserRepository extends Database
     // return true if updated successfully
     public function updateUserType(int $userId, string $type): bool
     {
-        $result = $this->dbConnect()->prepare('UPDATE user SET user.type = :userType, last_update=NOW() WHERE user.id = :userId');
+        $result = $this->database->dbConnect()->prepare('UPDATE user SET user.type = :userType, last_update=NOW() WHERE user.id = :userId');
         $result->bindValue(':userId', $userId, PDO::PARAM_INT);
         $result->bindValue(':userType', $type, PDO::PARAM_STR);
         $result->execute();
@@ -82,7 +89,7 @@ class UserRepository extends Database
     // Return a User is true, else null
     public function checkLogin(string $login, string $password): ?User
     {
-        $result = $this->dbConnect()->prepare(
+        $result = $this->database->dbConnect()->prepare(
             'SELECT id AS userId, user.login, user.password, user.email, user.type, user.activated, user.token, DATE_FORMAT(user.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(user.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate
             from user WHERE user.login = :userlogin AND user.activated = 1'
         );
@@ -103,7 +110,7 @@ class UserRepository extends Database
     // Return true if he has, else false
     public function userHasPosts(int $userId): bool
     {
-        $result = $this->dbConnect()->prepare('SELECT EXISTS (SELECT 1 from post WHERE post.user_id = :userId)');
+        $result = $this->database->dbConnect()->prepare('SELECT EXISTS (SELECT 1 from post WHERE post.user_id = :userId)');
         $result->bindValue(':userId', $userId, PDO::PARAM_INT);
         $result->execute();
         
@@ -114,7 +121,7 @@ class UserRepository extends Database
     // Return true it exists, else false
     public function userExists(string $login): bool
     {
-        $result = $this->dbConnect()->prepare('SELECT EXISTS (SELECT 1 from user WHERE user.login = :userlogin)');
+        $result = $this->database->dbConnect()->prepare('SELECT EXISTS (SELECT 1 from user WHERE user.login = :userlogin)');
         $result->bindValue(':userlogin', $login, PDO::PARAM_STR);
         $result->execute();
         
@@ -125,7 +132,7 @@ class UserRepository extends Database
     // Return true it exists, else false
     public function emailExists(string $email): bool
     {
-        $result = $this->dbConnect()->prepare('SELECT EXISTS (SELECT 1 from user WHERE user.email = :email)');
+        $result = $this->database->dbConnect()->prepare('SELECT EXISTS (SELECT 1 from user WHERE user.email = :email)');
         $result->bindValue(':email', $email, PDO::PARAM_STR);
         $result->execute();
         
@@ -135,7 +142,7 @@ class UserRepository extends Database
     // Create new User
     public function addUser(string $login, string $passwordHash, string $email): ?int
     {
-        $conn = $this->dbConnect();
+        $conn = $this->database->dbConnect();
         $result = $conn->prepare('INSERT INTO user(user.login, user.password, user.email) VALUES (:userLogin, :userPassword, :userEmail)');
         $result->bindValue(':userLogin', $login, PDO::PARAM_STR);
         $result->bindValue(':userPassword', $passwordHash, PDO::PARAM_STR);
@@ -149,7 +156,7 @@ class UserRepository extends Database
     // Return true is OK
     public function insertToken(string $token, int $newUserId): bool
     {
-        $result = $this->dbConnect()->prepare('UPDATE user SET token = :token, last_update=NOW() WHERE user.id = :userId');
+        $result = $this->database->dbConnect()->prepare('UPDATE user SET token = :token, last_update=NOW() WHERE user.id = :userId');
         $result->bindValue(':token', $token, PDO::PARAM_STR);
         $result->bindValue(':userId', $newUserId, PDO::PARAM_INT);
 
@@ -160,7 +167,7 @@ class UserRepository extends Database
     // if token is found, then return the User, else null
     public function searchToken(string $token): ?User
     {
-        $result = $this->dbConnect()->prepare('SELECT id AS userId, user.login, user.password, user.email, user.type, user.activated, user.token, DATE_FORMAT(user.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(user.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate 
+        $result = $this->database->dbConnect()->prepare('SELECT id AS userId, user.login, user.password, user.email, user.type, user.activated, user.token, DATE_FORMAT(user.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(user.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate 
         from user WHERE user.token = :token');
         $result->bindValue(':token', $token, PDO::PARAM_STR);
         $result->execute();
@@ -176,7 +183,7 @@ class UserRepository extends Database
     // Return true if OK
     public function activateOneUser(string $token): bool
     {
-        $result = $this->dbConnect()->prepare('UPDATE user SET token = NULL, activated = 1, last_update=NOW() WHERE user.token = :token');
+        $result = $this->database->dbConnect()->prepare('UPDATE user SET token = NULL, activated = 1, last_update=NOW() WHERE user.token = :token');
         $result->bindValue(':token', $token, PDO::PARAM_STR);
 
         return $result->execute();

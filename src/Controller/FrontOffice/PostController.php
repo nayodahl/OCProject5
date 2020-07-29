@@ -13,20 +13,19 @@ use \App\Model\Entity\User;
 
 class PostController
 {
-    private $renderer;
     private $postManager;
     private $commentManager;
+    private $renderer;
     private $session;
     private $auth;
 
     public function __construct(PostManager $postManager, CommentManager $commentManager, View $renderer, Session $session, Auth $auth)
     {
-        $this->renderer = $renderer;
         $this->postManager = $postManager;
         $this->commentManager = $commentManager;
+        $this->renderer = $renderer;
         $this->session = $session;
         $this->auth = $auth;
-
     }
 
     // Render homepage, by getting the last 4 most recent posts

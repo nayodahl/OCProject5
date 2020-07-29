@@ -3,23 +3,19 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use \App\Service\Http\Request;
 use \App\Service\Http\Session;
 use \App\Model\Repository\UserRepository;
 use \App\Model\Entity\User;
 
 class Auth
 {
-    private $request;
     private $session;
     private $userRepo;
     
-    public function __construct()
+    public function __construct(Session $session, UserRepository $userRepo)
     {
-        // dependancies
-        $this->request = new Request();
-        $this->session = new Session();
-        $this->userRepo = new UserRepository();
+        $this->session = $session;
+        $this->userRepo = $userRepo;
     }
 
     public function user(): ?User

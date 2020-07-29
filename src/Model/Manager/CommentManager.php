@@ -13,10 +13,10 @@ class CommentManager
     private $commentRepo;
     private $session;
 
-    public function __construct(CommentRepository $commentRepo)
+    public function __construct(CommentRepository $commentRepo, Session $session)
     {
         $this->commentRepo = $commentRepo;
-        $this->session = new Session();
+        $this->session = $session;
     }
 
     public function getApprovedComments(int $postId, int $offset, int $commentsNumberLimit): array

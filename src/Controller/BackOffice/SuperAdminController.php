@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Controller\BackOffice;
 
 use \App\View\View;
-use \App\Model\Repository\UserRepository;
 use \App\Model\Manager\UserManager;
 use \App\Model\Entity\User;
 use \App\Service\Http\Request;
@@ -15,17 +14,15 @@ class SuperAdminController
 {
     private $renderer;
     private $userManager;
-    private $userRepo;
     private $session;
     private $auth;
 
-    public function __construct()
+    public function __construct(UserManager $userManager, View $renderer, Session $session, Auth $auth)
     {
-        $this->renderer = new View();
-        $this->userRepo = new UserRepository();
-        $this->userManager = new UserManager($this->userRepo);
-        $this->session = new Session();
-        $this->auth = new Auth();
+        $this->renderer = $renderer;
+        $this->userManager = $userManager;
+        $this->session = $session;
+        $this->auth = $auth;
     }
 
     public function showUsersManager(Request $request): void
