@@ -16,7 +16,7 @@
                             {{ post.chapo }}
                         </h4>                   
                         <p>
-                            {{ post.content }}
+                            {{ post.content|raw }}
                         </p>
                     </section>
                     <p class="post-meta">Publié par {{ post.authorLogin }} le {{ post.lastUpdate }}</p>
@@ -40,7 +40,8 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto"  id="commentspart">                
-
+                <h2 class="section-heading" id="commentsection">Commentaires</h2>
+                <br>
                 {% for comment in listcomments %}
                 <div class="post-preview">
                     <p class="post-meta">{{ comment.authorLogin }}, le {{ comment.lastUpdate }} :</p>
