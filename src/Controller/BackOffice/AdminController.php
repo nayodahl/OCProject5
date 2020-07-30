@@ -57,19 +57,22 @@ class AdminController
         $currentPage=$request->getPostsManagerPage();
 
         $totalItems = $this->postManager->getNumberOfPosts(); // total number of Posts
-        $pagerArray = $this->postManager->getPostsPagePager($currentPage, $totalItems);
-        $offset = $pagerArray['offset'];
-        $limit = $pagerArray['limit'];
-        $totalPages = $pagerArray['totalPages'];
-        $currentPage = $pagerArray['currentPage'];
-        
-        // getting the Posts from DB
-        $listPosts = $this->postManager->getPostsPage($offset, $limit);
+        if ($totalItems > 0) {
+            $pagerArray = $this->postManager->getPostsPagePager($currentPage, $totalItems);
+            $offset = $pagerArray['offset'];
+            $limit = $pagerArray['limit'];
+            $totalPages = $pagerArray['totalPages'];
+            $currentPage = $pagerArray['currentPage'];
+            
+            // getting the Posts from DB
+            $listPosts = $this->postManager->getPostsPage($offset, $limit);
+        }
+
 
         $this->renderer->render('BackOffice/PostsManager.twig', [
-            'listposts' => $listPosts,
+            'listposts' => isset($listPosts) ? $listPosts : null,
             'currentPage' => $currentPage,
-            'totalPages' => $totalPages,
+            'totalPages' => isset($totalPages) ? $totalPages : null,
             'session' => $this->session->getSession(),
             'user' => $user,
             ]);
@@ -247,19 +250,21 @@ class AdminController
         $commentPage=$request->getCommentManagerPage();
        
         $totalComments = $this->commentManager->getNumberofNotApprovedComments(); // total number of Comments
-        $pagerArray = $this->commentManager->getCommentsManagerPager($commentPage, $totalComments);
-        $offset = $pagerArray['offset'];
-        $limit = $pagerArray['limit'];
-        $totalCommentPages = $pagerArray['totalCommentPages'];
-        $commentPage = $pagerArray['commentPage'];
-        
-        $listComments = $this->commentManager->getNotApprovedComments($offset, $limit);
+        if ($totalComments > 0) {
+            $pagerArray = $this->commentManager->getCommentsManagerPager($commentPage, $totalComments);
+            $offset = $pagerArray['offset'];
+            $limit = $pagerArray['limit'];
+            $totalCommentPages = $pagerArray['totalCommentPages'];
+            $commentPage = $pagerArray['commentPage'];
+            
+            $listComments = $this->commentManager->getNotApprovedComments($offset, $limit);
+        }
 
         // twig rendering with some parameters
         $this->renderer->render('BackOffice/CommentsManager.twig', [
-            'listcomments' => $listComments,
+            'listcomments' => isset($listComments) ? $listComments : null,
             'currentPage' => $commentPage,
-            'totalPages' => $totalCommentPages,
+            'totalPages' => isset($totalCommentPages) ? $totalCommentPages : null,
             'session' => $this->session->getSession(),
             'user' => $user
             ]);
