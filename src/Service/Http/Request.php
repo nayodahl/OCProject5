@@ -140,7 +140,7 @@ class Request
                 'title' => $this->sanitizeString($this->post['title']),
                 'chapo' => $this->sanitizeString($this->post['chapo']),
                 'author' => $this->sanitizeInteger((int)$this->post['author']),
-                'content' => $this->sanitizeTextArea($this->post['content']),
+                'content' => $this->post['content'], // can't escape html as we need to be able to add html link in posts, for exemple
                 'token' => $this->post['token']
                 
             ];

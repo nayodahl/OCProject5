@@ -164,7 +164,7 @@ class UserManager
         // Regex for password, exemple here https://ihateregex.io/expr/password
         $regex = '/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/';
         if (preg_match($regex, $password) === 0) {
-            $this->session->setSession(['error' => "Le mot de passe ne respecte pas les règles de complexité : minimum 8 caractères, au moins une majuscule, au moins une minuscule, au moins un chiffre et au moins un caractère spécial."]);
+            $this->session->setSession(['error' => "Le mot de passe ne respecte pas les règles de complexité : minimum 8 caractères, au moins une majuscule, au moins une minuscule, au moins un chiffre et au moins un caractère spécial parmi #?!@$ %^&*-"]);
             return null;
         }
 
