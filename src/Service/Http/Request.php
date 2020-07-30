@@ -189,7 +189,7 @@ class Request
 
     public function sanitizeTextArea(string $data): string
     {
-        return strip_tags($data, ['p', 'a', 'ul', 'li', 'hr', 'blockquote', 'b', 'i', 'u', 'br']);
+        return strip_tags($data, '<p><a><ul><li><hr><blockquote><b><i><u><br>');
     }
 
     public function sanitizeEmail(string $data): ?string
