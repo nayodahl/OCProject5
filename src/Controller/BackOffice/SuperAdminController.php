@@ -44,19 +44,21 @@ class SuperAdminController
         $userPage=$request->getUserManagerPage();
 
         $totalUsers = $this->userManager->getNumberOfUsers();
-        $pagerArray = $this->userManager->getUsersManagerPager($userPage, $totalUsers);
-        $offset = $pagerArray['offset'];
-        $limit = $pagerArray['limit'];
-        $totalUserPages = $pagerArray['totalUsersPages'];
-        $userPage = $pagerArray['userPage'];
-        
-        // getting the Members from DB
-        $listUsers = $this->userManager->getUsersPage((int)$offset, $limit);
+        if ($totalUsers > 0) {
+            $pagerArray = $this->userManager->getUsersManagerPager($userPage, $totalUsers);
+            $offset = $pagerArray['offset'];
+            $limit = $pagerArray['limit'];
+            $totalUserPages = $pagerArray['totalUsersPages'];
+            $userPage = $pagerArray['userPage'];
+            
+            // getting the Members from DB
+            $listUsers = $this->userManager->getUsersPage((int)$offset, $limit);
+        }
         
         $this->renderer->render('BackOffice/UsersManager.twig', [
-            'listUsers' => $listUsers,
+            'listUsers' => isset($listUsers) ? $listUsers : null,
             'currentPage' => $userPage,
-            'totalPages' => $totalUserPages,
+            'totalPages' => isset($totalUserPages) ? $totalUserPages : null,
             'session' => $this->session->getSession(),
             'user' => $user
             ]);
