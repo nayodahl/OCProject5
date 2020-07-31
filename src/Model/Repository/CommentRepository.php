@@ -15,7 +15,7 @@ class CommentRepository extends Database
     public function getCommentsFromPost(int $postId, int $offset, int $commentsNumberLimit, int $approved): array
     {
         $result = $this->dbConnect()->prepare(
-            'SELECT comment.id AS commentId, comment.content, DATE_FORMAT(comment.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(comment.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate, comment.post_id AS postId, comment.user_id AS authorId, user.login AS authorLogin 
+            'SELECT comment.id AS commentId, comment.content, comment.approved, DATE_FORMAT(comment.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(comment.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate, comment.post_id AS postId, comment.user_id AS authorId, user.login AS authorLogin 
             FROM comment 
             INNER JOIN user ON comment.user_id = user.id
             WHERE comment.post_id= :postId
@@ -36,7 +36,7 @@ class CommentRepository extends Database
     public function getAllNotApprovedComments(int $offset, int $commentsNumberLimit): array
     {
         $result = $this->dbConnect()->prepare(
-            'SELECT comment.id AS commentId, comment.content, DATE_FORMAT(comment.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(comment.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate, comment.post_id AS postId, comment.user_id AS authorId, user.login AS authorLogin, post.title AS postTitle 
+            'SELECT comment.id AS commentId, comment.content, comment.approved, DATE_FORMAT(comment.created, \'%d/%m/%Y à %Hh%i\') AS created, DATE_FORMAT(comment.last_update, \'%d/%m/%Y à %Hh%i\') AS lastUpdate, comment.post_id AS postId, comment.user_id AS authorId, user.login AS authorLogin, post.title AS postTitle 
             FROM comment 
             INNER JOIN user ON comment.user_id = user.id
             INNER JOIN post ON comment.post_id = post.id

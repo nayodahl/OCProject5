@@ -7,6 +7,7 @@ class Comment
 {
     private $commentId;
     private $content;
+    private $approved;
     private $created;
     private $lastUpdate;
     private $postId;
@@ -51,6 +52,17 @@ class Comment
     public function setContent(string $content): self
     {
         $this->content = $content;
+        return $this;
+    }
+
+    public function getApproved(): int
+    {
+        return $this->approved;
+    }
+
+    public function setApproved(int $approved): self
+    {
+        $this->approved = $approved;
         return $this;
     }
 
