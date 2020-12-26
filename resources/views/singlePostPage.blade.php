@@ -71,19 +71,17 @@
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
                 <h2 class="section-heading" id="comments">Ajouter un commentaire</h2>
-                @isset($session->success)                
-                    <div class="alert alert-success alert-dismissible" role="alert">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        {{ session.success }}
-                    </div>    
-                @endisset
-                @isset($session->error)
-                    <div class="alert alert-danger alert-dismissible" role="alert">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        {{ session.error }}
-                    </div>    
-                @endisset 
-                <form method="post" action="#" name="sentMessage" id="contactForm" class="needs-validation" novalidate>
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+                <form method="POST" action="/post/{{ $post->id }}" name="sentMessage" id="contactForm" class="needs-validation" novalidate>
+                    @csrf
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls">
                         <label for="comment">Tapez votre message</label>

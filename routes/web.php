@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'PostController@showHomePage');
-Route::get('post/{id}', 'PostController@showSinglePost');
+Route::get('post/{id}', 'PostController@showSinglePost')->name('app_post_show');
+Route::post('post/{id}', 'CommentController@store')->name('app_comment_add');
 Route::get('posts', 'PostController@showAllPosts')->name('app_posts_show');
 
 Auth::routes();

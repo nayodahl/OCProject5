@@ -20,10 +20,12 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
         $comments = $post->comments;
 
-        return view('singlePostPage', [
+        return view(
+            'singlePostPage', [
             'post' => $post,
             'comments' => $comments,
-            ]);
+            ]
+        );
     }
 
     public function showAllPosts()

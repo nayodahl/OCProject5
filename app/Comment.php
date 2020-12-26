@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
+    protected $fillable = [
+        'content',     
+    ];
+    
     /**
      * Get the post that owns the comment.
      */
