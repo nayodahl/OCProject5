@@ -9,9 +9,15 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('can:see-backoffice');
+    }
+    
     public function showAllPosts()
     {
-        $posts = Post::paginate(2);
+        $posts = Post::paginate(5);
 
         return view('postsManagerPage', ['posts' => $posts]);
     }
@@ -28,5 +34,12 @@ class AdminController extends Controller
         $users = User::all();
 
         return view('usersManagerPage', ['users' => $users]);
+    }
+
+    public function createPost()
+    {
+        $admins = User::all()->where('isAdmin', true);
+
+        return view('postCreatePage', ['admins' => $admins]);
     }
 }

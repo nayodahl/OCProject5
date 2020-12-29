@@ -9,7 +9,7 @@
             <div class="col-lg-12 mx-auto">
                 <h2 class="section-heading">Articles :</h2>
                 <hr> 
-                <a class="btn btn-primary left" href="/admin/newpost">Ecrire un Article</a>
+                <a class="btn btn-primary left" href="{{ route('app_admin_post_create') }}">Ecrire un Article</a>
                 <br />                
                 <br />
 

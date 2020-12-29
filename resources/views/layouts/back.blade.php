@@ -50,22 +50,19 @@
           @auth
             <li class="nav-item">
               <a class="nav-link disabled">
-                <i class="fa fa-user fa-fw"></i> {{ user.login }}
+                <i class="fa fa-user fa-fw"></i> {{ Auth::user()->name }}
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/account/logout">
+              <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
                 <i class="fa fa-sign-out-alt"></i>
               </a>
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                  @csrf
+              </form>
             </li>
           @endauth
-          @guest
-            <li class="nav-item">
-              <a class="nav-link" href="/account/login#logintitle">
-                <i class="fa fa-user fa-fw"></i> Se Connecter
-              </a>
-            </li>  
-          @endguest
         </ul>
       </div>
     </div>

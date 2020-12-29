@@ -6,7 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-  
+    protected $fillable = [
+        'title',     
+        'chapo',
+        'content',
+        'user_id',
+    ];
+
     /**
      * Get the comments for the blog post.
      */

@@ -27,3 +27,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/admin/posts', 'AdminController@showAllPosts')->name('app_admin_posts_show');
 Route::get('/admin/comments', 'AdminController@showAllComments')->name('app_admin_comments_show');
 Route::get('/admin/users', 'AdminController@showAllUsers')->name('app_admin_users_show');
+Route::get('/admin/create', 'AdminController@createPost')->name('app_admin_post_create');
+Route::post('/admin/create', 'PostController@store');
