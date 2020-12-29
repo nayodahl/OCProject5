@@ -18,6 +18,13 @@
                     </div>    
                 @endif
 
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{ session('success') }}
+                    </div>
+                @endif
+
                 <table class="table table-striped table-bordered table-hover table-responsive-lg" id="posts">
                     <thead>
                         <tr>
@@ -26,7 +33,7 @@
                             <th scope="col">Commentaire</th>
                             <th scope="col">Article parent</th>
                             <th scope="col">Ajouté le</th>
-                            <th scope="col">Action</th>
+                            <th scope="col" colspan=2 style="text-align: center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,7 +44,8 @@
                             <td>{{ $comment->content }}</td>
                             <td>{{ $comment->post->title }}</td>
                             <td class="td-lastupdate">{{ $comment->updated_at }}</td>
-                            <td><a href="/admin/post/{{ $comment->id }}">Modifier</a></td>
+                            <td><a href="{{ route('app_admin_comment_approve', [ 'id' => $comment->id ]) }}">Approuver</a></td>
+                            <td><a href="{{ route('app_admin_comment_refuse', [ 'id' => $comment->id ]) }}">Refuser</a></td>
                         </tr> 
                         @endforeach                       
                     </tbody>

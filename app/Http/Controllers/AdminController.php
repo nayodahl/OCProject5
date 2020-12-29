@@ -24,7 +24,7 @@ class AdminController extends Controller
 
     public function showAllComments()
     {
-        $comments = Comment::all();
+        $comments = Comment::all()->where('approved', 0);
 
         return view('commentsManagerPage', ['comments' => $comments]);
     }
@@ -42,4 +42,17 @@ class AdminController extends Controller
 
         return view('postCreatePage', ['admins' => $admins]);
     }
+
+    public function updatePost(int $id)
+    {
+        $admins = User::all()->where('isAdmin', true);
+        $post = Post::findOrFail($id);
+
+        return view(
+            'postUpdatePage', [
+            'admins' => $admins,
+            'post' => $post
+            ]
+        );
+    }    
 }

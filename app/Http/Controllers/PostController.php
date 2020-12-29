@@ -19,7 +19,7 @@ class PostController extends Controller
     public function showSinglePost($id)
     {       
         $post = Post::findOrFail($id);
-        $comments = $post->comments;
+        $comments = $post->comments->where('approved', 1);
 
         return view(
             'singlePostPage', [
@@ -64,5 +64,42 @@ class PostController extends Controller
         $post->save();
 
         return redirect()->route('app_admin_posts_show')->with('success', 'Article ajouté !');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  int                      $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate(
+            [
+            'title'=>'required',
+            'chapo'=>'required',
+            'content'=>'required',
+            ]
+        );
+        $post = Post::findOrFail($id);
+
+        $post->title = $request->get('title');
+        $post->chapo = $request->get('chapo');
+        $post->content = $request->get('content');
+        $post->user_id = $request->get('author');
+
+        $post->save();
+
+        return redirect()->route('app_admin_posts_show')->with('success', 'Article modifié !');
+    }
+
+    public function deletePost(int $id)
+    {
+        $post = Post::findOrFail($id);
+
+        $post->delete();
+
+        return redirect()->route('app_admin_posts_show')->with('success', 'Article supprimé !');
     }
 }

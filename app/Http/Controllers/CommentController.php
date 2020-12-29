@@ -50,7 +50,7 @@ class CommentController extends Controller
             ]
         );
 
-        $comment->approved = 1;
+        $comment->approved = 0;
         $comment->post_id = $postId;
         $comment->user_id = $id;
 
@@ -59,39 +59,15 @@ class CommentController extends Controller
         return redirect()->route('app_post_show', ['id' => $postId])->with('success', 'Commentaire ajouté !');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function approveComment($id)
     {
-        //
+        $comment = Comment::findOrFail($id);
+        $comment->approved = 1;
+        $comment->save();
+
+        return redirect()->route('app_admin_comments_show')->with('success', 'Commentaire approuvé !');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -101,6 +77,10 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $comment = Comment::findOrFail($id);
+
+        $comment->delete();
+
+        return redirect()->route('app_admin_comments_show')->with('success', 'Commentaire supprimé !');
     }
 }

@@ -12,12 +12,18 @@
                 <a class="btn btn-primary left" href="{{ route('app_admin_post_create') }}">Ecrire un Article</a>
                 <br />                
                 <br />
-
                 @if ($errors->any())
                     <div class="alert alert-danger alert-dismissible" role="alert">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         {{ session.error }}
                     </div>    
+                @endif
+
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{ session('success') }}
+                    </div>
                 @endif
 
                 <table class="table table-striped table-bordered table-hover table-responsive-lg" id="posts">
@@ -39,7 +45,7 @@
                             <td>{{ $post->chapo }}</td>
                             <td>{{ $post->user->name }}</td>
                             <td class="td-lastupdate">{{ $post->updated_at }}</td>
-                            <td><a href="/admin/post/{{ $post->postId }}">Modifier</a></td>
+                            <td><a href="{{ route('app_admin_post_update', ['id' => $post->id]) }}">Modifier</a></td>
                         </tr> 
                         @endforeach                       
                     </tbody>

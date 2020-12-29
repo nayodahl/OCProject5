@@ -29,3 +29,8 @@ Route::get('/admin/comments', 'AdminController@showAllComments')->name('app_admi
 Route::get('/admin/users', 'AdminController@showAllUsers')->name('app_admin_users_show');
 Route::get('/admin/create', 'AdminController@createPost')->name('app_admin_post_create');
 Route::post('/admin/create', 'PostController@store');
+Route::get('/admin/post/{id}', 'AdminController@updatePost')->name('app_admin_post_update');
+Route::post('/admin/update/{id}', 'PostController@update');
+Route::get('/admin/delete/{id}', 'PostController@deletePost')->name('app_admin_post_delete');
+Route::get('/admin/approve/{id}', 'CommentController@approveComment')->name('app_admin_comment_approve');
+Route::get('/admin/refuse/{id}', 'CommentController@destroy')->name('app_admin_comment_refuse');
