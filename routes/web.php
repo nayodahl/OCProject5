@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+////// FRONTOFFICE ///////////////
 Route::get('/', 'PostController@showHomePage')->name('app_homepage');
+Route::post('/', 'PostController@sendMessage')->name('app_homepage_contactForm');
 Route::get('post/{id}', 'PostController@showSinglePost')->name('app_post_show');
 Route::post('post/{id}', 'CommentController@store')->name('app_comment_add');
 Route::get('posts', 'PostController@showAllPosts')->name('app_posts_show');

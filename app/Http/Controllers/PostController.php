@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Contact;
+use App\Mail\NewContactFormMessageReceived;
 use Illuminate\Http\Request;
 use App\Post;
+use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class PostController extends Controller
 {
@@ -101,5 +105,19 @@ class PostController extends Controller
         $post->delete();
 
         return redirect()->route('app_admin_posts_show')->with('success', 'Article supprimé !');
+    }
+    
+    public function sendMessage(Request $request)
+    {
+        $contact = new Contact();
+        $contact->lastname = $request->get('lastname');
+        $contact->firstname = $request->get('firstname');
+        $contact->email = $request->get('email');
+        $contact->message = $request->get('message');
+        $contact->save();
+
+        Mail::send(new NewContactFormMessageReceived($contact));
+
+        return redirect()->route('app_homepage')->with('success', 'Message envoyé !');
     }
 }

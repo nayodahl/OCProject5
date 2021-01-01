@@ -45,11 +45,25 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{ session.error }}
+                    </div>    
+                @endif
+
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{ session('success') }}
+                    </div>
+                @endif
                 <h2 class="section-heading" id="contact">Contactez-moi</h2>
 
                 <p>Envoyez-moi un message et je vous répondrai dans les plus brefs délais !</p>
 
                 <form method="post" action="/#contact" name="sentMessage" id="contactForm" class="needs-validation" novalidate>
+                    @csrf   
                     <div class="control-group">
                         <div class="form-row">
                             <div class="form-group col-lg-6 floating-label-form-group controls">
