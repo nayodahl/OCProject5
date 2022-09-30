@@ -7,7 +7,7 @@
         }
     },
     "require": {
-        "twig/twig": "3.0.3"
+        "twig/twig": "3.4.3"
     },
     "require-dev": {
         "filp/whoops": "^2.7",
